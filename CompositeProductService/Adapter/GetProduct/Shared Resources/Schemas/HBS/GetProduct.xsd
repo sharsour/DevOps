@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://adidasGroup.com/schema/local/entity/be/getproduct/v1" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gp="http://adidasGroup.com/schema/local/entity/be/getproduct/v1">
+
+
+    <complexType name="GetProductByGlobalArtNrType">
+    	<sequence></sequence>
+    	<attribute name="sourceObjType" type="gp:sourceObjTypeType"></attribute>
+    	<attribute name="globalArtNr" type="gp:globalArtNrType"></attribute>
+    	<attribute name="targetApp" type="gp:targetAppType"></attribute>
+    	<attribute name="targetMsg" type="gp:targetMsgType"></attribute>
+    </complexType>
+
+    <simpleType name="sourceObjTypeType">
+        <annotation>
+        	<documentation>Currently, for HBS, only value "MktArticle" allowed.  Other values will be added in the future.</documentation>
+        </annotation>
+        <restriction base="string">
+    		<enumeration value="MktArticle"></enumeration>
+    		<enumeration value="Price"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="globalArtNrType">
+        <annotation>
+        	<documentation>TODO: Added Regex pattern for globalArtNr (for now, for MktArticle). </documentation>
+        </annotation>
+        <restriction base="string"></restriction>
+    </simpleType>
+
+    <simpleType name="targetAppType">
+        <annotation>
+        	<documentation>Currently only value "HBS_EU" allowed.  Other values will be added later (or the constraint be removed)</documentation>
+        </annotation>
+        <restriction base="string">
+    		<enumeration value="HBS_EU"></enumeration>
+    		<enumeration value="RequestReply"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="targetMsgType">
+        <annotation>
+        	<documentation>Currently only value "HBS_EU" allowed.  Other values will be added later (or the constraint be removed)</documentation>
+        </annotation>
+        <restriction base="string">
+    		<enumeration value="HBS_EU"></enumeration>
+    		<enumeration value="HBS_EU_Pricebook"></enumeration>
+    	</restriction>
+    </simpleType>
+
+    <element name="GetProductByGlobalArtNr"
+    	type="gp:GetProductByGlobalArtNrType">
+    </element>
+</schema>

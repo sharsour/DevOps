@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO)
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:bt="http://adidasGroup/schema/cdm/basicTypes/v1"
+	 xmlns:cat="http://adidasGroup/schema/cdm/product/catalogue/v1"
+	 xmlns:sho="http://adidasGroup.com/schema/cdm/sharedObjects/v2"
+	 targetNamespace="http://adidasGroup/schema/cdm/product/catalogue/v1"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="SharedObjects/SharedObjects_v2_0.xsd"/>
+	<import namespace="http://adidasGroup/schema/cdm/basicTypes/v1" schemaLocation="CommonV1/BasicTypes_v1_0.xsd"/>
+	<complexType name="CatalogInformationType">
+		<sequence>
+			<element name="ctlModelLanguage" type="cat:CtlModelLanguageType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="ctlModelToLogo" type="cat:CtlModelToLogoType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="ctlFandBsToModel" type="cat:CtlFandBsToModelType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="ctlModel" type="cat:CtlModelType"/>
+		</sequence>
+	</complexType>
+	<complexType name="CtlModelLanguageType">
+		<attribute name="grpMdlNo" type="string" use="required"/>
+		<attribute name="languageCode" type="string" use="required"/>
+		<attribute name="b2cModelName" type="string"/>
+		<attribute name="bullets1" type="string"/>
+		<attribute name="bullets2" type="string"/>
+		<attribute name="bullets3" type="string"/>
+		<attribute name="bullets4" type="string"/>
+		<attribute name="bullets5" type="string"/>
+		<attribute name="bullets6" type="string"/>
+		<attribute name="b2cCopy" type="string"/>
+		<attribute name="b2bCopy" type="string"/>
+		<attribute name="b2cCopyShort" type="string"/>
+		<attribute name="b2bCopyShort" type="string"/>
+	</complexType>
+	<complexType name="CtlModelToLogoType">
+		<attribute name="grpMdlNo" type="string" use="required"/>
+		<attribute name="logoName" type="string" use="required"/>
+	</complexType>
+	<complexType name="CtlFandBsToModelType">
+		<attribute name="grpMdlNo" type="string" use="required"/>
+		<attribute name="fandBCode" type="string" use="required"/>
+	</complexType>
+	<complexType name="CtlModelType">
+		<attribute name="grpMdlNo" type="string" use="required"/>
+		<attribute name="dropped" type="boolean"/>
+		<attribute name="prdBriefNo" type="string"/>
+		<attribute name="prdBriefName" type="string"/>
+		<attribute name="miadidasFlag" type="boolean"/>
+		<attribute name="miCoachFlag" type="boolean"/>
+		<attribute name="fullYearFlag" type="boolean"/>
+		<attribute name="sellingRegion" type="string"/>
+		<attribute name="b2cProductName" type="string"/>
+		<attribute name="colorWay" type="string"/>
+	</complexType>
+	<element name="CatalogInformation" type="cat:CatalogInformationType"/>
+</schema>

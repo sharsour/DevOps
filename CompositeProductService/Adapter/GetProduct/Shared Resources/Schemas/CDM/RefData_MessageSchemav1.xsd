@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO)
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:bt="http://adidasGroup/schema/cdm/basicTypes/v1"
+	 xmlns:ref="http://adidasGroup/schema/cdm/product/reference/v1"
+	 xmlns:sho="http://adidasGroup.com/schema/cdm/sharedObjects/v2"
+	 targetNamespace="http://adidasGroup/schema/cdm/product/reference/v1"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="SharedObjects/SharedObjects_v2_0.xsd"/>
+	<import namespace="http://adidasGroup/schema/cdm/basicTypes/v1" schemaLocation="CommonV1/BasicTypes_v1_0.xsd"/>
+	<complexType name="ReferenceDataType">
+		<sequence>
+			<element name="rfdTechnicalSize" type="ref:RfdTechnicalSizeType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdChannels" type="ref:RfdChannelsType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdFandBs" type="ref:RfdFandBsType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdRegion" type="ref:RfdRegionType" minOccurs="0"/>
+			<element name="rfdMktStrucSalesArea" type="ref:RfdMktStrucSalesAreaType" minOccurs="0"/>
+			<element name="rfdCondition" type="ref:RfdConditionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdLocale" type="ref:RfdLocaleType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdSizeConv" type="ref:RfdSizeConvType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdSalesArea" type="ref:RfdSalesAreaType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdLogo" type="ref:RfdLogoType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdLanguage" type="ref:RfdLanguageType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdConversion" type="ref:RfdConversionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdSeason" type="ref:RfdSeasonType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdHBS" type="ref:RfdHBSType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdHBSDescription" type="ref:RfdHBSDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdNodeList" type="ref:RfdNodeListType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdNodeDescription" type="ref:RfdNodeDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdMktArea" type="ref:RfdMktAreaType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdMktChan" type="ref:RfdMktChanType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdFandBsLang" type="ref:RfdFandBsLanguageType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="rfdFandBsToLogo" type="ref:RfdFandBsToLogoType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="RfdTechnicalSizeType">
+		<attribute name="srcSizeScale" type="string" use="required"/>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="srcSizeCd2" type="string"/>
+		<attribute name="srcSizeCd" type="string"/>
+	</complexType>
+	<complexType name="RfdChannelsType">
+		<attribute name="distChan" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdRegionType">
+		<sequence>
+			<element name="rfdArea" minOccurs="0" maxOccurs="unbounded">
+				<complexType>
+					<sequence>
+						<element name="rfdCountryCode" minOccurs="0" maxOccurs="unbounded">
+							<complexType>
+								<attribute name="countryCode" type="string" use="required"/>
+								<attribute name="countryCodeDesc" type="string"/>
+							</complexType>
+						</element>
+					</sequence>
+					<attribute name="areaCode" type="string" use="required"/>
+					<attribute name="areaCodeDesc" type="string"/>
+				</complexType>
+			</element>
+		</sequence>
+		<attribute name="regionCode" type="string" use="required"/>
+		<attribute name="regionCodeDesc" type="string"/>
+	</complexType>
+	<complexType name="RfdFandBsType">
+		<attribute name="fandBCode" type="string" use="required"/>
+		<attribute name="businessUnit" type="string"/>
+	</complexType>
+	<complexType name="RfdMktStrucSalesAreaType">
+		<attribute name="salesOrg" type="string"/>
+		<attribute name="distChan" type="string"/>
+		<attribute name="regionCd" type="string"/>
+		<attribute name="areaCd" type="string"/>
+		<attribute name="countryCd" type="string"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="customerNoDef" type="string"/>
+		<attribute name="sizeConvId" type="string"/>
+		<attribute name="localeId" type="string"/>
+		<attribute name="languageCd" type="string"/>
+		<attribute name="sequNo" type="int" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdConditionType">
+		<attribute name="conditionType" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdLocaleType">
+		<attribute name="desc" type="string"/>
+		<attribute name="localeId" type="string" use="required"/>
+	</complexType>
+	<complexType name="RfdSizeConvType">
+		<attribute name="sizeConvId" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdSalesAreaType">
+		<attribute name="salesOrg" type="string" use="required"/>
+		<attribute name="distChan" type="string" use="required"/>
+	</complexType>
+	<complexType name="RfdLogoType">
+		<attribute name="logoName" type="string" use="required"/>
+		<attribute name="url" type="string"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdSalesOrgType">
+		<attribute name="salesOrg" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdLanguageType">
+		<attribute name="languageCd" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+		<attribute name="sapCd" type="string"/>
+		<attribute name="spmCd" type="string"/>
+		<attribute name="iso3Cd" type="string"/>
+		<attribute name="iso2Code" type="string"/>
+	</complexType>
+	<complexType name="RfdConversionType">
+		<attribute name="conversionType" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdSeasonType">
+		<attribute name="timePeriodCd" type="string" use="required"/>
+		<attribute name="seasonCd" type="string"/>
+		<attribute name="sPMSeasonCd" type="string"/>
+		<attribute name="active" type="boolean"/>
+	</complexType>
+	<complexType name="RfdHBSType">
+		<attribute name="hbsTypeName" type="string" use="required"/>
+		<attribute name="hbsValue" type="string" use="required"/>
+	</complexType>
+	<complexType name="RfdHBSDescriptionType">
+		<attribute name="hbsTypeName" type="string" use="required"/>
+		<attribute name="hbsValue" type="string" use="required"/>
+		<attribute name="languageCode" type="string" use="required"/>
+		<attribute name="hbsDescriptionShort" type="string"/>
+		<attribute name="hbsDescriptionLong" type="string"/>
+	</complexType>
+	<complexType name="RfdNodeListType">
+		<attribute name="nodeId" type="string" use="required"/>
+		<attribute name="nodeId_Parent" type="string"/>
+	</complexType>
+	<complexType name="RfdNodeDescriptionType">
+		<attribute name="nodeId" type="string" use="required"/>
+		<attribute name="languageCode" type="string" use="required"/>
+		<attribute name="nodeDescription" type="string"/>
+	</complexType>
+	<complexType name="RfdMktAreaType">
+		<attribute name="mktArea" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdMktChanType">
+		<attribute name="mktChan" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="RfdFandBsLanguageType">
+		<attribute name="fandBCode" type="string" use="required"/>
+		<attribute name="languageCode" type="string" use="required"/>
+		<attribute name="featureName" type="string"/>
+		<attribute name="featureBenefit" type="string"/>
+	</complexType>
+	<complexType name="RfdFandBsToLogoType">
+		<attribute name="logoName" type="string" use="required"/>
+		<attribute name="fandBCode" type="string" use="required"/>
+	</complexType>
+	<element name="ReferenceData" type="ref:ReferenceDataType"/>
+</schema>

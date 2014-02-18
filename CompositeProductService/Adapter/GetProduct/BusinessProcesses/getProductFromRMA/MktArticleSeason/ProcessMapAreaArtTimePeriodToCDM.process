@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.adidas.de/EAI/Audit.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx5="http://adidasGroup/schema/cdm/product/market/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_MARKET_XML.XSD.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CDM_Latest/IDM_PCS_MARKET_XML.XSD.xsd" xmlns:pfx2="urn:agrp:rma" xmlns:pfx="urn:agrp:acs">
+    <xsd:import namespace="urn:agrp:acs" schemaLocation="/SharedResources/Schemas/RMA/Schema_RMAArticle_Hierarchial.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" schemaLocation="/SharedResources/Schemas/CDM/CPSM_Schema.xsd"/>
+    <xsd:import namespace="urn:agrp:rma" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/RMA/Schema_RMAArticle.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_MARKET_XML.XSD.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_MARKET_XML.XSD.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/market/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/MktProduct_MessageSchema.xsd"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getProductFromRMA/MktArticleSeason/ProcessMapAreaArtTimePeriodToCDM.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:mt_tfArticle"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:choose>
+                <xsl:when test="string-length($getErrorCode/error/errorCode)>0">
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$getErrorCode/error/errorCode">
+                <errorCode>
+                    <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                </errorCode>
+            </xsl:if>
+            <xsl:if test="$getErrorCode/error/errorInformation">
+                <StackTrace>
+                    <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                </StackTrace>
+            </xsl:if>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>917</pd:endX>
+    <pd:endY>133</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1361435745477</pd:targetNamespace>
+    <pd:group name="Group (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>339</pd:x>
+        <pd:y>6</pd:y>
+        <pd:width>529</pd:width>
+        <pd:height>260</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx2:mt_tfArticle/row[TAB_NAME="14"]</pd:over>
+            <pd:iterationElementSlot>current-iteration-ArticleRow</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Group</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Group</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="Group">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>369</pd:x>
+            <pd:y>31</pd:y>
+            <pd:width>476</pd:width>
+            <pd:height>214</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$getSalesOrg/SalesOrg/param[AreaCode=$current-iteration-ArticleRow/row/AREA_CD]</pd:over>
+                <pd:iterationElementSlot>current-iteration-SaleOrg</pd:iterationElementSlot>
+                <pd:indexSlot>k</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>getSizeScale</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Null</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SendCDMMsg</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapData</pd:from>
+                <pd:to>Null</pd:to>
+                <pd:xpathDescription>NoArtTimePeriodExistsFromRMA</pd:xpathDescription>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>xpath</pd:conditionType>
+                <pd:xpath>not(exists($current-iteration-ArticleRow/row/ARTICLE_NUMBER))</pd:xpath>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>getSizeScale</pd:from>
+                <pd:to>MapData</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapData</pd:from>
+                <pd:to>AuditLog1</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AuditLog1</pd:from>
+                <pd:to>SendCDMMsg</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="MapData">
+                <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+                <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+                <pd:x>543</pd:x>
+                <pd:y>86</pd:y>
+                <config>
+                    <element ref="pfx5:MarketArticle"/>
+                </config>
+                <pd:inputBindings>
+                    <pfx5:MarketArticle>
+                        <pfx5:mktArticle>
+                            <xsl:variable name="var_ArticleNo" select="$Start/pfx2:mt_tfArticle/row[TAB_NAME=&quot;01&quot; and ARTICLE_CD=$current-iteration-ArticleRow/row/ARTICLE_CD]/ARTICLE_NUMBER"/>
+                            <xsl:variable name="var_MarketArea" select="$current-iteration-SaleOrg/param/SalesOrganization"/>
+                            <xsl:variable name="var_MarketChannel" select="$current-iteration-SaleOrg/param/DistributionChannel"/>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$var_ArticleNo"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="marketArea">
+                                <xsl:value-of select="$var_MarketArea"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="marketChan">
+                                <xsl:value-of select="$var_MarketChannel"/>
+                            </xsl:attribute>
+                            <xsl:if test="$current-iteration-ArticleRow/row/TIME_PERIOD_CD=$getTimeperiod/timePeriodMapping/param[Active='TRUE']/TimePeriodCode">
+                                <xsl:attribute name="retailIntroDate">
+                                    <xsl:value-of select="substring($current-iteration-ArticleRow/row/AREA_RETAIL_INTRO_DATE, 1,10)"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$current-iteration-ArticleRow/row/TIME_PERIOD_CD=$getTimeperiod/timePeriodMapping/param[Active='TRUE']/TimePeriodCode">
+                                <xsl:attribute name="retailExitDate">
+                                    <xsl:value-of select="substring($current-iteration-ArticleRow/row/AREA_RETAIL_EXIT_DATE, 1,10)"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <pfx5:mktArtSeason>
+                                <xsl:attribute name="grpArtNo">
+                                    <xsl:value-of select="$var_ArticleNo"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="marketArea">
+                                    <xsl:value-of select="$var_MarketArea"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="marketChan">
+                                    <xsl:value-of select="$var_MarketChannel"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="timePeriodCd">
+                                    <xsl:value-of select="$current-iteration-ArticleRow/row/TIME_PERIOD_CD"/>
+                                </xsl:attribute>
+                                <xsl:if test="$current-iteration-ArticleRow/row/MARKETING_FORECAST">
+                                    <xsl:attribute name="mktgFC">
+                                        <xsl:value-of select="$current-iteration-ArticleRow/row/MARKETING_FORECAST"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="$current-iteration-ArticleRow/row/AREA_RETAIL_INTRO_DATE!=''">
+                                    <xsl:attribute name="areaRetailIntroDt">
+                                        <xsl:value-of select="substring($current-iteration-ArticleRow/row/AREA_RETAIL_INTRO_DATE, 1,10)"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="$current-iteration-ArticleRow/row/AREA_RETAIL_EXIT_DATE!=''">
+                                    <xsl:attribute name="areaRetailExitDt">
+                                        <xsl:value-of select="substring($current-iteration-ArticleRow/row/AREA_RETAIL_EXIT_DATE,1,10)"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="$current-iteration-ArticleRow/row/AFS_FLAG!=''">
+                                    <xsl:attribute name="aFSInd">
+                                        <xsl:value-of select="if($current-iteration-ArticleRow/row/AFS_FLAG='N') then 0 else&#xA;if($current-iteration-ArticleRow/row/AFS_FLAG='Y') then 1 else&#xA;if($current-iteration-ArticleRow/row/AFS_FLAG='true') then 1 else&#xA;if($current-iteration-ArticleRow/row/AFS_FLAG='false') then 0 else&#xA;$current-iteration-ArticleRow/row/AFS_FLAG"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:if test="$current-iteration-ArticleRow/row/LEAD_TME">
+                                    <xsl:attribute name="leadTm">
+                                        <xsl:value-of select="$current-iteration-ArticleRow/row/LEAD_TME"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <pfx5:mktArtSeasonSKU>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="$var_ArticleNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketArea">
+                                        <xsl:value-of select="$var_MarketArea"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketChan">
+                                        <xsl:value-of select="$var_MarketChannel"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="timePeriodCd">
+                                        <xsl:value-of select="$current-iteration-ArticleRow/row/TIME_PERIOD_CD"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="$current-iteration-ArticleRow/row/SIZE_INDEX"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeScale">
+                                        <xsl:value-of select="$getSizeScale/SizeScale/param[$getSizeScale/SizeScale/param/SourcingSizeCd3=$current-iteration-ArticleRow/row/SIZE_INDEX]/SourcingSizeScale"/>
+                                    </xsl:attribute>
+                                </pfx5:mktArtSeasonSKU>
+                            </pfx5:mktArtSeason>
+                        </pfx5:mktArticle>
+                    </pfx5:MarketArticle>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="SendCDMMsg">
+                <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+                <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+                <pd:x>747</pd:x>
+                <pd:y>86</pd:y>
+                <config>
+                    <PermittedMessageType>XML Text</PermittedMessageType>
+                    <SessionAttributes>
+                        <transacted>false</transacted>
+                        <acknowledgeMode>1</acknowledgeMode>
+                        <maxSessions>1</maxSessions>
+                        <destination>%%BusinessProcesses/CPSInbound/SharedProcesses/CDMDataToBE/MarketInputQueue%%</destination>
+                    </SessionAttributes>
+                    <ConfigurableHeaders>
+                        <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                        <JMSExpiration>0</JMSExpiration>
+                        <JMSPriority>4</JMSPriority>
+                    </ConfigurableHeaders>
+                    <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+                    <ApplicationProperties>/Adapter/GetProduct/Shared Resources/Schemas/Shared/ACSCatalogInfo.sharedjmsapp</ApplicationProperties>
+                    <InDataxsdString ref="pfx5:MarketArticle"/>
+                </config>
+                <pd:inputBindings>
+                    <ns0:ActivityInput>
+                        <OtherProperties>
+                            <GlobalArtNr>
+                                <xsl:value-of select="concat(&quot;grpArtNo.&quot;,$MapData/pfx5:MarketArticle/pfx5:mktArticle/@grpArtNo,&quot;.marketArea.&quot;,$MapData/pfx5:MarketArticle/pfx5:mktArticle/@marketArea,&quot;.marketChan.&quot;,$MapData/pfx5:MarketArticle/pfx5:mktArticle/@marketChan)"/>
+                            </GlobalArtNr>
+                            <SourceApp>
+                                <xsl:value-of select="&quot;RMA&quot;"/>
+                            </SourceApp>
+                            <SourceTimeStamp>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </SourceTimeStamp>
+                            <SourceMsgID>
+                                <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                            </SourceMsgID>
+                            <SourceVer>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </SourceVer>
+                            <SourceObjType>
+                                <xsl:value-of select="&quot;MktArticle&quot;"/>
+                            </SourceObjType>
+                            <CorrelationID>
+                                <xsl:value-of select="&quot;AreaArtTimePeriod&quot;"/>
+                            </CorrelationID>
+                        </OtherProperties>
+                        <Body>
+                            <xsl:copy-of select="$MapData/pfx5:MarketArticle"/>
+                        </Body>
+                    </ns0:ActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="Null">
+                <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+                <pd:resourceType>ae.activities.null</pd:resourceType>
+                <pd:x>713</pd:x>
+                <pd:y>199</pd:y>
+                <config/>
+                <pd:inputBindings/>
+            </pd:activity>
+            <pd:activity name="getSizeScale">
+                <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+                <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+                <pd:x>433</pd:x>
+                <pd:y>85</pd:y>
+                <config>
+                    <variableConfig>/Adapter/GetProduct/Shared Resources/Variables/SharedVariable_SizeScale.sharedvariable</variableConfig>
+                </config>
+                <pd:inputBindings/>
+            </pd:activity>
+            <pd:activity name="AuditLog1">
+                <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+                <pd:resourceType>ae.process.subprocess</pd:resourceType>
+                <pd:x>652</pd:x>
+                <pd:y>86</pd:y>
+                <config>
+                    <processName>/Base/Logging/Audit/Audit.process</processName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <customKey>
+                            <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                        </customKey>
+                        <station>
+                            <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP5(&quot;,$k,&quot;)  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;)  :  ProcessMapAreaArtTimePeriodToCDM&quot;)"/>
+                        </station>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;ARTICLE_NUMBER&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$Start/pfx2:mt_tfArticle/row[TAB_NAME=&quot;01&quot; and ARTICLE_CD=$current-iteration-ArticleRow/row/ARTICLE_CD]/ARTICLE_NUMBER"/>
+                            </value>
+                        </attributes>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;REGION_CD&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$current-iteration-ArticleRow/row/REGION_CD"/>
+                            </value>
+                        </attributes>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;COUNTRY_CD&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$current-iteration-ArticleRow/row/COUNTRY_CD"/>
+                            </value>
+                        </attributes>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;AREA_CD&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$current-iteration-ArticleRow/row/AREA_CD"/>
+                            </value>
+                        </attributes>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+    </pd:group>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>226</pd:x>
+        <pd:y>321</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <error>
+                <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                    <errorCode>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                    </errorCode>
+                </xsl:if>
+                <errorInformation>
+                    <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                </errorInformation>
+                <sourceApp>
+                    <xsl:value-of select="&quot;ProcessMapAreaArtTimePeriodToCDM&quot;"/>
+                </sourceApp>
+            </error>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>559</pd:x>
+        <pd:y>318</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>918</pd:x>
+        <pd:y>325</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/sourceApp">
+                    <errorApplication>
+                        <xsl:value-of select="$getErrorCode/error/sourceApp"/>
+                    </errorApplication>
+                </xsl:if>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns2:AuditDetails/ns2:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns2:AuditDetails/ns2:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns2:AuditDetails/ns2:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns2:AuditDetails/ns2:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns2:AuditDetails/ns2:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getSalesOrg">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>225</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <variableConfig>/Adapter/GetProduct/Shared Resources/Variables/SharedVariable_SalesOrg.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="AuditLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>197</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP5  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;)  :  ProcessMapAreaArtTimePeriodToCDM&quot;,&quot;  before loop group&quot;)"/>
+                </station>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getTimeperiod">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>116</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <variableConfig>/Adapter/GetProduct/Shared Resources/Variables/SharedVariable_timeperiod.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getTimeperiod</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getSalesOrg</pd:from>
+        <pd:to>AuditLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getSalesOrg</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog</pd:from>
+        <pd:to>Group (1)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getTimeperiod</pd:from>
+        <pd:to>getSalesOrg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

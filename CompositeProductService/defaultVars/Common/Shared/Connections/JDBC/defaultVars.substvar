@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>HBS_Db_Url</name>
+			<value>jdbc:tibcosoftwareinc:oracle://deheremap5063.emea.adsint.biz:1522;SID=OSDEV</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390829224103</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>HBS_UserName</name>
+			<value>PRODUCTDB</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390829248487</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>SmeniMe123#</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390864846904</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

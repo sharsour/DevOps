@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>HBSrefdata</name>
+    <resourceType>ae.shared.ParseSharedResource</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <FormatType>Delimiter separated</FormatType>
+        <ColumnSeparator>;</ColumnSeparator>
+        <ColSeparatorRule>Treat each character entered as a potential column separator</ColSeparatorRule>
+        <LineSeparator>
+</LineSeparator>
+        <FillCharacter>Space</FillCharacter>
+        <LineLength>7</LineLength>
+        <DataFormat>
+            <xsd:element name="HBSrefdata">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="HBSTypeName" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="HBSValue" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="LanguageCode" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="HBSDescriptionShort" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="HBSDescriptionLong" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </DataFormat>
+    </config>
+</BWSharedResource>

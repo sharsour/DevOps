@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Ronald (Adidas-Salomon AG) -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:cpsm="http://adidasGroup.com/schema/local/entity/be/product/v1"
+	 targetNamespace="http://adidasGroup.com/schema/local/entity/be/product/v1"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+
+	<complexType name="CPSMListType">
+		<sequence>
+			<element name="cpsm" type="cpsm:CPSMType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<element name="CPSMList" type="cpsm:CPSMListType"/>
+
+
+	<complexType name="CPSMType">
+		<sequence>
+			<element name="header" type="cpsm:HeaderType"/>
+			<element name="attributeList" type="cpsm:AttributeListType" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<complexType name="HeaderType">
+		<attribute name="globalArtNr" type="anySimpleType" use="required"/>
+		<attribute name="sourceAppID" type="anySimpleType" use="required">
+			<annotation>
+				<documentation>Contains the application ID from Iteraplan</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="sourceTimeStamp" type="dateTime" use="required"/>
+		<attribute name="sourceMsgID" type="anySimpleType" use="required"/>
+		<attribute name="sourceVer" type="anySimpleType" use="required"/>
+		<attribute name="sourceObjType" type="anySimpleType" use="required"/>
+		<attribute name="correlationID" type="anySimpleType"/>
+		<attribute name="changeType" type="anySimpleType"/>
+		<attribute name="targetApp" type="anySimpleType"/>
+		<attribute name="trackingID" type="anySimpleType"/>
+	</complexType>
+	<complexType name="AttributeListType">
+		<sequence>
+			<element name="attribute" type="cpsm:AttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="ValueHistoryType">
+		<attribute name="previousValue" type="string"/>
+		<attribute name="sourceTimeStamp" type="dateTime"/>
+		<attribute name="sourceAppID" type="string">
+			<annotation>
+				<documentation>Contains the application ID from Iteraplan</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+	<complexType name="AttributeType">
+		<sequence>
+			<element name="valueHistory" type="cpsm:ValueHistoryType"/>
+		</sequence>
+		<attribute name="name" type="anySimpleType"/>
+		<attribute name="value" type="anySimpleType"/>
+	</complexType>
+	<element name="CPSM" type="cpsm:CPSMType"/>
+</schema>

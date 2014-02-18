@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://schemas.tibco.com/bw/plugins/http/5.0/httpExceptions" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="urn:agrp:rma" xmlns:pfx="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="urn:agrp:rma" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/RMA/Schema_RMAArticle.xsd"/>
+    <pd:name>Adapter/GetProduct/StarterProcesses/HTTP/GetProductDataFromXIRMA.process</pd:name>
+    <pd:startName>ReceiveData FromXI</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveData FromXI">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/Adapter/GetProduct/Shared Resources/Connections/HTTP/RMAHTTPConnection.sharedhttp</sharedChannel>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>832</pd:endX>
+    <pd:endY>160</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1346146606208</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>130</pd:x>
+        <pd:y>9</pd:y>
+        <pd:width>555</pd:width>
+        <pd:height>262</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InitializeAudit</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SendHTTPResponse</pd:from>
+            <pd:to>SendDataToRMAInterface</pd:to>
+            <pd:xpathDescription>Route_To_BE</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SendDataToRMAInterface</pd:from>
+            <pd:to>AuditEnd</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InitializeAudit</pd:from>
+            <pd:to>AuditStart</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SendHTTPResponse</pd:from>
+            <pd:to>AuditError</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-3407821</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SendDataToRMAInterface</pd:from>
+            <pd:to>AuditError</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-65485</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditStart</pd:from>
+            <pd:to>SendHTTPResponse</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SendHTTPResponse">
+            <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+            <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+            <pd:x>399</pd:x>
+            <pd:y>65</pd:y>
+            <config>
+                <closeConnection>true</closeConnection>
+                <eventSource>ReceiveData FromXI</eventSource>
+                <Headers>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </Headers>
+            </config>
+            <pd:inputBindings>
+                <ResponseActivityInput>
+                    <asciiContent>
+                        <xsl:value-of select="&quot;SUCCESS&quot;"/>
+                    </asciiContent>
+                </ResponseActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SendDataToRMAInterface">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>519</pd:x>
+            <pd:y>132</pd:y>
+            <config>
+                <PermittedMessageType>Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%BusinessProcesses/CPSInbound/RMAArcticleData/InputQueue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+                <ApplicationProperties>/Adapter/GetProduct/Shared Resources/Schemas/Shared/ACSCatalogInfo.sharedjmsapp</ApplicationProperties>
+            </config>
+            <pd:inputBindings>
+                <ns2:ActivityInput>
+                    <OtherProperties>
+                        <GlobalArtNr>
+                            <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                        </GlobalArtNr>
+                    </OtherProperties>
+                    <Body>
+                        <xsl:value-of select="$ReceiveData-FromXI/ProcessStarterOutput/PostData"/>
+                    </Body>
+                </ns2:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="InitializeAudit">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>193</pd:x>
+            <pd:y>65</pd:y>
+            <config>
+                <processName>/Base/Initialization/InitializeAudit.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <payload>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </payload>
+                    <duplicateKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </duplicateKey>
+                    <targetApp>
+                        <xsl:value-of select="&quot;CompositeProductService-BE-Engine&quot;"/>
+                    </targetApp>
+                    <sourceApp>
+                        <xsl:value-of select="&quot;RMA&quot;"/>
+                    </sourceApp>
+                    <bpName>
+                        <xsl:value-of select="&quot;RMAArticleDataToCPS&quot;"/>
+                    </bpName>
+                    <boType>
+                        <xsl:value-of select="&quot;CPSInbound-RMAArticleData&quot;"/>
+                    </boType>
+                    <checkpoint>
+                        <xsl:value-of select="0"/>
+                    </checkpoint>
+                    <DBPayloadAuditEnabled>
+                        <xsl:value-of select="0"/>
+                    </DBPayloadAuditEnabled>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditStart">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>282</pd:x>
+            <pd:y>65</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Start.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <payload>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </payload>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID &quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;Received HTTP request from XI &quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;GUID&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditEnd">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>613</pd:x>
+            <pd:y>95</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit End.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID &quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;After SendDataToRMAInterface : Data Sent to  Queue&quot;)"/>
+                    </station>
+                    <additionalInfo>
+                        <xsl:value-of select="&quot;Data sent to RMAArticleDataToCPS interface input Queue Successfully   &quot;"/>
+                    </additionalInfo>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;GUID&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditError">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>403</pd:x>
+            <pd:y>195</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Error.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:choose xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                    <xsl:when test="string-length($_error_SendDataToRMAInterface/ActivityErrors)>0">
+                        <root>
+                            <customKey>
+                                <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                            </customKey>
+                            <station>
+                                <xsl:value-of select="concat(&quot;PID &quot;,$_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </station>
+                            <additionalInfo>
+                                <xsl:value-of select="tib:render-xml($_error_SendDataToRMAInterface/ActivityErrors)"/>
+                            </additionalInfo>
+                            <errorCode>
+                                <xsl:value-of select="&quot;Error in QueueSender&quot;"/>
+                            </errorCode>
+                            <attributes>
+                                <name>
+                                    <xsl:value-of select="&quot;GUID&quot;"/>
+                                </name>
+                                <value>
+                                    <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                                </value>
+                            </attributes>
+                        </root>
+                    </xsl:when>
+                    <xsl:when test="string-length($_error_SendHTTPResponse/ns4:HttpCommunicationException/msg)>0">
+                        <root>
+                            <customKey>
+                                <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                            </customKey>
+                            <station>
+                                <xsl:value-of select="concat(&quot;PID &quot;,$_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </station>
+                            <additionalInfo>
+                                <xsl:value-of select="$_error_SendHTTPResponse/ns4:HttpCommunicationException/msg"/>
+                            </additionalInfo>
+                            <errorCode>
+                                <xsl:value-of select="$_error_SendHTTPResponse/ns4:HttpCommunicationException/msgCode"/>
+                            </errorCode>
+                            <attributes>
+                                <name>
+                                    <xsl:value-of select="&quot;GUID&quot;"/>
+                                </name>
+                                <value>
+                                    <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                                </value>
+                            </attributes>
+                        </root>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <root>
+                            <customKey>
+                                <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                            </customKey>
+                            <station>
+                                <xsl:value-of select="concat(&quot;PID &quot;,$_processContext/ns1:ProcessContext/ProcessId)"/>
+                            </station>
+                            <errorCode>
+                                <xsl:value-of select="&quot;Error in WriteFile Activity&quot;"/>
+                            </errorCode>
+                            <attributes>
+                                <name>
+                                    <xsl:value-of select="&quot;GUID&quot;"/>
+                                </name>
+                                <value>
+                                    <xsl:value-of select="concat(&quot;Received GUID from XI:&quot;,substring-before(substring-after($ReceiveData-FromXI/ProcessStarterOutput/RequestURI,&quot;msgguid=&quot;),&quot;&amp;service&quot;))"/>
+                                </value>
+                            </attributes>
+                        </root>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="LogAuditAndUnexpectedFatalError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>826</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/LogAuditAndUnexpectedFatalError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="&quot;Unexpected Error in process GetProductDataFromXIRMA&quot;"/>
+                </station>
+                <additionalInfo>
+                    <xsl:value-of select="tib:render-xml($_error/ns1:ErrorReport/StackTrace)"/>
+                </additionalInfo>
+                <errorCode>
+                    <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                </errorCode>
+                <errorMsg>
+                    <xsl:value-of select="concat(&quot;Unexpected Error occured in RGetProductDataFromXIRMA  :  &quot;, &quot;boId: &quot;, $InitializeAudit/root/boId, &quot;&#xD;&#xA;&quot;,tib:render-xml($_error/ns1:ErrorReport, false(), true()))"/>
+                </errorMsg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ReceiveData FromXI</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>LogAuditAndUnexpectedFatalError</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogAuditAndUnexpectedFatalError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

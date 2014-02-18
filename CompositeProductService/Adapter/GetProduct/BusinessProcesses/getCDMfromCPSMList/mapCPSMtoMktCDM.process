@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.adidas.de/EAI/Audit.xsd" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://adidasGroup/schema/cdm/product/market/v1" xmlns:pfx2="http://adidasGroup/schema/cdm/product/catalogue/v1" xmlns:pfx="http://adidasGroup.com/schema/local/entity/be/product/v1">
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/market/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/MktProduct_MessageSchema.xsd"/>
+    <xsd:import namespace="http://adidasGroup.com/schema/local/entity/be/product/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/CPSMSchemaV1.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/catalogue/v1"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getCDMfromCPSMList/mapCPSMtoMktCDM.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:CPSMList"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>97</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:choose>
+                <xsl:when test="string-length($getErrorCode/error/errorCode)>0">
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$getErrorCode/error/errorCode">
+                <errorCode>
+                    <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                </errorCode>
+            </xsl:if>
+            <xsl:if test="$getErrorCode/error/errorInformation">
+                <StackTrace>
+                    <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                </StackTrace>
+            </xsl:if>
+            <xsl:copy-of select="$Map-Data/pfx3:MarketArticle"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="pfx3:MarketArticle" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>681</pd:endX>
+    <pd:endY>104</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1388466142177</pd:targetNamespace>
+    <pd:activity name="AuditLogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>680</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;, &quot;-----&quot;,&quot;In Process(PID:&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;)  - mapCPSMtoMktCDM: Error for ID: &quot;,$CPSM_Mkt/pfx:cpsm/pfx:header/@globalArtNr)"/>
+                </station>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>398</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <error>
+                <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                    <errorCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </errorCode>
+                </xsl:if>
+                <errorInformation>
+                    <xsl:value-of select="$_error/ns:ErrorReport/StackTrace"/>
+                </errorInformation>
+                <sourceApp>
+                    <xsl:value-of select="&quot;mapCPSMtoMktCDM&quot;"/>
+                </sourceApp>
+            </error>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>493</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>208</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/sourceApp">
+                    <errorApplication>
+                        <xsl:value-of select="$getErrorCode/error/sourceApp"/>
+                    </errorApplication>
+                </xsl:if>
+                <processStack>
+                    <xsl:value-of select="&quot;mapCPSMtoCtlCDM&quot;"/>
+                </processStack>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>89</pd:x>
+        <pd:y>0</pd:y>
+        <pd:width>264</pd:width>
+        <pd:height>179</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx:CPSMList/pfx:cpsm[pfx:header/@sourceObjType=$_globalVariables/pfx4:GlobalVariables/BusinessProcesses/CPSOutbound/GetProductDataFromBE/GEPS/MktObject]</pd:over>
+            <pd:iterationElementSlot>CPSM_Mkt</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AuditLog</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditLog</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="AuditLog">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>159</pd:x>
+            <pd:y>97</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit.process</processName>
+                <spawn>false</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;, &quot;-----&quot;,&quot;In Process(PID:&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;)  - mapCPSMtoMktCDM: Before mapper Activity , Unique Identifier: &quot;, $CPSM_Mkt/pfx:cpsm/pfx:header/@globalArtNr )"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;globalArtNr&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:header/@globalArtNr"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>268</pd:x>
+            <pd:y>95</pd:y>
+            <config>
+                <element ref="pfx3:MarketArticle"/>
+            </config>
+            <pd:inputBindings>
+                <pfx3:MarketArticle>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="var_GrpArtNo" select="substring-before(substring-after($CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[1]/@name,&quot;grpArtNo.&quot;),&quot;.&quot;)&#xA;&#xA;"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="var_mktArea" select=" substring-before(substring-after($CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[1]/@name,&quot;.marketArea.&quot;),&quot;.&quot;)"/>
+                    <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="var_mktChan" select="substring-before(substring-after($CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[1]/@name,&quot;.marketChan.&quot;),&quot;.&quot;)"/>
+                    <pfx3:mktArticle>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="grpArtNo">
+                            <xsl:value-of select="$var_GrpArtNo"/>
+                        </xsl:attribute>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketArea">
+                            <xsl:value-of select="$var_mktArea"/>
+                        </xsl:attribute>
+                        <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketChan">
+                            <xsl:value-of select="$var_mktChan"/>
+                        </xsl:attribute>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.grpMdlNo&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.grpMdlNo&quot;)]/@value">
+                                <xsl:attribute name="grpMdlNo">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.grpMdlNo&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailIntroDate&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailIntroDate&quot;)]/@value">
+                                <xsl:attribute name="retailIntroDate">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailIntroDate&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailExitDate&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailExitDate&quot;)]/@value">
+                                <xsl:attribute name="retailExitDate">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.retailExitDate&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryPlant&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryPlant&quot;)]/@value">
+                                <xsl:attribute name="deliveryPlant">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryPlant&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.prodHier&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.prodHier&quot;)]/@value">
+                                <xsl:attribute name="prodHier">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.prodHier&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup4&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup4&quot;)]/@value">
+                                <xsl:attribute name="materialGroup4">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup4&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup5&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup5&quot;)]/@value">
+                                <xsl:attribute name="materialGroup5">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialGroup5&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesUnit&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesUnit&quot;)]/@value">
+                                <xsl:attribute name="salesUnit">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesUnit&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.minDeliveryQuantity&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.minDeliveryQuantity&quot;)]/@value">
+                                <xsl:attribute name="minDeliveryQuantity">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.minDeliveryQuantity&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryUnit&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryUnit&quot;)]/@value">
+                                <xsl:attribute name="deliveryUnit">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.deliveryUnit&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.pricingIndicator&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.pricingIndicator&quot;)]/@value">
+                                <xsl:attribute name="pricingIndicator">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.pricingIndicator&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialPricingGroup&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialPricingGroup&quot;)]/@value">
+                                <xsl:attribute name="materialPricingGroup">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.materialPricingGroup&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsCode&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsCode&quot;)]/@value">
+                                <xsl:attribute name="sportsCode">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsCode&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsDescription&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsDescription&quot;)]/@value">
+                                <xsl:attribute name="sportsDescription">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sportsDescription&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.silhouette&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.silhouette&quot;)]/@value">
+                                <xsl:attribute name="silhouette">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.silhouette&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.genderSize&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.genderSize&quot;)]/@value">
+                                <xsl:attribute name="genderSize">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.genderSize&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.rangeType&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.rangeType&quot;)]/@value">
+                                <xsl:attribute name="rangeType">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.rangeType&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.dimWidth&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.dimWidth&quot;)]/@value">
+                                <xsl:attribute name="dimWidth">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.dimWidth&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.toolingGroup&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.toolingGroup&quot;)]/@value">
+                                <xsl:attribute name="toolingGroup">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.toolingGroup&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.macroModel&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.macroModel&quot;)]/@value">
+                                <xsl:attribute name="macroModel">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.macroModel&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.blankTshirt&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.blankTshirt&quot;)]/@value">
+                                <xsl:attribute name="blankTshirt">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.blankTshirt&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.managedAllocation&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.managedAllocation&quot;)]/@value">
+                                <xsl:attribute name="managedAllocation">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.managedAllocation&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.lastSellingSeason&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.lastSellingSeason&quot;)]/@value">
+                                <xsl:attribute name="lastSellingSeason">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.lastSellingSeason&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.limitedDiscountClass&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.limitedDiscountClass&quot;)]/@value">
+                                <xsl:attribute name="limitedDiscountClass">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.limitedDiscountClass&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sellInQuarter&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sellInQuarter&quot;)]/@value">
+                                <xsl:attribute name="sellInQuarter">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sellInQuarter&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.timePeriod&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.timePeriod&quot;)]/@value">
+                                <xsl:attribute name="timePeriod">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.timePeriod&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.businessUnit&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.businessUnit&quot;)]/@value">
+                                <xsl:attribute name="businessUnit">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.businessUnit&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.IBMFlag&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.IBMFlag&quot;)]/@value">
+                                <xsl:attribute name="IBMFlag">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.IBMFlag&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.categoryManager&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.categoryManager&quot;)]/@value">
+                                <xsl:attribute name="categoryManager">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.categoryManager&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.theme&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.theme&quot;)]/@value">
+                                <xsl:attribute name="theme">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.theme&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sCAMktgSeg&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sCAMktgSeg&quot;)]/@value">
+                                <xsl:attribute name="sCAMktgSeg">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sCAMktgSeg&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sizeScale&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sizeScale&quot;)]/@value">
+                                <xsl:attribute name="sizeScale">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.sizeScale&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesStatus&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesStatus&quot;)]/@value">
+                                <xsl:attribute name="salesStatus">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.salesStatus&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.taxClassification&quot;)]/@value!=''">
+                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.taxClassification&quot;)]/@value">
+                                <xsl:attribute name="taxClassification">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.taxClassification&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <pfx3:mktArtVersInfo>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="grpArtNo">
+                                <xsl:value-of select="$var_GrpArtNo"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketArea">
+                                <xsl:value-of select="$var_mktArea"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketChan">
+                                <xsl:value-of select="$var_mktChan"/>
+                            </xsl:attribute>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.versionDate&quot;)]/@value!=''">
+                                <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.versionDate&quot;)]/@value">
+                                    <xsl:attribute name="versionDate">
+                                        <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.versionDate&quot;)]/@value"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.verID&quot;)]/@value!=''">
+                                <xsl:attribute name="verID">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.verID&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtChange&quot;)]/@value!=''">
+                                <xsl:attribute name="mktArtChange">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtChange&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktSKUChange&quot;)]/@value!=''">
+                                <xsl:attribute name="mktSKUChange">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktSKUChange&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSizeConversion&quot;)]/@value!=''">
+                                <xsl:attribute name="mktArtSizeConversion">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSizeConversion&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSeasonChange&quot;)]/@value!=''">
+                                <xsl:attribute name="mktArtSeasonChange">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSeasonChange&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSeasonSKUChange&quot;)]/@value!=''">
+                                <xsl:attribute name="mktArtSeasonSKUChange">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtVersInfo.mktArtSeasonSKUChange&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx3:mktArtVersInfo>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                            <xsl:if test="contains(current()/@name,&quot;mktArtDescription.txtTypeCd&quot;) and contains(current()/@name,&quot;.lang.&quot;)&#xA; and substring-after(current()/@name,&quot;.lang.&quot;)=current()/@value and current()/@value!=''">
+                                <pfx3:mktArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="$var_GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketArea">
+                                        <xsl:value-of select="$var_mktArea"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketChan">
+                                        <xsl:value-of select="$var_mktChan"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.lang&quot;),&quot;mktArtDescription.txtTypeCd.&quot;)"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="current()/@value"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtDescription.txtTypeCd.&quot;,substring-after(substring-before(current()/@name,&quot;.lang&quot;),&quot;mktArtDescription.txtTypeCd.&quot;),&quot;.lang.&quot;,current()/@value,&quot;.desc&quot;)]/@value"/>
+                                    </xsl:attribute>
+                                </pfx3:mktArtDescription>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                            <xsl:choose>
+                                <xsl:when test="contains(current()/@name,&quot;mktArtSKU.srcSizeCd3.&quot;) and substring-after(current()/@name,&quot;.srcSizeCd3.&quot;)=current()/@value and &#xA;current()/@value!=''">
+                                    <pfx3:mktArtSKU>
+                                        <xsl:variable name="var_Artno" select="substring-after(substring-before(current()/@name,&quot;.marketArea&quot;),&quot;grpArtNo.&quot;)"/>
+                                        <xsl:variable name="var_mktAr" select="substring-after(substring-before(current()/@name,&quot;.marketChan&quot;),&quot;marketArea.&quot;)"/>
+                                        <xsl:variable name="var_mktCh" select="substring-after(substring-before(current()/@name,&quot;.mktArtSKU&quot;),&quot;marketChan.&quot;)"/>
+                                        <xsl:variable name="var_srcCd3" select="current()/@value"/>
+                                        <xsl:attribute name="marketArea">
+                                            <xsl:value-of select="$var_mktAr"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="marketChan">
+                                            <xsl:value-of select="$var_mktCh"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="srcSizeCd3">
+                                            <xsl:value-of select="current()/@value"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.localSize&quot;)]/@value!=''">
+                                            <xsl:attribute name="localSize">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.localSize&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:attribute name="grpArtNo">
+                                            <xsl:value-of select="$var_Artno"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.deliveringPlant&quot;)]/@value!=''">
+                                            <xsl:attribute name="deliveringPlant">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.deliveringPlant&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSHeartSize&quot;)]/@value!=''">
+                                            <xsl:attribute name="aFSHeartSize">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSHeartSize&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSSizeSpreadOrder&quot;)]/@value!=''">
+                                            <xsl:attribute name="aFSSizeSpreadOrder">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSSizeSpreadOrder&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSDefaultOrderQty&quot;)]/@value!=''">
+                                            <xsl:attribute name="aFSDefaultOrderQuantity">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSDefaultOrderQty&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSGridGroupPriceDetermin&quot;)]/@value!=''">
+                                            <xsl:attribute name="aFSGridGroupPriceDetermin">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.aFSGridGroupPriceDetermin&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.roundingFactor&quot;)]/@value!=''">
+                                            <xsl:attribute name="roundingFactor">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.roundingFactor&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.minOrderQty&quot;)]/@value!=''">
+                                            <xsl:attribute name="minOrderQty">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.minOrderQty&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.taxClassification&quot;)]/@value!=''">
+                                            <xsl:attribute name="taxClassification">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.taxClassification&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.addSKUNumber&quot;)]/@value!=''">
+                                            <xsl:attribute name="addSKUNumber">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.addSKUNumber&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.delFlag&quot;)]/@value!=''">
+                                            <xsl:attribute name="delFlag">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.delFlag&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.nRFSizeCode&quot;)]/@value!=''">
+                                            <xsl:attribute name="nRFSizeCode">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.nRFSizeCode&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.srcSizeScale&quot;)]/@value!=''">
+                                            <xsl:attribute name="srcSizeScale">
+                                                <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_Artno,&quot;.marketArea.&quot;,$var_mktAr,&quot;.marketChan.&quot;,$var_mktCh,&quot;.mktArtSKU.srcSizeCd3.&quot;,$var_srcCd3,&quot;.srcSizeScale&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </pfx3:mktArtSKU>
+                                </xsl:when>
+                            </xsl:choose>
+                        </xsl:for-each>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                            <xsl:if test="contains(current()/@name,&quot;mktArtSizeConversion.mtrlId&quot;) and contains(current()/@name,&quot;.sizeConvId&quot;) and  substring-after(current()/@name,&quot;.sizeConvId.&quot;)=current()/@value and &#xA;current()/@value!=''">
+                                <pfx3:mktArtSizeConversion>
+                                    <xsl:variable name="var_mtrId" select="substring-after(substring-before(current()/@name,&quot;.convType&quot;),&quot;mktArtSizeConversion.mtrlId.&quot;)"/>
+                                    <xsl:variable name="var_convtp" select="substring-after(substring-before(current()/@name,&quot;.srcSizeCd3&quot;),&quot;convType.&quot;)"/>
+                                    <xsl:variable name="var_SzCd3" select="substring-after(substring-before(current()/@name,&quot;.sizeConvId&quot;),&quot;srcSizeCd3.&quot;)"/>
+                                    <xsl:variable name="var_convId" select="current()/@value"/>
+                                    <xsl:attribute name="mtrlId">
+                                        <xsl:value-of select="$var_mtrId"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="convType">
+                                        <xsl:value-of select="$var_convtp"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="$var_SzCd3"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="sizeConvId">
+                                        <xsl:value-of select="current()/@value"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.lineEntryConv&quot;)]/@value!=''">
+                                        <xsl:attribute name="lineEntryConv">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.lineEntryConv&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.convAssignmRemarks&quot;)]/@value!=''">
+                                        <xsl:attribute name="convAssignmRemarks">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.convAssignmRemarks&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.gridEntryConv&quot;)]/@value!=''">
+                                        <xsl:attribute name="gridEntryConv">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;mktArtSizeConversion.mtrlId.&quot;,$var_mtrId,&quot;.convType.&quot;,$var_convtp,&quot;.srcSizeCd3.&quot;,$var_SzCd3,&quot;.sizeConvId.&quot;,$var_convId,&quot;.gridEntryConv&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx3:mktArtSizeConversion>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                            <xsl:if test="contains(current()/@name,&quot;mktArtSeason.timePeriodCd.&quot;) and current()/@value!='' and&#xA;substring-after(current()/@name,&quot;timePeriodCd.&quot;)=current()/@value">
+                                <pfx3:mktArtSeason>
+                                    <xsl:variable name="var_gArtNo" select="substring-after(substring-before(current()/@name,&quot;.marketArea&quot;),&quot;grpArtNo.&quot;)"/>
+                                    <xsl:variable name="var_mkArea" select="substring-after(substring-before(current()/@name,&quot;.marketChan&quot;),&quot;marketArea.&quot;)&#xA;"/>
+                                    <xsl:variable name="var_mkChan" select="substring-after(substring-before(current()/@name,&quot;.mktArtSeason.timePeriodCd&quot;),&quot;marketChan.&quot;)&#xA;"/>
+                                    <xsl:variable name="var_TmPdcd" select="current()/@value"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="$var_gArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketArea">
+                                        <xsl:value-of select="$var_mkArea"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="marketChan">
+                                        <xsl:value-of select="$var_mkChan"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="timePeriodCd">
+                                        <xsl:value-of select="$var_TmPdcd"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.grpMdlNo&quot;)]/@value!=''">
+                                        <xsl:attribute name="grpMdlNo">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.grpMdlNo&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.mktgFC&quot;)]/@value!=''">
+                                        <xsl:attribute name="mktgFC">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.mktgFC&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.areaRetailIntroDt&quot;)]/@value!=''">
+                                        <xsl:attribute name="areaRetailIntroDt">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.areaRetailIntroDt&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.areaRetailExitDt&quot;)]/@value!=''">
+                                        <xsl:attribute name="areaRetailExitDt">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.areaRetailExitDt&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.aFSInd&quot;)]/@value!=''">
+                                        <xsl:attribute name="aFSInd">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.aFSInd&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.leadTm&quot;)]/@value!=''">
+                                        <xsl:attribute name="leadTm">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.leadTm&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.factoryCd&quot;)]/@value!=''">
+                                        <xsl:attribute name="factoryCd">
+                                            <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_gArtNo,&quot;.marketArea.&quot;,$var_mkArea,&quot;.marketChan.&quot;,$var_mkChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$var_TmPdcd,&quot;.factoryCd&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:for-each select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[contains(@name,&quot;mktArtSeasonSKU.srcSizeScale.&quot;) and &#xA;contains(@name,&quot;.srcSizeCd3.&quot;)&#xA; and  @value!='' and substring-after(@name,&quot;.srcSizeCd3.&quot;)=@value]">
+                                        <pfx3:mktArtSeasonSKU>
+                                            <xsl:attribute name="grpArtNo">
+                                                <xsl:value-of select="$var_GrpArtNo"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="marketArea">
+                                                <xsl:value-of select="$var_mktArea"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="marketChan">
+                                                <xsl:value-of select="$var_mktChan"/>
+                                            </xsl:attribute>
+                                            <xsl:variable name="tpcd" select="substring-before(substring-after(current()/@name,&quot;mktArtSeason.timePeriodCd.&quot;),&quot;.mktArtSeasonSKU.srcSizeScale&quot;)"/>
+                                            <xsl:variable name="srcSizeScale" select="substring-before(substring-after(current()/@name,&quot;mktArtSeasonSKU.srcSizeScale.&quot;),&quot;.srcSizeCd3.&quot;)"/>
+                                            <xsl:attribute name="timePeriodCd">
+                                                <xsl:value-of select="substring-before(substring-after(current()/@name,&quot;mktArtSeason.timePeriodCd.&quot;),&quot;.mktArtSeasonSKU.srcSizeScale&quot;)"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$tpcd,&quot;.mktArtSeasonSKU.srcSizeScale.&quot;,$srcSizeScale,&quot;.srcSizeCd3.&quot;,current()/@value,&quot;.srcSizeCd2&quot;)]/@value!=''">
+                                                <xsl:attribute name="srcSizeCd2">
+                                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.mktArtSeason.timePeriodCd.&quot;,$tpcd,&quot;.mktArtSeasonSKU.srcSizeScale.&quot;,$srcSizeScale,&quot;.srcSizeCd3.&quot;,current()/@value,&quot;.srcSizeCd2&quot;)]/@value"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:attribute name="srcSizeScale">
+                                                <xsl:value-of select="substring-before(substring-after(current()/@name,&quot;mktArtSeasonSKU.srcSizeScale.&quot;),&quot;.srcSizeCd3.&quot;)"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="srcSizeCd3">
+                                                <xsl:value-of select="current()/@value"/>
+                                            </xsl:attribute>
+                                        </pfx3:mktArtSeasonSKU>
+                                    </xsl:for-each>
+                                </pfx3:mktArtSeason>
+                            </xsl:if>
+                        </xsl:for-each>
+                        <pfx3:mktHeartBeatSports>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="grpArtNo">
+                                <xsl:value-of select="$var_GrpArtNo"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketArea">
+                                <xsl:value-of select="$var_mktArea"/>
+                            </xsl:attribute>
+                            <xsl:attribute xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="marketChan">
+                                <xsl:value-of select="$var_mktChan"/>
+                            </xsl:attribute>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSGender&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSGender">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSGender&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSMainColorCode&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSMainColorCode">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSMainColorCode&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSProductCategory&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSProductCategory">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSProductCategory&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSProductType&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSProductType">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSProductType&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSKeyProductInd&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSKeyProductInd">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSKeyProductInd&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSAthleteCode&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSAthleteCode">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSAthleteCode&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSTeamCode&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSTeamCode">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSTeamCode&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSCarryOver&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSCarryOver">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSCarryOver&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSNewTag&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSNewTag">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSNewTag&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter1&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSSpecialFilter1">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter1&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter2&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSSpecialFilter2">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter2&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if xmlns:xsl="http://www.w3.org/1999/XSL/Transform" test="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter3&quot;)]/@value!=''">
+                                <xsl:attribute name="hBSSpecialFilter3">
+                                    <xsl:value-of select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(&quot;grpArtNo.&quot;,$var_GrpArtNo,&quot;.marketArea.&quot;,$var_mktArea,&quot;.marketChan.&quot;,$var_mktChan,&quot;.hBSSpecialFilter3&quot;)]/@value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                                <xsl:if test="contains(current()/@name,&quot;.hBSTechnology&quot;) and contains(current()/@name,&quot;.marketChan.&quot;)">
+                                    <pfx3:mktHBSTechnologies>
+                                        <xsl:attribute name="groupArticleNumber">
+                                            <xsl:value-of select="$var_GrpArtNo"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="marketArea">
+                                            <xsl:value-of select="$var_mktArea"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="marketChan">
+                                            <xsl:value-of select="$var_mktChan"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="current()/@value!=''">
+                                            <xsl:attribute name="hBSTechnology">
+                                                <xsl:value-of select="current()/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </pfx3:mktHBSTechnologies>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </pfx3:mktHeartBeatSports>
+                    </pfx3:mktArticle>
+                    <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$CPSM_Mkt/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                        <xsl:if test="contains(current()/@name,&quot;mktArticleToNode.marketArea&quot;) and contains(current()/@name,&quot;nodeId&quot;)&#xA;and current()/@value!=''">
+                            <pfx3:mktArticleToNode>
+                                <xsl:attribute name="grpArtNo">
+                                    <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.mktArticleToNode.marketArea.&quot;),&quot;grpArtNo.&quot;)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="marketArea">
+                                    <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.marketChan&quot;),&quot;marketArea.&quot;)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="marketChan">
+                                    <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.nodeId&quot;),&quot;marketChan.&quot;)"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="nodeId">
+                                    <xsl:value-of select="substring-after(@name,&quot;.nodeId.&quot;)"/>
+                                </xsl:attribute>
+                            </pfx3:mktArticleToNode>
+                        </xsl:if>
+                    </xsl:for-each>
+                </pfx3:MarketArticle>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>AuditLogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLogError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

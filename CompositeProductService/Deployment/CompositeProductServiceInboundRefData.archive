@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
+    <enterpriseArchive>
+        <sharedArchive name="Shared Archive">
+            <resourceType>shared.archive.resource</resourceType>
+            <authorProperty>Arun_Kadian</authorProperty>
+        </sharedArchive>
+        <processArchive name="Process Archive">
+            <resourceType>process.archive.resource</resourceType>
+            <authorProperty>Arun_Kadian</authorProperty>
+            <processProperty>/Adapter/GetProduct/StarterProcesses/Timer/GetReferenceData.process</processProperty>
+        </processArchive>
+        <versionProperty>2</versionProperty>
+        <authorProperty>Arun_Kadian</authorProperty>
+        <addServiceSettableGvars>true</addServiceSettableGvars>
+        <name>CompositeProductServiceInboundRefData</name>
+        <designer>
+            <lockedProperties/>
+            <fixedChildren/>
+            <resourceDescriptions/>
+        </designer>
+        <fileLocationProperty>C:\Users\arun_kadian\Desktop\Adidas-CodeWork\Working\CompositeProductServiceInboundRefData.ear</fileLocationProperty>
+    </enterpriseArchive>
+</Repository:repository>

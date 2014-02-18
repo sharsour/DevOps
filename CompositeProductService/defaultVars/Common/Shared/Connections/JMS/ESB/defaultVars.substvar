@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>jmsConnectionPassword</name>
+			<value>#!ALT5mJgjGQZAtCVpIt7VC/6i8fvDfYHv</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1389626047238</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>jmsConnectionUsername</name>
+			<value>admin</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047238</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>jndiJMSURL</name>
+			<value>tibjmsnaming://deheremap6213.emea.adsint.biz:7222</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047238</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>jndiPassword</name>
+			<value>#!V9czBAkV9tzKaC/ui2mjJgb0BcBicSyT</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1389626047238</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>jndiUserName</name>
+			<value>admin</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047238</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

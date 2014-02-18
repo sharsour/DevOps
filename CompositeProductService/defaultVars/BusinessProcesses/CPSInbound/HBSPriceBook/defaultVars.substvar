@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>BEInputQueue</name>
+			<value>adidasgroup.eai.orchestrator.hbs.price.requestproductinformation.asynch.request.v1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390817261403</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>FileName</name>
+			<value>no value</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390900568582</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>HBSInternalQueue</name>
+			<value>adidasgroup.eai.orchestrator.bw.product.processpricebookinformation.asynch.publish.v1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390831347335</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>TimerInterval</name>
+			<value>10000</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1390814058597</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

@@ -1,0 +1,1872 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:infatype="http://www.informatica.com/types/"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xsd:element name="ProductMaster">
+		<xsd:annotation id="ProductMaster">
+			<xsd:documentation>ProductMaster</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Header"/>
+				<xsd:element ref="Prod"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Prod">
+		<xsd:annotation id="Prod">
+			<xsd:documentation>Product</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ARTCL" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation id="Prod_ARTCL">
+						<xsd:documentation>Article, Colorway</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="AVERS" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_AVERS">
+									<xsd:documentation>Article Version Information</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_AVERS_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="VerId" type="xsd:string">
+											<xsd:annotation infatype:length="100" infatype:type="xsd:string" id="Prod_ARTCL_AVERS_VerId">
+												<xsd:documentation>Version Identifier</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtChange">
+												<xsd:documentation>Article Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtMainChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtMainChange">
+												<xsd:documentation>Article Main Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSizeChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtSizeChange">
+												<xsd:documentation>Article Size Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtCompChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtCompChange">
+												<xsd:documentation>Article Composition Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtCustomsChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtCustomsChange">
+												<xsd:documentation>Article Customs Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtCustomsBTIChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtCustomsBTIChange">
+												<xsd:documentation>Article Customs BTI Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtFactoryChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtFactoryChange">
+												<xsd:documentation>Article Factory Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtDescChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtDescChange">
+												<xsd:documentation>Article Description Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ColorwayDescChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ColorwayDescChange">
+												<xsd:documentation>Colorway Description Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SKUChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_SKUChange">
+												<xsd:documentation>SKU Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtRMHChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArtRMHChange">
+												<xsd:documentation>Article RMH Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSeasonChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArticleSeasonChange">
+												<xsd:documentation>Article Season Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtCostingChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArticleCostingChange">
+												<xsd:documentation>Article Costing Change,</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtMainMaterialChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_AVERS_ArticleMainMaterialChange">
+												<xsd:documentation>Article Main Material Change, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="GrpArtNo" type="NoArtA6">
+								<xsd:annotation id="Prod_ARTCL_GrpArtNo">
+									<xsd:documentation>Group Article Number, Colorway.GrpArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GrpArtNo1" type="NoArtA6">
+								<xsd:annotation id="Prod_ARTCL_GrpArtNo1">
+									<xsd:documentation>Group Article Number1, Colorway.GrpArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AltArtNo" type="CdXLongA18">
+								<xsd:annotation id="Prod_ARTCL_AltArtNo">
+									<xsd:documentation>Alternate Article Number, Colorway.AltArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OrigArtNo" type="CdXLongA30" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OrigArtNo">
+									<xsd:documentation>Original Article Number, Colorway.OrigArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="VendorArtNo" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_VendorArtNo">
+									<xsd:documentation>Vendor Article Number, Colorway.VendorArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BaseArtNo" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_BaseArtNo">
+									<xsd:documentation>Base Article Number, Colorway.BaseArtNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GrpMdlNo" type="NoMdlA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_GrpMdlNo">
+									<xsd:documentation>Group Model Number, Article.GrpMdlNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OrigMdlNo" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OrigMdlNo">
+									<xsd:documentation>Original Model Number, Article.OrigMdlNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AltMdlNo" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_AltMdlNo">
+									<xsd:documentation>Alternate Model Number, Article.AltMdlNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="WorkingMdlNo" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_WorkingMdlNo">
+									<xsd:documentation>Working Model Number, Article.WorkingMdlNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LicensedVendor" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LicensedVendor">
+									<xsd:documentation>Licensed Vendor, Article.LicensedVendor</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MacroMdlCd" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MacroMdlCd">
+									<xsd:documentation>Macro Model Code, Article.MacroMdlCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtType" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtType">
+									<xsd:documentation>Article Type, Colorway.ArtType</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtCreationSeason" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtCreationSeason">
+									<xsd:documentation>Article Creation Season, Colorway.ArtCreationSeason</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtActiveSeason" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtActiveSeason">
+									<xsd:documentation>Article Active Season, Colorway.ArtActiveSeason</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtLifecycle" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtLifecycle">
+									<xsd:documentation>Article Lifecycle, Colorway.ArtLifecycleSts</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtLifecycleStsDt" type="DtA8" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtLifecycleStsDt">
+									<xsd:documentation>Article Lifecycle Status Date, Colorway.ArtLifecycleStsDt</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ArtSrcSys" type="CdMedA6" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ArtSrcSys">
+									<xsd:documentation>Article Source System, Colorway.ArtSrcSys</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BrandGrp" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_BrandGrp">
+									<xsd:documentation>Brand Group, Article.BrandGrp</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Brand" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Brand">
+									<xsd:documentation>Brand, Article.Brand</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SportsCat" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_SportsCat">
+									<xsd:documentation>Sports Category, Article.SportsCat</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdDiv" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdDiv">
+									<xsd:documentation>Product Division, Article.ProdDiv</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdGrp" type="CdShortA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdGrp">
+									<xsd:documentation>Product Group, Article.ProdGrp</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdType" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdType">
+									<xsd:documentation>Product Type, Article.ProdType</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MktgDiv" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MktgDiv">
+									<xsd:documentation>Marketing Division, Colorway.MktgDiv</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BusSeg" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_BusSeg">
+									<xsd:documentation>Business Segment, Colorway.BusSeg</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="CorpMktgLine" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_CorpMktgLine">
+									<xsd:documentation>Corporate Marketing Line, Article.CorpMktgLine</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="CatMktgLine" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_CatMktgLine">
+									<xsd:documentation>Category Marketing Line, Article.CatMktgLine</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="TechConcept" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_TechConcept">
+									<xsd:documentation>Technology Concept, Article.TechConcept</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="RoyaltyContract1" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_RoyaltyContract1">
+									<xsd:documentation>Royalty Contract 1, Article.RoyaltyContract1</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="RoyaltyContract2" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_RoyaltyContract2">
+									<xsd:documentation>Royalty Contract 2, Article.RoyaltyContract2</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="RoyaltyContract3" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_RoyaltyContract3">
+									<xsd:documentation>Royalty Contract 3, Article.RoyaltyContract3</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BaseUnit" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_BaseUnit">
+									<xsd:documentation>Base Unit</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OutsoleToolingNo" type="CdLongA8" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OutsoleToolingNo">
+									<xsd:documentation>Outsole Tooling Number</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OutsoleToolingDesc" type="DescMedA40" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OutsoleToolingDesc">
+									<xsd:documentation>Outsole Tooling Description</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Color1" type="CdMedA4" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Color1">
+									<xsd:documentation>Color 1, Colorway.Color1</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Color2" type="CdMedA4" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Color2">
+									<xsd:documentation>Color 2, Colorway.Color2</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Color3" type="CdMedA4" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Color3">
+									<xsd:documentation>Color 3, Colorway.Color3</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Color4" type="CdMedA4" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Color4">
+									<xsd:documentation>Color 4, Colorway.Color4</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="NRFColorCd" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_NRFColorCd">
+									<xsd:documentation>NRF Color Code, Colorway.NRFColorCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AltColorCd" type="DescMedA40" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_AltColorCd">
+									<xsd:documentation>Alternate Color Code, Colorway.AltColorCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GraphicCd" type="CdLongA10" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_GraphicCd">
+									<xsd:documentation>Graphic Code, Colorway.GraphicCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="GraphicDesc" type="DescMedA40" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_GraphicDesc">
+									<xsd:documentation>Graphic Description, Colorway.GraphicDesc</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AgeGrp" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_AgeGrp">
+									<xsd:documentation>Age Group, Colorway.AgeGrp</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Gender" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Gender">
+									<xsd:documentation>Gender, Article.Gender</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdBabies" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdBabies">
+									<xsd:documentation>USer Code Babies, Model.UserCdBabies</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdChildren" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdChildren">
+									<xsd:documentation>User Code Children, Model.UserCdChildren</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdGirls" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdGirls">
+									<xsd:documentation>User Code Girls, Model.UserCdGirls</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdBoys" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdBoys">
+									<xsd:documentation>User Code Boys,Model.UserCdBoys</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdMen" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdMen">
+									<xsd:documentation>User Code Men, Model.UserCdMen</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UserCdLadies" type="CdA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UserCdLadies">
+									<xsd:documentation>User Code Ladies , Model.UserCdLadies</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OrdLockedInd" type="IndYesNoA1" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OrdLockedInd">
+									<xsd:documentation>Order Locked Indicator,Colorway.OrdLockedInd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="DevOrg" type="CdMedA4" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_DevOrg">
+									<xsd:documentation>Development Organization, Article.DevOrg</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="DevLocn" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_DevLocn">
+									<xsd:documentation>Development Location, Article.DevLocn</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="QtyUnit" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_QtyUnit">
+									<xsd:documentation>Quantity Unit, Article.QtyUnit</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OutPkgQty" type="IntA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OutPkgQty">
+									<xsd:documentation>Outer Package Quantity, Article.OutPkgQty</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MtrlTech" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MtrlTech">
+									<xsd:documentation>Material Technology, Article.MtrlTech</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="PictogramCompCd" type="CdXLongA18" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_PictogramCompCd">
+									<xsd:documentation>Pictogram Composition Code, Article.PictogramCompCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UpperMainMtrl" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UpperMainMtrl">
+									<xsd:documentation>Upper Main Material, Colorway.UpperMainMtrl</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LiningMainMtrl" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LiningMainMtrl">
+									<xsd:documentation>Lining Main Material, Colorway.LiningMainMtrl</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="InSoleMainMtrl" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_InSoleMainMtrl">
+									<xsd:documentation>Inner Sole Main Material, Colorway.InSoleMainMtrl</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="OutSoleMainMtrl" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_OutSoleMainMtrl">
+									<xsd:documentation>Outer Sole Main Material, Colorway.OutSoleMainMtrl</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SizePage" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_SizePage">
+									<xsd:documentation>Size Page, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SrcSizeScale" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_SrcSizeScale">
+									<xsd:documentation>Sourcing Size Scale, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SrcSampleSizeCd2" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_SrcSampleSizeCd2">
+									<xsd:documentation>Sourcing Sample Size Code 2, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SrcSampleSizeCd3" type="CdA2" minOccurs="0">
+								<xsd:annotation infatype:length="3" infatype:type="CdA2" id="Prod_ARTCL_SrcSampleSizeCd3">
+									<xsd:documentation>Sourcing Sample Size Code 3, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LocalSizeCountry" type="CdA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LocalSizeCountry">
+									<xsd:documentation>Local Size Country</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LocalSampleSize" type="CdA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LocalSampleSize">
+									<xsd:documentation>Local Sample Size</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LocalSizeList" type="CdA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LocalSizeList">
+									<xsd:documentation>Local Size List</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="LocalSizeRange" type="CdA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_LocalSizeRange">
+									<xsd:documentation>Local Size Range</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdSet" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdSet">
+									<xsd:documentation>Product Set, Article.ProdSet</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ICGSCode" type="CdLongA10" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ICGSCode">
+									<xsd:documentation>ICGS Code, Article.ICGSCode</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdDescEN" type="DescShortA30" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdDescEN">
+									<xsd:documentation>Product Description EN, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ColorwayShortDescEN" type="DescShortA25" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ColorwayShortDescEN">
+									<xsd:documentation>Colorway Short Description EN, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ColorwayLongDescEN" type="DescMedA45" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ColorwayLongDescEN">
+									<xsd:documentation>Colorway Long Description EN, </xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="SecondaryColorwayDescEN" type="NmLongA60" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_SecondaryColorwayDescEN">
+									<xsd:documentation>Secondary Colorway Description EN,Colorway.SecondaryColorwayDescEN</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="TgtMtrlCd" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_TgtMtrlCd">
+									<xsd:documentation>Target Material Code, Article.TgtMtrlCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="TgtSrcCd" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_TgtSrcCd">
+									<xsd:documentation>Target Sourcing Code, Article.TgtSrcCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="TgtMtrlTech" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_TgtMtrlTech">
+									<xsd:documentation>Target Material Technology, Model.TgtMtrlTech</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="AllocCatCd" type="TxtXLongA120" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_AllocCatCd">
+									<xsd:documentation>Allocation Category Code, Article.AllocCatCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProdSpecialityCd" type="MVDelimTxt" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProdSpecialityCd">
+									<xsd:documentation>Product Speciality Code, ProdSpecialityCd</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="PDUOM" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_PDUOM">
+									<xsd:documentation>Product Dimension UOM, Article.PDUOM</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Length" type="Num8Pre2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Length">
+									<xsd:documentation>Length, Article.Length</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Width" type="Num8Pre2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Width">
+									<xsd:documentation>Width, Article.Width</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Height" type="Num8Pre2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Height">
+									<xsd:documentation>Height, Article.Height</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="PDUOV" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_PDUOV">
+									<xsd:documentation>Product Dimension UOV, Article.PDUOV</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Volume" type="Num8Pre2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Volume">
+									<xsd:documentation>Volume, Article.Volume</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="Weight" type="Num8Pre2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_Weight">
+									<xsd:documentation>Weight, Article.Weight</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ConsumerBenefit" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ConsumerBenefit">
+									<xsd:documentation>Consumer Benefit, Model.ConsumerBenefit</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="FeaturesandBenefits" type="TxtXLongA2000" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_FeaturesandBenefits">
+									<xsd:documentation>Features and Benefits, Model.FeaturesandBenefits</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="KeyCategory" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_KeyCategory">
+									<xsd:documentation>Key category, Colorway.KeyCategory</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="UpperToolingNo" type="CdLongA8" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_UpperToolingNo">
+									<xsd:documentation>Upper Tooling Number, Product.UpperToolingNo</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ManufacturingType" type="CdLongA8" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ManufacturingType">
+									<xsd:documentation>Manufacturing Type, Product.ManufacturingType</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ManufacturingCapability" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ManufacturingCapability">
+									<xsd:documentation>Manufacturing Capability, Product.ManufacturingCapability</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ConstructionType" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ConstructionType">
+									<xsd:documentation>Construction Type, Product.ConstructionType</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="BoxLblCategory" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_BoxLblCategory">
+									<xsd:documentation>Box Label Category, product.BoxLblCategory</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MgmtBrand" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MgmtBrand">
+									<xsd:documentation>Management Brand,MgmtBrand</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ProductFit" type="CdShortA3" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ProductFit">
+									<xsd:documentation>Product Fit, Colorway.ProductFit</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="DropReason" type="CdA2" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_DropReason">
+									<xsd:documentation>Drop Reason, Colorway.DropReason</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ColorwayName" type="TxtXLongA250" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_ColorwayName">
+									<xsd:documentation>Colorway Name</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MdlSrcSys" type="CdMedA6" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MdlSrcSys">
+									<xsd:documentation>Model Source System</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="MdlBusSeg" type="CdMedA5" minOccurs="0">
+								<xsd:annotation id="Prod_ARTCL_MdlBusSeg">
+									<xsd:documentation>Business Segment, Colorway.BusSeg</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="ALSIZ" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ALSIZ">
+									<xsd:documentation>Size</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd2" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_SrcSizeCd2">
+												<xsd:documentation>Sourcing Size Code 2, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd3" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_SrcSizeCd3">
+												<xsd:documentation>Sourcing Size Code 3, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Placeholder3" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_Placeholder">
+												<xsd:documentation>Place Holder, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="FeasInd" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_FeasInd">
+												<xsd:documentation>Feasible Indicator, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProdWgt" type="MeasN7">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_ProdWgt">
+												<xsd:documentation>Product Weight</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="InPkg" type="CdLongA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_InPkg">
+												<xsd:documentation>Inner Package, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="InPkgLen" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_InPkgLen">
+												<xsd:documentation>Inner Package Length, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="InPkgWid" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_InPkgWid">
+												<xsd:documentation>Inner Package Width, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="InPkgHgt" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_InPkgHgt">
+												<xsd:documentation>Inner Package Height, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="InPkgWgt" type="MeasN7" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_InPkgWgt">
+												<xsd:documentation>Inner Package Weight, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkgQty" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkgQty">
+												<xsd:documentation>Outer Package Quantity, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkg" type="CdLongA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkg">
+												<xsd:documentation>Outer Package, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkgLen" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkgLen">
+												<xsd:documentation>Outer Package Length, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkgWid" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkgWid">
+												<xsd:documentation>Outer Package Width, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkgHgt" type="MeasN5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkgHgt">
+												<xsd:documentation>Outer Package Height, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="OutPkgWgt" type="MeasN7" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ALSIZ_OutPkgWgt">
+												<xsd:documentation>Outer Package Weight, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ACOMP" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ACOMP">
+									<xsd:documentation>Article Composition, Colorway.ArtComp</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ImportCountry" type="CdShortA3">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_ImportCountry">
+												<xsd:documentation>Import Country, ArtComp.ImportCountry</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="CustomsCompTxtEN" type="TxtXLongA250" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_CustomsCompTxtEN">
+												<xsd:documentation>Customs Composition Text EN, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PictogramCompTxtEN" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_PictogramCompTxtEN">
+												<xsd:documentation>Pictogram Composition TextEN, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProtectedAnimalInd" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_ProtectedAnimalInd">
+												<xsd:documentation>Protected Animal Indicator, ArtComp.ProtectedAnimalInd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="AnimalType" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACOMP_AnimalType">
+												<xsd:documentation>Animal Type, ArtComp.AnimalType</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ACUST" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ACUST">
+									<xsd:documentation>Article Customs, Colorway.ArtCustoms</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ACUST_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ImportCountry" type="CdShortA3">
+											<xsd:annotation id="Prod_ARTCL_ACUST_ImportCountry">
+												<xsd:documentation>Import Country, ArtCustoms.ImportCountry</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProdPartNo" type="IntA5">
+											<xsd:annotation id="Prod_ARTCL_ACUST_ProdPartNo">
+												<xsd:documentation>Product Part Number, ArtCustoms.ProdPartNo</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeScale" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_SrcSizeScale">
+												<xsd:documentation>Sourcing Size Scale, ArtCustoms.SrcSizeSplit</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd2" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_SrcSizeCd2">
+												<xsd:documentation>Sourcing Size Code 2, ArtCustoms.SrcSizeSplit</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd3" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_SrcSizeCd3">
+												<xsd:documentation>Sourcing Size Code 3, ArtCustoms.SrcSizeSplit</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Placeholder1" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_Placeholder1">
+												<xsd:documentation>Place Holder1 </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Placeholder2" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_Placeholder2">
+												<xsd:documentation>Place Holder2 </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Customs_Number" type="NoCustomsA17">
+											<xsd:annotation id="Prod_ARTCL_ACUST_Customs_Number">
+												<xsd:documentation>Customs Number, ArtCustoms.CustomsNumber</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="DutyQualifier" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_DutyQualifier">
+												<xsd:documentation>Duty Qualifier, ArtCustoms.DutyQualifier</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PkgCompCountry" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_PkgCompCountry">
+												<xsd:documentation>Package Component Country, ArtCustoms.PkgCompCountry</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PkgCompCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_PkgCompCurr">
+												<xsd:documentation>Package Component Currency, ArtCustoms.PkgCompCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PkgCompDesc" type="DescMedA40" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_PkgCompDesc">
+												<xsd:documentation>Package Component Description, ArtCustoms.PkgCompDesc</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PkgCompVal" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_PkgCompVal">
+												<xsd:documentation>Package Component Value, ArtCustoms.PkgCompVal</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PkgCompPercentage" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ACUST_PkgCompPercentage">
+												<xsd:documentation>Package Component Percentage, ArtCustoms.PkgCompPercentage</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LDPFlag" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACUST_LDPFlag">
+												<xsd:documentation>LDP Flag, ArtCustoms.LDPFlag</xsd:documentation>
+												<xsd:documentation/>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ACBTI" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ACBTI_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ImportCountry" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACBTI_ImportCountry">
+												<xsd:documentation>Import Country,ArtBTI.ImportCountry</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BTINumber" type="DescMedA40" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACBTI_BTINumber">
+												<xsd:documentation>BTI Number, ArtBTI.BTINumber</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BTIValidFrom" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACBTI_BTIValidFrom">
+												<xsd:documentation>BTI Valid From, ArtBTI.BTIValidFrom</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ADESC" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ADESC">
+									<xsd:documentation>Article Description ML</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ADESC_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LangCd" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ADESC_LangCd">
+												<xsd:documentation>Language Code</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtDesc" type="DescShortA30" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ADESC_ArtDesc">
+												<xsd:documentation>Article Description</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MdlDesc" type="DescShortA30" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ADESC_MdlDesc">
+												<xsd:documentation>Model Description</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ACWDL" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ACWDL">
+									<xsd:documentation>Colorway Description ML</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ACWDL_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LangCd" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACWDL_LangCd">
+												<xsd:documentation>Language Code</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ColorwayShortDesc" type="DescShortA25" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACWDL_ColorwayShortDesc">
+												<xsd:documentation>Colorway Short Description</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ColorwayLongDesc" type="DescMedA45" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ACWDL_ColorwayLongDesc">
+												<xsd:documentation>Colorway Long Description</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ALLBL" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_Art_ArtLbl">
+									<xsd:documentation>Article Label, </xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ALLBL_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Lbl" type="CdLongA10">
+											<xsd:annotation id="Prod_ARTCL_ALLBL_Lbl">
+												<xsd:documentation>Label, ArtLbl.Lbl</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LblCnt" type="IntA5">
+											<xsd:annotation id="Prod_ARTCL_ALLBL_LblCnt">
+												<xsd:documentation>Label Count, ArtLbl.LblCnt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ASEAS" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ASEAS">
+									<xsd:documentation>Article Season</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SeasonCode" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SeasonCode">
+												<xsd:documentation>Season Code, ColorwaySeason.SeasonCode</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SeasonChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SeasonChange">
+												<xsd:documentation>Season Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SeasonMainChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SeasonMainChange">
+												<xsd:documentation>Season Main Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtFactoryChange" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtFactoryChange">
+												<xsd:documentation>Article Factory Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MktgFC" type="IntA10" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MktgFC">
+												<xsd:documentation>Marketing Forecast</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PlaceholderStyleCount" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_PlaceholderStyleCount">
+												<xsd:documentation>Placeholder Stylecount</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProductPlaceholder" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ProductPlaceholder">
+												<xsd:documentation>Product Placeholder</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ReplenishmentFlag" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ReplenishmentFlag">
+												<xsd:documentation>Replenishment Flag</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Designer" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_Designer">
+												<xsd:documentation>Designer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Developer" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_Developer">
+												<xsd:documentation>Developer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LOMerchandiser" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_LOMerchandiser">
+												<xsd:documentation>LO Developer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProductManager" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ProductManager">
+												<xsd:documentation>Product Manager</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="CADPatternMaker" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_CADPatternMaker">
+												<xsd:documentation>CAD Pattern Maker</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="DirectDevelopment" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_DirectDevelopment">
+												<xsd:documentation>Direct Development</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TransportationleadTime" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TransportationleadTime">
+												<xsd:documentation>Transportation Lead Time</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SalesLine" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SalesLine">
+												<xsd:documentation>Sales Line</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ConsumerSeg" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ConsumerSeg">
+												<xsd:documentation>Consumer Segment</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PriceSeg" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_PriceSeg">
+												<xsd:documentation>Price Segment</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SalesRgn" type="MVDelimTxt" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SalesRgn">
+												<xsd:documentation>Sales Region</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="DevType" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_DevType">
+												<xsd:documentation>Development Type</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="DistChan" type="MVDelimTxt" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_DistChan">
+												<xsd:documentation>Distribution Channel, ColorwaySeason.DistChan</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SpecialUsg" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SpecialUsg">
+												<xsd:documentation>Special Usage, ColorwaySeason.SpecialUsg</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProdLine" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ProdLine">
+												<xsd:documentation>Product Line, ColorwaySeason.ProdLine</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BusUnit" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_BusUnit">
+												<xsd:documentation>Business Unit ,ColorwaySeason.BusUnit</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="FirstExFactoryDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_FirstExFactoryDt">
+												<xsd:documentation>First Ex Factory Date,ColorwaySeason.FirstExFactoryDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LastExFactoryDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_LastExFactoryDt">
+												<xsd:documentation>Last Ex Factory Date, ColorwaySeason.LastExFactoryDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PrdnLeadTm" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_PrdnLeadTm">
+												<xsd:documentation>Production Lead Time, ColorwaySeason.PrdnLeadTm</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailIntroDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_RetailIntroDt">
+												<xsd:documentation>Retail Intro Date, ColorwaySeason.RetailIntroDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailExitDt" type="DtA8">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_RetailExitDt">
+												<xsd:documentation>Retail Exit Date, ColorwaySeason.RetailExitDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProdLifecycleSeasonSts" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ProdLifecycleSeasonSts">
+												<xsd:documentation>Production Lifecycle Season Status, ColorwaySeason.ProdLifecycleSeasonSts</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="PurOrdMinQty" type="IntA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_PurOrdMinQty">
+												<xsd:documentation>Purchase Order Minimum Quantity,ColorwaySeason.PurOrdMinQty</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="QuarterCd" type="CdLongA10" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_QuarterCd">
+												<xsd:documentation>Quarter Code, ColorwaySeason.QuarterCd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TimelineCd" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TimelineCd">
+												<xsd:documentation>Timeline Code, ColorwaySeason.TimelineCd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TargetFOB" type="AmtN8P2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TargetFOB">
+												<xsd:documentation>Target FOB, ColorwaySeason.TargetFOB</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TargetFOBCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TargetFOBCurr">
+												<xsd:documentation>Target FOB Currency, ColorwaySeason.TargetFOBCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TargetRRP" type="Num8Pre2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TargetRRP">
+												<xsd:documentation>Recommended Retail Price, ColorwaySeason.TargetRRP</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="TargetRRPCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_TargetRRPCurr">
+												<xsd:documentation>Target RRP Currency, ColorwaySeason.TargetRRPCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BusMdlAttCd" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_BusMdlAttCd">
+												<xsd:documentation>Business Model Attribute Code, ColorwaySeason.BusMdlAttCd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MktClassificationCd" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MktClassificationCd">
+												<xsd:documentation>Market Classification Code, ColorwaySeason.MktClassificationCd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="FulfillmentMdlCd" type="CdMedA5" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_FulfillmentMdlCd">
+												<xsd:documentation>Fullfillment Model Code, ColorwaySeason.FulfillmentMdlCd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BuyReadyDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_BuyReadyDt">
+												<xsd:documentation>Buy Ready Date, ColorwaySeason.BuyReadyDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="BuyReadySetDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_BuyReadySetDt">
+												<xsd:documentation>Buy Ready Set Date, ColorwaySeason.BuyReadySetDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RevisedBuyReadyDt" type="DtA8" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_RevisedBuyReadyDt">
+												<xsd:documentation>Revised Buy Ready Date, ColorwaySeason.RevisedBuyReadyDt</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSeasonSts" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtSeasonSts">
+												<xsd:documentation>Article Seson Status, ColorwaySeason.ArtSeasonSts</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MdlSeasonSts" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MdlSeasonSts">
+												<xsd:documentation>MdlSeasonSts</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SeasonState" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SeasonState">
+												<xsd:documentation>Season State, ColorwaySeason.SeasonState</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SMUCustomer" type="MVDelimTxt" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SMUCustomer">
+												<xsd:documentation>SMU Customer, ColorwaySeason.SMUCustomer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ColorwayDelayReason" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ColorwayDelayReason">
+												<xsd:documentation>Colorway Delay Reason, ColorwaySeason.ColorwayDelayReason</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SecondTargetFOB" type="AmtN8P2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SecondTargetFOB">
+												<xsd:documentation>Second Target FOB, ProductSeason.SecondTargetFOB</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SecondTargetFOBCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SecondTargetFOBCurr">
+												<xsd:documentation>Second Target FOB Currency, ProductSeason.Second TargetFOBCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SecondTargetRRP" type="AmtN8P2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SecondTargetRRP">
+												<xsd:documentation>Second Target Recommended Retail Price, ProductSeason.SecondTargetRRP</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SecondTargetRRPCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SecondTargetRRPCurr">
+												<xsd:documentation>Second Target RRP Currency, ProductSeason.SecondTargetRRPCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RangePlanId" type="CdXLongA20" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_RangePlanId">
+												<xsd:documentation>Range Plan Identifier, ProductSeason.RangePlanId</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RangePlanTitle" type="DescMedA40" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_RangePlanTitle">
+												<xsd:documentation>Range Plan Title,Product Season.RangePlanTitle</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MaterialWaytype" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MaterialWaytype">
+												<xsd:documentation>Material Way Type, MaterialWaytype</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ProductBriefId" type="CdXLongA20" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ProductBriefId">
+												<xsd:documentation>Product Brief Identifier, ColorwaySeason.ProductBriefId</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MaterialConceptId" type="CdXLongA20" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MaterialConceptId">
+												<xsd:documentation>Material Concept Identifier, ColorwaySeason.MaterialConceptId</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="MaterialConceptDesc" type="DescMedA40" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_MaterialConceptDesc">
+												<xsd:documentation>Material Concept Description, ColorwaySeason.MaterialConceptDesc</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SeasonalArticleText" type="TxtXLongA2000" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SeasonalArticleText">
+												<xsd:documentation>SeasonalArticleText, ColorwaySeason.SeasonalArticleText</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeList" type="TxtXLongA2000" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_SrcSizeList">
+												<xsd:documentation>Sourcing Size List, ColorwaySeason.SrcSizeList</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSecondTargetFOB" type="AmtN8P2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtSecondTargetFOB">
+												<xsd:documentation>Second Target FOB, Product.SecondTargetFOB</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSecondTargetFOBCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtSecondTargetFOBCurr">
+												<xsd:documentation>Second Target FOB Currency, Product.SecondTargetFOBCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSecondTargetRRP" type="AmtN8P2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtSecondTargetRRP">
+												<xsd:documentation>Second Recommended Retail Price, Product.SecondTargetRRP</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtSecondTargetRRPCurr" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtSecondTargetRRPCurr">
+												<xsd:documentation>Second RRP Currency, Product.SecondTargetRRPCurr</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtMktgFC" type="IntA10" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtMktgFC">
+												<xsd:documentation>Marketing Forecast</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtDesigner" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtDesigner">
+												<xsd:documentation>Designer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtDeveloper" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtDeveloper">
+												<xsd:documentation>Developer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LODeveloper" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_LODeveloper">
+												<xsd:documentation>LO Developer</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ArtProductManager" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_ArtProductManager">
+												<xsd:documentation>Product Manager</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="DirectDev" type="TxtXLongA120" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASEAS_DirectDev">
+												<xsd:documentation>Direct Development</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="AMMAT" minOccurs="0" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="GrpArtNo" type="NoArtA6">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AMMAT_GrpArtNo">
+															<xsd:documentation>Group Article Number</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="SeasonCode" type="CdMedA5" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AMMAT_SeasonCode">
+															<xsd:documentation>Season Code, ColorwaySeason.SeasonCode</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="MtrlRefNo" type="DescShortA20" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AMMAT_MtrlRefNo">
+															<xsd:documentation>Material Reference No, ArticleMainMtrl.MtrlRefNo</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="ColorOverwriteInd" type="IndYesNoA1" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AMMAT_ColorOverwriteInd">
+															<xsd:documentation>Color Overwrite Indicator, ColorOverwriteInd</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="MtrlSupplier" type="CdMedA6" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AMMAT_MtrlSupplier">
+															<xsd:documentation>Material Supplier, MtrlSupplier</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="AFACT" minOccurs="0" maxOccurs="unbounded">
+											<xsd:complexType>
+												<xsd:sequence>
+													<xsd:element name="GrpArtNo" type="NoArtA6">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_GrpArtNo">
+															<xsd:documentation>Group Article Number</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="SeasonCode" type="CdMedA5" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_SeasonCode">
+															<xsd:documentation>Season Code, ColorwaySeason.SeasonCode</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="ArtCostingChange" type="CdA1">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ArtCostingChange">
+															<xsd:documentation>Article Costing Change</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="FactoryPriorityInd" type="CdA1" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_FactoryPriorityInd">
+															<xsd:documentation>Factory Priority Indicator,ArtFactory.Factory Priority Indicator</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="FactoryCd" type="CdMedA6" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_FactoryCd">
+															<xsd:documentation>Factory Code,ArtFactory.Factory Code</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="DevFactInd" type="IndYesNoA1" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_DevFactInd">
+															<xsd:documentation>Development Factory Indicator, ArtFactory.DevFactInd</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="PrdnLeadTm" type="IntA5" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_PrdnLeadTm">
+															<xsd:documentation>Production Lead Time, ArtFactory.PrdnLeadTm</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="ShortLeadTm" type="IntA5" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ShortLeadTm">
+															<xsd:documentation>Short Lead Time, ArtFactory.ShortLeadTm</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="MinMdlQty" type="IntA10" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_AFACT_MinMdlQty">
+															<xsd:documentation>Minimum Article Quantity, ArtFactory.MinArtQty</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="MinArtQty" type="IntA10" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_MinArtQty">
+															<xsd:documentation>Minimum Article Quantity, ArtFactory.MinArtQty</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="SMSFactoryInd" type="IndYesNoA1" minOccurs="0">
+														<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_SMSFactoryInd">
+															<xsd:documentation>SMS Factory Indicator, SourcingConfig.SMSFactoryInd</xsd:documentation>
+														</xsd:annotation>
+													</xsd:element>
+													<xsd:element name="ACOST" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType>
+															<xsd:sequence>
+																<xsd:element name="GrpArtNo" type="NoArtA6">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_GrpArtNo">
+																		<xsd:documentation>Group Article Number</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="ArtCostingChange" type="CdA1" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_ArtCostingChange">
+																		<xsd:documentation>Article Costing Change,</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="SeasonCode" type="CdMedA5" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_SeasonCode">
+																		<xsd:documentation>Season Code, ColorwaySeason.SeasonCode</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="FactoryCd" type="CdMedA6" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_FactoryCd">
+																		<xsd:documentation>Factory Code,ArtFactory.Factory Code</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="ArtFOB" type="Num8Pre2" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_ArtFOB">
+																		<xsd:documentation>Article FOB, ArticleCosting.ArtFOB</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="FOBCurr" type="CdShortA3" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_FOBCurr">
+																		<xsd:documentation>FOB Currency, ArticleCosting.FOBCurr</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="PricingMilestone" type="CdLongA10" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_PricingMilestone">
+																		<xsd:documentation>Pricing Milestone, ArticleCosting.PricingMilestone</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="PriceType" type="CdShortA3" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_PriceType">
+																		<xsd:documentation>Price Type, ArticleCosting.PriceType</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="SrcSizCd2" type="CdA2" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_SrcSizCd2">
+																		<xsd:documentation>Sourcing Size Code 2, ArticleCosting.SrcSizCd2</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="SrcSizCd3" type="CdShortA3" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_SrcSizCd3">
+																		<xsd:documentation>Sourcing Size Code 3, ArticleCosting.SrcSizCd3</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="FOBValidFrom" type="DtA8" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_FOBValidFrom">
+																		<xsd:documentation>FOB Valid From,ArticleCosting.FOBValidFrom</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="FOBValidTo" type="DtA8" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_FOBValidTo">
+																		<xsd:documentation>FOB Valid To, ArticleCosting.FOBValidTo</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+																<xsd:element name="Confirmed" type="IndYesNoA1" minOccurs="0">
+																	<xsd:annotation id="Prod_ARTCL_ASEAS_AFACT_ACOST_Confirmed">
+																		<xsd:documentation>Confirmed, ArticleCosting.Confirmed</xsd:documentation>
+																	</xsd:annotation>
+																</xsd:element>
+															</xsd:sequence>
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ASKUS" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ASKUS">
+									<xsd:documentation>SKU, SKU</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeScale" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_SrcSizeScale">
+												<xsd:documentation>Sourcing Size Scale, </xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SKUChange" type="CdA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_SKUChange">
+												<xsd:documentation>SKU Change</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd2" type="CdA2" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_SrcSizeCd2">
+												<xsd:documentation>Sourcing Size Code 2, SKU.SrcSize</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="SrcSizeCd3" type="CdShortA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_SrcSizeCd3">
+												<xsd:documentation>Sourcing Size Code 3, SKU.SrcSize</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LocalSizeCountry" type="CdA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_LocalSizeCountry">
+												<xsd:documentation>Local Size Country</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="LocalSize" type="CdA3" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_LocalSize">
+												<xsd:documentation>Local Size</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="EANNo" type="NoEANA13" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_EANNo">
+												<xsd:documentation>EAN No, SKU.EANNo</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="UPCNo" type="NoUPCA12" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_UPCNo">
+												<xsd:documentation>UPC No, SKU.UPCNo</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="FeasInd" type="CdA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_FeasInd">
+												<xsd:documentation>Feasible Indicator, SKU.FeasInd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="ActiveInd" type="IndYesNoA1" minOccurs="0">
+											<xsd:annotation id="Prod_ARTCL_ASKUS_ActiveInd">
+												<xsd:documentation>Active Indicator, SKU.ActiveInd</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="ALRMH" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation id="Prod_ARTCL_ALRMH">
+									<xsd:documentation>RMH,RMH</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="GrpArtNo" type="NoArtA6">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_GrpArtNo">
+												<xsd:documentation>Group Article Number</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RMHMktDiv" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RMHMktDiv">
+												<xsd:documentation>RMH Marketing Division</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RMHProdDiv" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RMHProdDiv">
+												<xsd:documentation>RMH Product Division</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RMHGender" type="CdA1">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RMHGender">
+												<xsd:documentation>RMH Gender</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RMHCategory" type="CdA2">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RMHCategory">
+												<xsd:documentation>RMH Category</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RMHProdType" type="CdA2">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RMHProdType">
+												<xsd:documentation>RMH ProductType</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailDept" type="CdA2">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RetailDept">
+												<xsd:documentation>Retail Department</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailSubDept" type="CdShortA3">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RetailSubDept">
+												<xsd:documentation>Retail Sub Department</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailClass" type="CdMedA5">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RetailClass">
+												<xsd:documentation>Retail Class</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RetailSubClass" type="CdLongA7">
+											<xsd:annotation id="Prod_ARTCL_ALRMH_RetailSubClass">
+												<xsd:documentation>Retail Sub Class</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Header">
+		<xsd:annotation id="Header">
+			<xsd:documentation>Header</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="nulltag1" type="CdA1" minOccurs="0"/>
+				<xsd:element name="Sender" type="CdMedA6">
+					<xsd:annotation id="Header_Sender">
+						<xsd:documentation>Sender</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="SeqNumber" type="SequenceA40" minOccurs="0">
+					<xsd:annotation id="Header_SeqNumber">
+						<xsd:documentation>SeqNumber</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Priority" type="CdA1" minOccurs="0">
+					<xsd:annotation id="Header_Priority">
+						<xsd:documentation>Priority</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="PublishingType" type="CdA2" minOccurs="0">
+					<xsd:annotation id="Header_PublishingType">
+						<xsd:documentation>PublishingType</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="MessageType" type="DescShortA30" minOccurs="0">
+					<xsd:annotation id="Header_MessageType">
+						<xsd:documentation>Message Type</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="TargetGroup" type="DescShortA30" minOccurs="0">
+					<xsd:annotation id="Header_TargetGroup">
+						<xsd:documentation>TargetGroup</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="XSDVer" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="AmtN8P2">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:fractionDigits value="2"/>
+			<xsd:totalDigits value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Num8Pre2">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="10"/>
+			<xsd:fractionDigits value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DtTmA14">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="14"/>
+			<xsd:minLength value="14"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdLongA7">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="7"/>
+			<xsd:minLength value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoUPCA12">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="12"/>
+			<xsd:minLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoEANA13">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="13"/>
+			<xsd:minLength value="13"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DescShortA20">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdXLongA20">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IntA10">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoCustomsA17">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="17"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MeasN5">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MeasN7">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TxtXLongA250">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="250"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TxtXLongA2000">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TxtXLongA120">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="120"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NmLongA60">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="60"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DescMedA45">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="45"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DescShortA25">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="25"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdA3">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="3"/>
+			<xsd:minLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IntA5">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IndYesNoA1">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdLongA10">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdMedA4">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="4"/>
+			<xsd:minLength value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DescMedA40">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="40"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdLongA8">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="8"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MVDelimTxt">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdShortA3">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdShortA2">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DtA8">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="8"/>
+			<xsd:minLength value="8"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdMedA5">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoMdlA5">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+			<xsd:minLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdXLongA30">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdXLongA18">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="18"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoArtA6">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DescShortA30">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdA2">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2"/>
+			<xsd:minLength value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SequenceA40">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="40"/>
+			<xsd:minLength value="26"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdMedA6">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="6"/>
+			<xsd:minLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CdA1">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IndBL">
+		<xsd:restriction base="xsd:boolean"/>
+	</xsd:simpleType>
+</xsd:schema>

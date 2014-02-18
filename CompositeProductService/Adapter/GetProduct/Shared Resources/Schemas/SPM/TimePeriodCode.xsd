@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/CompositeProductServicev2test/Adapter/GetProduct/Shared Resources/Schemas/SPM/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/CompositeProductServicev2test/Adapter/GetProduct/Shared Resources/Schemas/SPM/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="timePeriodMapping" type="Root"/>
+	<xs:complexType name="Root">
+		<xs:sequence>
+			<xs:element name="TimePeriodMapping" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ArtActiveSeason" type="xs:string"/>
+						<xs:element name="TimePeriodCode" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

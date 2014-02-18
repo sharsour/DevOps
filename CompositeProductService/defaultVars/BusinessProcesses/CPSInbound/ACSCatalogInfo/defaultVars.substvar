@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>FTPLocalFilename</name>
+			<value>C:\Users\arun_kadian\Desktop\Adidas-CodeWork\Misc\FTP\done\</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>FTPRemoteFilename</name>
+			<value>*.xml</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>InputQueue</name>
+			<value>adidasgroup.eai.orchestrator.acs.product.processarticleinformation.asynch.publish.v1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>TimeInterval</name>
+			<value>90000000</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Integer</type>
+			<modTime>1389651147277</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

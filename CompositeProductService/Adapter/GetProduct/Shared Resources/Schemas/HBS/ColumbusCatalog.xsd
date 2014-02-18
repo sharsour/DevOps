@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="http://schemas.columbus2050.de/ColumbusCatalog/1.1" targetNamespace="http://schemas.columbus2050.de/ColumbusCatalog/1.1">
+
+	<!-- Re-Use common definitions -->
+	<xs:include schemaLocation="ColumbusCommon.xsd" />
+
+	<!-- Root element "catalog" -->
+	<xs:element name="catalog">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="init" type="init" />
+				<xs:element ref="categories" minOccurs="0" />
+				<xs:element ref="productAttributes" minOccurs="0" />
+				<xs:element ref="productOptions" minOccurs="0" />
+				<xs:element ref="products" minOccurs="0" />
+			</xs:all>
+			<xs:attribute name="version" use="required" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Categories -->
+
+	<xs:element name="categories">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="category" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="category">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="displayName" minOccurs="0" maxOccurs="1" type="localizableString" />
+				<xs:element name="title" minOccurs="0" maxOccurs="1" type="localizableString" />
+				<xs:element name="description" minOccurs="0" maxOccurs="1" type="localizableString" />
+				<xs:element name="keywords" minOccurs="0" maxOccurs="1" type="localizableString" />
+
+				<xs:element name="metaTitle" minOccurs="0" maxOccurs="1" type="localizableString" />
+				<xs:element name="metaDescription" minOccurs="0" maxOccurs="1" type="localizableString" />
+				<xs:element name="pageUrl" minOccurs="0" maxOccurs="1" type="localizableString" />
+
+				<xs:element name="online" minOccurs="0" maxOccurs="1" type="online" />
+
+				<xs:element name="parent" minOccurs="0" maxOccurs="1" type="categoryId" />
+				<xs:element name="position" minOccurs="0" maxOccurs="1" type="xs:integer" />
+
+				<xs:element name="customAttributes" type="categoryCustomAttributes" minOccurs="0" maxOccurs="1" />
+			</xs:all>
+			<xs:attribute name="id" use="required" type="categoryId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="categoryCustomAttributes">
+		<xs:sequence>
+			<xs:element name="customAttribute" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="value" maxOccurs="unbounded" minOccurs="0">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="shortString">
+										<xs:attribute type="locale" name="locale" use="optional" />
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="attributeId" use="required" type="objectId" />
+					<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<!-- Products -->
+
+	<xs:element name="products">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="product" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="product">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="type" minOccurs="0" maxOccurs="1" type="productType" />
+				<xs:element name="master" minOccurs="0" maxOccurs="1" type="productIdType" /><!-- for variants and sub-masters -->
+
+				<xs:element name="displayName" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="title" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="teaser" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="description" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="keywords" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+
+				<xs:element name="metaDescription" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="metaKeywords" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="metaTitle" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+				<xs:element name="pageUrl" minOccurs="0" maxOccurs="1" type="longLocalizableString" />
+
+				<xs:element name="online" minOccurs="0" maxOccurs="1" type="online" />
+				<xs:element name="new" minOccurs="0" maxOccurs="1" type="new" />
+				<xs:element name="orderable" minOccurs="0" maxOccurs="1" type="orderable" />
+				<xs:element name="taxClass" minOccurs="0" maxOccurs="1" type="taxClass" />
+				<xs:element name="externalTaxClassId" minOccurs="0" maxOccurs="1" type="taxClass" />
+				<xs:element name="vendorItemCode" minOccurs="0" maxOccurs="1" type="shortString" />
+				<xs:element name="returnToVendorDate" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+				<xs:element name="carryOver" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+				<xs:element name="oversized" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+
+				<xs:element name="customAttributes" minOccurs="0" maxOccurs="1" type="productCustomAttributes" />
+				<xs:element name="productAttributeReferences" minOccurs="0" maxOccurs="1" type="productAttributeReferences" />
+
+				<xs:element name="variationAttributes" minOccurs="0" maxOccurs="1" type="variationAttributes" />
+
+				<xs:element name="productReferences" minOccurs="0" maxOccurs="1" type="productReferences" />
+
+				<xs:element name="charges" minOccurs="0" maxOccurs="1" type="charges" />
+
+				<xs:element name="categoryAssignments" minOccurs="0" maxOccurs="1" type="categoryAssignments" />
+
+				<xs:element name="productOptionAssignments" minOccurs="0" maxOccurs="1" type="productOptionAssignments" />
+
+			</xs:all>
+
+			<xs:attribute name="id" use="required" type="productIdType" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="taxClass">
+		<xs:sequence>
+			<xs:element name="value" maxOccurs="unbounded" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="shortString">
+							<xs:attribute type="context" name="context" />
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:simpleType name="productType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="master" />
+			<xs:enumeration value="sub-master" />
+			<xs:enumeration value="variant" />
+			<xs:enumeration value="bundle" />
+			<xs:enumeration value="look" />
+			<xs:enumeration value="standard" />
+			<xs:enumeration value="group" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="charges">
+		<xs:sequence>
+			<xs:element name="charge" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="gtin" minOccurs="0" maxOccurs="1" type="shortString" /><!-- EAN or UPC -->
+						<xs:element name="vendor" minOccurs="0" maxOccurs="1" type="shortString" />
+					</xs:sequence>
+					<xs:attribute name="id" use="required" type="chargeIdType" />
+					<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:complexType name="productCustomAttributes">
+		<xs:sequence>
+			<xs:element name="customAttribute" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="value" maxOccurs="unbounded" minOccurs="0">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="longString">
+										<xs:attribute type="locale" name="locale" use="optional" />
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="attributeId" use="required" type="productAttributeId" />
+					<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:complexType name="productAttributeReferences">
+		<xs:sequence>
+			<xs:element name="productAttributeReference" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="value" maxOccurs="unbounded" minOccurs="0" type="productAttributeValueId" />
+					</xs:sequence>
+					<xs:attribute name="attributeId" use="required" type="productAttributeId" />
+					<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:complexType name="longLocalizableString">
+		<xs:sequence>
+			<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="longString">
+							<xs:attribute name="locale" type="locale" />
+							<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:complexType name="variationAttributes">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" ref="variationAttribute" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:element name="variationAttribute">
+		<xs:complexType>
+			<xs:attribute name="attributeId" use="required" type="productAttributeId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="productReferences">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="productLinks" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="productLinks">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="productLink" />
+			</xs:sequence>
+			<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+			<xs:attribute name="type" use="required" type="productLinkType" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="productLink">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="section" type="localizableString" minOccurs="0" maxOccurs="1" /><!-- only for looks -->
+				<xs:element name="filter" type="xs:string" minOccurs="0" maxOccurs="1" /><!-- only for looks -->
+			</xs:sequence>
+			<xs:attribute name="productId" use="required" type="productIdType" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+			<xs:attribute name="quantity" type="xs:integer" default="1" /><!-- only for bundles -->
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="productLinkType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="components" /> <!-- identifies components of a look, bundle or group -->
+			<xs:enumeration value="variants" /> <!-- identifies variants of a sub master -->
+			<xs:enumeration value="fit_together" />
+			<xs:enumeration value="cross_seller" />
+			<xs:enumeration value="up_seller" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Category assignments -->
+
+	<xs:complexType name="categoryAssignments">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="categoryAssignment" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:element name="categoryAssignment">
+		<xs:complexType>
+			<xs:attribute name="categoryId" use="required" type="categoryId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+
+	<!-- Product Attributes -->
+
+	<xs:element name="productAttributes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="productAttribute" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="productAttribute">
+		<xs:complexType>
+			<xs:all>
+				<xs:element minOccurs="0" maxOccurs="1" name="displayName" type="localizableString" />
+				<xs:element name="productAttributeValues" minOccurs="0" maxOccurs="1" type="productAttributeValues" />
+				<xs:element name="orderMode" minOccurs="0" maxOccurs="1" type="productAttributeOrderMode" />
+			</xs:all>
+			<xs:attribute name="id" use="required" type="productAttributeId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="productAttributeValues">
+		<xs:sequence>
+			<xs:element ref="productAttributeValue" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:element name="productAttributeValue">
+		<xs:complexType>
+			<xs:all>
+				<xs:element minOccurs="0" maxOccurs="1" name="position" type="xs:integer" />
+				<xs:element minOccurs="0" maxOccurs="1" name="displayName" type="longLocalizableString" />
+				<xs:element minOccurs="0" maxOccurs="1" name="customAttributes" type="productAttributeValueCustomAttributes" />
+			</xs:all>
+			<xs:attribute name="id" use="required" type="productAttributeValueId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="productAttributeValueCustomAttributes">
+		<xs:sequence>
+			<xs:element name="customAttribute" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="value" maxOccurs="unbounded" minOccurs="0">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="shortString">
+										<xs:attribute type="locale" name="locale" use="optional" />
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="attributeId" use="required" type="objectId" />
+					<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+
+	<xs:simpleType name="productAttributeOrderMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="numerical" />
+			<xs:enumeration value="alphanumerical" />
+			<xs:enumeration value="position" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Product Options -->
+
+	<xs:element name="productOptions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="productOption" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="productOption">
+		<xs:complexType>
+			<xs:all>
+				<xs:element minOccurs="0" maxOccurs="1" name="displayName" type="localizableString" />
+				<xs:element minOccurs="0" maxOccurs="1" name="description" type="localizableString" />
+				<xs:element minOccurs="0" maxOccurs="1" name="productOptionValues" type="productOptionValues" />
+				<xs:element minOccurs="0" maxOccurs="1" name="active" type="xs:boolean" />
+				<xs:element minOccurs="0" maxOccurs="1" name="customizable" type="xs:boolean" />
+				<xs:element minOccurs="0" maxOccurs="1" name="mandatory" type="xs:boolean" />
+			</xs:all>
+			<xs:attribute name="id" use="required" type="productOptionId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="productOptionValues">
+		<xs:sequence>
+			<xs:element ref="productOptionValue" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:element name="productOptionValue">
+		<xs:complexType>
+			<xs:all>
+				<xs:element minOccurs="0" maxOccurs="1" name="displayName" type="localizableString" />
+				<xs:element minOccurs="0" maxOccurs="1" name="taxClass" type="taxClass" />
+				<xs:element minOccurs="0" maxOccurs="1" name="externalTaxClass" type="taxClass" />
+			</xs:all>
+			<xs:attribute name="id" use="required" type="productOptionValueId" />
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Product Option Assignments -->
+
+	<xs:complexType name="productOptionAssignments">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="productOptionAssignment" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="full_dump" />
+	</xs:complexType>
+
+	<xs:element name="productOptionAssignment">
+		<xs:complexType>
+			<xs:attribute name="mode" type="valueImportMode" default="add_or_update" />
+			<xs:attribute name="productOptionId" use="required" type="productOptionId" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Common Elements and Types -->
+
+	<xs:complexType name="localizableString">
+		<xs:sequence>
+			<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="shortString">
+							<xs:attribute name="locale" type="locale" />
+							<xs:attribute name="mode" type="valueImportMode" />
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:simpleType name="sortDirection">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ASC" />
+			<xs:enumeration value="DESC" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="online">
+		<xs:sequence>
+			<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="isOnline" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+						<xs:element name="onlineFrom" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+						<xs:element name="onlineTo" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+					</xs:all>
+					<xs:attribute name="context" type="context" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:complexType name="new">
+		<xs:sequence>
+			<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="isNew" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+						<xs:element name="newFrom" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+						<xs:element name="newTo" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+					</xs:all>
+					<xs:attribute name="context" type="context" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<xs:complexType name="orderable">
+		<xs:sequence>
+			<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:all>
+						<xs:element name="isOrderable" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+						<xs:element name="orderableFrom" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+						<xs:element name="orderableTo" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+					</xs:all>
+					<xs:attribute name="context" type="context" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="mode" type="collectionImportMode" default="add_or_update" />
+	</xs:complexType>
+
+	<!-- ID types -->
+
+	<xs:simpleType name="categoryId">
+		<xs:restriction base="objectId" />
+	</xs:simpleType>
+
+	<xs:simpleType name="productAttributeId">
+		<xs:restriction base="objectId" />
+	</xs:simpleType>
+
+	<xs:simpleType name="productAttributeValueId">
+		<xs:restriction base="objectId" />
+	</xs:simpleType>
+
+	<xs:simpleType name="productOptionId">
+		<xs:restriction base="objectId" />
+	</xs:simpleType>
+
+	<xs:simpleType name="productOptionValueId">
+		<xs:restriction base="objectId" />
+	</xs:simpleType>
+
+</xs:schema>

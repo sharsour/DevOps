@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>RfdFTPConnection</name>
+    <resourceType>ae.shared.FTPuserChannel</resourceType>
+    <config>
+        <Timeout>60000</Timeout>
+        <Port>%%Common/Shared/Connections/FTP/RFD/Port%%</Port>
+        <Encoding>UTF8</Encoding>
+        <FireWall>false</FireWall>
+        <Mode>Passive</Mode>
+        <Host>%%Common/Shared/Connections/FTP/RFD/Host%%</Host>
+        <UserName>%%Common/Shared/Connections/FTP/RFD/UserName%%</UserName>
+        <Password>%%Common/Shared/Connections/FTP/RFD/Password%%</Password>
+    </config>
+</BWSharedResource>

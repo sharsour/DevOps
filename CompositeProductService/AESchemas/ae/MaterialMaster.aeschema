@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns="http://www.tibco.com/xmlns/aemeta/types/2002" xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <sequence name="Child_AFS_Sales_Data_Level12">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_AFS_Sales_Data_Level12</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Material_Plant_Data_MARC">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Material_Plant_Data_MARC</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_AFS_Season_data">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_AFS_Season_data</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Language_Dependent_Fields">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Language_Dependent_Fields</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Pricing_Fields">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Pricing_Fields</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Product_Costing_Fields">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Product_Costing_Fields</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Sales_Data_Material_MVKE">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Sales_Data_Material_MVKE</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Size_Data_Material_MEAN">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Size_Data_Material_MEAN</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Classification">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Classification</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Pricing_Fields_Article_Size">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Pricing_Fields_Article_Size</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <sequence name="Child_Seasonal_Indicators">
+        <elementType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Child_Seasonal_Indicators</elementType>
+        <maxLength>0</maxLength>
+    </sequence>
+    <class name="MaterialMaster">
+        <attribute>
+            <name>Header_Material_General_Data_MARA</name>
+            <attributeType isRef="true">/AESchemas/ae/MaterialMaster_Structures.aeschema#class.Header_Material_General_Data_MARA</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Language_Dependent_Fields</name>
+            <attributeType isRef="true">#sequence.Child_Language_Dependent_Fields</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Material_Plant_Data_MARC</name>
+            <attributeType isRef="true">#sequence.Child_Material_Plant_Data_MARC</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Sales_Data_Material_MVKE</name>
+            <attributeType isRef="true">#sequence.Child_Sales_Data_Material_MVKE</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Size_Data_Material_MEAN</name>
+            <attributeType isRef="true">#sequence.Child_Size_Data_Material_MEAN</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_AFS_Season_data</name>
+            <attributeType isRef="true">#sequence.Child_AFS_Season_data</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Classification</name>
+            <attributeType isRef="true">#sequence.Child_Classification</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Product_Costing_Fields</name>
+            <attributeType isRef="true">#sequence.Child_Product_Costing_Fields</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Pricing_Fields</name>
+            <attributeType isRef="true">#sequence.Child_Pricing_Fields</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Pricing_Fields_Article_Size</name>
+            <attributeType isRef="true">#sequence.Child_Pricing_Fields_Article_Size</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_Seasonal_Indicators</name>
+            <attributeType isRef="true">#sequence.Child_Seasonal_Indicators</attributeType>
+            <isKey>false</isKey>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+        <attribute>
+            <name>Child_AFS_Sales_Data_Level12</name>
+            <attributeType isRef="true">#sequence.Child_AFS_Sales_Data_Level12</attributeType>
+            <isReadable>true</isReadable>
+            <isWriteable>true</isWriteable>
+        </attribute>
+    </class>
+    <designer>
+        <lockedProperties/>
+        <fixedChildren/>
+        <resourceDescriptions/>
+    </designer>
+</Repository:repository>

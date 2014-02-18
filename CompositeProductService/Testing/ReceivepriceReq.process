@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx="http://adidasGroup.com/schema/local/entity/be/product/v1">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://adidasGroup.com/schema/local/entity/be/product/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/CPSMSchemaV1.xsd"/>
+    <pd:name>Testing/ReceivepriceReq.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>122</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%BusinessProcesses/CPSInbound/HBSPriceBook/BEInputQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>666</pd:endX>
+    <pd:endY>79</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390909475082</pd:targetNamespace>
+    <pd:activity name="Reply to JMS Message">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>486</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>JMS Queue Receiver</EventSource>
+            </ConfigurableHeaders>
+            <InDataxsdString ref="pfx:CPSMList"/>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <Body>
+                    <pfx:CPSMList>
+                        <xsl:for-each select="$Wait-for-JMS-Queue-Message/ns1:ActivityOutput/Body/pfx:CPSM">
+                            <pfx:cpsm>
+                                <xsl:for-each select="pfx:header">
+                                    <pfx:header>
+                                        <xsl:attribute name="globalArtNr">
+                                            <xsl:value-of select="@globalArtNr"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="sourceAppID">
+                                            <xsl:value-of select="@sourceAppID"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="sourceTimeStamp">
+                                            <xsl:value-of select="@sourceTimeStamp"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="sourceMsgID">
+                                            <xsl:value-of select="@sourceMsgID"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="sourceVer">
+                                            <xsl:value-of select="@sourceVer"/>
+                                        </xsl:attribute>
+                                        <xsl:attribute name="sourceObjType">
+                                            <xsl:value-of select="&quot;Price&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="@correlationID">
+                                            <xsl:attribute name="correlationID">
+                                                <xsl:value-of select="@correlationID"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="@changeType">
+                                            <xsl:attribute name="changeType">
+                                                <xsl:value-of select="@changeType"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="@targetApp">
+                                            <xsl:attribute name="targetApp">
+                                                <xsl:value-of select="@targetApp"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="@trackingID">
+                                            <xsl:attribute name="trackingID">
+                                                <xsl:value-of select="@trackingID"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </pfx:header>
+                                </xsl:for-each>
+                                <xsl:for-each select="pfx:attributeList">
+                                    <pfx:attributeList>
+                                        <xsl:for-each select="pfx:attribute">
+                                            <pfx:attribute>
+                                                <xsl:if test="@name">
+                                                    <xsl:attribute name="name">
+                                                        <xsl:value-of select="@name"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:if test="@value">
+                                                    <xsl:attribute name="value">
+                                                        <xsl:value-of select="@value"/>
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:for-each select="pfx:valueHistory">
+                                                    <pfx:valueHistory>
+                                                        <xsl:if test="@previousValue">
+                                                            <xsl:attribute name="previousValue">
+                                                                <xsl:value-of select="@previousValue"/>
+                                                            </xsl:attribute>
+                                                        </xsl:if>
+                                                        <xsl:if test="@sourceTimeStamp">
+                                                            <xsl:attribute name="sourceTimeStamp">
+                                                                <xsl:value-of select="@sourceTimeStamp"/>
+                                                            </xsl:attribute>
+                                                        </xsl:if>
+                                                        <xsl:if test="@sourceAppID">
+                                                            <xsl:attribute name="sourceAppID">
+                                                                <xsl:value-of select="@sourceAppID"/>
+                                                            </xsl:attribute>
+                                                        </xsl:if>
+                                                    </pfx:valueHistory>
+                                                </xsl:for-each>
+                                            </pfx:attribute>
+                                        </xsl:for-each>
+                                    </pfx:attributeList>
+                                </xsl:for-each>
+                            </pfx:cpsm>
+                        </xsl:for-each>
+                    </pfx:CPSMList>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for JMS Queue Message">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>-1</maxSessions>
+                <destination>Price.Receiver</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx:CPSM"/>
+        </config>
+        <pd:inputBindings>
+            <ns:input/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reply-to-JMS-Message-1">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>188</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>JMS Queue Receiver</EventSource>
+            </ConfigurableHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$Read-File/ns2:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </Body>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>260</pd:x>
+        <pd:y>179</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="'C:\Users\arun_kadian\Desktop\Adidas-CodeWork\Misc\Test\test.txt'"/>
+                </fileName>
+                <encoding>
+                    <xsl:value-of select="&quot;UTF-8&quot;"/>
+                </encoding>
+            </pfx2:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Wait for JMS Queue Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for JMS Queue Message</pd:from>
+        <pd:to>Reply to JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to JMS Message</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply-to-JMS-Message-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>Reply-to-JMS-Message-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

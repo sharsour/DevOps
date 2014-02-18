@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO)
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:bt="http://adidasGroup/schema/cdm/basicTypes/v1"
+	 xmlns:mkt="http://adidasGroup/schema/cdm/product/market/v1"
+	 xmlns:sho="http://adidasGroup.com/schema/cdm/sharedObjects/v2"
+	 targetNamespace="http://adidasGroup/schema/cdm/product/market/v1"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="SharedObjects/SharedObjects_v2_0.xsd"/>
+	<import namespace="http://adidasGroup/schema/cdm/basicTypes/v1" schemaLocation="CommonV1/BasicTypes_v1_0.xsd"/>
+	<complexType name="MarketArticleType">
+		<sequence>
+
+			<!--
+         SalesOrg bezogene Artikelstammdaten (MVKE in SAP)
+         -->
+			<element name="mktArticle" type="mkt:MktArticleType"/>
+			<element name="mktArticleToNode" type="mkt:MktArticleToNodeType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	<complexType name="MktArticleToNodeType">
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="nodeId" type="string" use="required"/>
+	</complexType>
+	<complexType name="MktHBSTechnologiesType">
+		<attribute name="groupArticleNumber" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="hBSTechnology" type="string"/>
+	</complexType>
+	<complexType name="MktHeartBeatSportsType">
+		<sequence>
+			<element name="mktHBSTechnologies" type="mkt:MktHBSTechnologiesType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="hBSGender" type="string"/>
+		<attribute name="hBSMainColorCode" type="string"/>
+		<attribute name="hBSProductCategory" type="string"/>
+		<attribute name="hBSProductType" type="string"/>
+		<attribute name="hBSKeyProductInd" type="boolean"/>
+		<attribute name="hBSAthleteCode" type="string"/>
+		<attribute name="hBSTeamCode" type="string"/>
+		<attribute name="hBSCarryOver" type="boolean"/>
+		<attribute name="hBSNewTag" type="boolean"/>
+		<attribute name="hBSSpecialFilter1" type="string"/>
+		<attribute name="hBSSpecialFilter2" type="string"/>
+		<attribute name="hBSSpecialFilter3" type="string"/>
+	</complexType>
+	<complexType name="MktArtSeasonSKUType">
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="timePeriodCd" type="string" use="required"/>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="srcSizeCd2" type="string"/>
+		<attribute name="srcSizeScale" type="string" use="required"/>
+	</complexType>
+	<complexType name="MktArtSeasonType">
+		<sequence>
+			<element name="mktArtSeasonSKU" type="mkt:MktArtSeasonSKUType" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="timePeriodCd" type="string" use="required"/>
+		<attribute name="grpMdlNo" type="string"/>
+		<attribute name="mktgFC" type="int"/>
+		<attribute name="areaRetailIntroDt" type="date"/>
+		<attribute name="areaRetailExitDt" type="date"/>
+		<attribute name="aFSInd" type="boolean"/>
+		<attribute name="leadTm" type="decimal"/>
+		<attribute name="factoryCd" type="string"/>
+	</complexType>
+	<complexType name="MktArtSizeConversionType">
+		<attribute name="mtrlId" type="string" use="required"/>
+		<attribute name="convType" type="string" use="required"/>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="sizeConvId" type="string" use="required"/>
+		<attribute name="lineEntryConv" type="string"/>
+		<attribute name="convAssignmRemarks" type="string"/>
+		<attribute name="gridEntryConv" type="string"/>
+	</complexType>
+	<complexType name="MktArtSKUType">
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="localSize" type="string"/>
+		<attribute name="deliveringPlant" type="string"/>
+		<attribute name="aFSHeartSize" type="string"/>
+		<attribute name="aFSSizeSpreadOrder" type="decimal"/>
+		<attribute name="aFSDefaultOrderQuantity" type="double"/>
+		<attribute name="aFSGridGroupPriceDetermin" type="string"/>
+		<attribute name="roundingFactor" type="decimal"/>
+		<attribute name="minOrderQty" type="double"/>
+		<attribute name="taxClassification" type="string"/>
+		<attribute name="addSKUNumber" type="string"/>
+		<attribute name="delFlag" type="boolean"/>
+		<attribute name="nRFSizeCode" type="string"/>
+		<attribute name="srcSizeScale" type="string"/>
+	</complexType>
+	<complexType name="MktArtDescriptionType">
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="txtTypeCd" type="string" use="required"/>
+		<attribute name="lang" type="string" use="required"/>
+		<attribute name="desc" type="string"/>
+	</complexType>
+	<complexType name="MktArtVersInfoType">
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="versionDate" type="dateTime"/>
+		<attribute name="verID" type="string"/>
+		<attribute name="mktArtChange" type="boolean"/>
+		<attribute name="mktSKUChange" type="boolean"/>
+		<attribute name="mktArtSizeConversion" type="boolean"/>
+		<attribute name="mktArtSeasonChange" type="boolean"/>
+		<attribute name="mktArtSeasonSKUChange" type="boolean"/>
+	</complexType>
+	<complexType name="MktArticleType">
+		<sequence>
+			<element name="mktArtVersInfo" type="mkt:MktArtVersInfoType" minOccurs="0"/>
+			<element name="mktArtDescription" type="mkt:MktArtDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="mktArtSKU" type="mkt:MktArtSKUType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="mktArtSizeConversion" type="mkt:MktArtSizeConversionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="mktArtSeason" type="mkt:MktArtSeasonType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="mktHeartBeatSports" type="mkt:MktHeartBeatSportsType" minOccurs="0"/>
+			<element name="mktHBSTechnologies" type="mkt:MktHBSTechnologiesType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" type="string" use="required"/>
+		<attribute name="marketArea" type="string" use="required"/>
+		<attribute name="marketChan" type="string" use="required"/>
+		<attribute name="grpMdlNo" type="string"/>
+		<attribute name="retailIntroDate" type="date"/>
+		<attribute name="retailExitDate" type="date"/>
+		<attribute name="deliveryPlant" type="string"/>
+		<attribute name="prodHier" type="string"/>
+		<attribute name="materialGroup4" type="string"/>
+		<attribute name="materialGroup5" type="string"/>
+		<attribute name="salesUnit" type="string"/>
+		<attribute name="minDeliveryQuantity" type="double"/>
+		<attribute name="deliveryUnit" type="double"/>
+		<attribute name="pricingIndicator" type="string"/>
+		<attribute name="materialPricingGroup" type="string"/>
+		<attribute name="sportsCode" type="string"/>
+		<attribute name="sportsDescription" type="string"/>
+		<attribute name="silhouette" type="string"/>
+		<attribute name="genderSize" type="string"/>
+		<attribute name="rangeType" type="string"/>
+		<attribute name="dimWidth" type="string"/>
+		<attribute name="toolingGroup" type="string"/>
+		<attribute name="macroModel" type="string"/>
+		<attribute name="blankTshirt" type="string"/>
+		<attribute name="managedAllocation" type="string"/>
+		<attribute name="lastSellingSeason" type="string"/>
+		<attribute name="limitedDiscountClass" type="string"/>
+		<attribute name="sellInQuarter" type="string"/>
+		<attribute name="timePeriod" type="string"/>
+		<attribute name="businessUnit" type="string"/>
+		<attribute name="IBMFlag" type="string"/>
+		<attribute name="categoryManager" type="string"/>
+		<attribute name="theme" type="string"/>
+		<attribute name="sCAMktgSeg" type="string"/>
+		<attribute name="sizeScale" type="string"/>
+		<attribute name="salesStatus" type="string"/>
+		<attribute name="taxClassification" type="string"/>
+	</complexType>
+	<element name="MarketArticle" type="mkt:MarketArticleType"/>
+</schema>

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1" xmlns:pfx="http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1 ">
+    <wsdl:import namespace="http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1" location="/Adapter/GetProduct/Shared Resources/Schemas/HBS/ProductService_v1_0.wsdl"/>
+    <pd:name>Adapter/GetProduct/StarterProcesses/WebService/GetProductDataFromBEToHBS.process</pd:name>
+    <pd:startName>SOAPEventSource</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SOAPEventSource">
+        <pd:type>com.tibco.plugin.soap.SOAPEventSource</pd:type>
+        <pd:resourceType>ae.activities.SOAPEventSourceUI</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>119</pd:y>
+        <config>
+            <service>pfx2:product.asynch</service>
+            <wsdlNamespaceRoot>http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1/requestProductInformationImpl</wsdlNamespaceRoot>
+            <operation>requestProductInformation</operation>
+            <portAddressPrefix/>
+            <operationStyle>rpc</operationStyle>
+            <soapUse>literal</soapUse>
+            <inputNamespace>http://InputMessageNamespace</inputNamespace>
+            <outputNamespace>http://OutputMessageNamespace</outputNamespace>
+            <faultNamespace>http://FaultMessageNamespace</faultNamespace>
+            <embedWsdlComponents>true</embedWsdlComponents>
+            <embedSchemaComponents>true</embedSchemaComponents>
+            <soapAction>/Adapter/GetProduct/StarterProcesses/WebService/GetProductDataFromBEToHBS</soapAction>
+            <sharedChannel>/Adapter/GetProduct/Shared Resources/Connections/HTTP/HBSInboundConnection.sharedhttp</sharedChannel>
+            <soapVersion>SOAP 1.1</soapVersion>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <inputAttachmentBindings/>
+            <outputAttachmentBindings/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1046</pd:endX>
+    <pd:endY>117</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390168709861</pd:targetNamespace>
+    <pd:group name="Group (1)">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>122</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>270</pd:width>
+        <pd:height>216</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>InitializeAudit</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InitializeAudit</pd:from>
+            <pd:to>end</pd:to>
+            <pd:xpathDescription>From CheckPoint</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$_processContext/ns:ProcessContext/RestartedFromCheckpoint = "true"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SOAPSendReply</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>InitializeAudit</pd:from>
+            <pd:to>SOAPSendReply</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="InitializeAudit">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>192</pd:x>
+            <pd:y>116</pd:y>
+            <config>
+                <processName>/Base/Initialization/InitializeAudit.process</processName>
+                <processNameXPath/>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <payload>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </payload>
+                    <targetApp>
+                        <xsl:value-of select="&quot;CompositeProductService-HBS&quot;"/>
+                    </targetApp>
+                    <sourceApp>
+                        <xsl:value-of select="&quot;BE&quot;"/>
+                    </sourceApp>
+                    <bpName>
+                        <xsl:value-of select="&quot;CPSOutbound-sendProductDataToHBS&quot;"/>
+                    </bpName>
+                    <boType>
+                        <xsl:value-of select="&quot;CPSOutbound-ProductDataFromBEtoHBS&quot;"/>
+                    </boType>
+                    <checkpoint>
+                        <xsl:value-of select="false()"/>
+                    </checkpoint>
+                    <DBPayloadAuditEnabled>
+                        <xsl:value-of select="false()"/>
+                    </DBPayloadAuditEnabled>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="SOAPSendReply">
+            <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+            <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+            <pd:x>299</pd:x>
+            <pd:y>56</pd:y>
+            <config>
+                <eventSource>SOAPEventSource</eventSource>
+            </config>
+            <pd:inputBindings>
+                <requestProductInformationResponse>
+                    <Status>
+                        <xsl:value-of select="&quot;Request Received. Processing Articles&quot;"/>
+                    </Status>
+                </requestProductInformationResponse>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>418</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>508</pd:width>
+        <pd:height>219</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AuditStart</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditEnd-1</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditStart</pd:from>
+            <pd:to>CallProcess_PublishHBSArticleRequestMessagetoBE</pd:to>
+            <pd:xpathDescription/>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallProcess_PublishHBSArticleRequestMessagetoBE</pd:from>
+            <pd:to>AuditError</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$CallProcess_PublishHBSArticleRequestMessagetoBE/root/Status= "Error"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>CallProcess_PublishHBSArticleRequestMessagetoBE</pd:from>
+            <pd:to>AuditLog</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditLog</pd:from>
+            <pd:to>Call_getHBSPriceBookData</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_getHBSPriceBookData</pd:from>
+            <pd:to>AuditError</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>Multiple Bends</pd:lineType>
+            <pd:lineColor>-65536</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Call_getHBSPriceBookData/root/Status="Error"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_getHBSPriceBookData</pd:from>
+            <pd:to>AuditEnd-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="CallProcess_PublishHBSArticleRequestMessagetoBE">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>581</pd:x>
+            <pd:y>59</pd:y>
+            <config>
+                <processName>/Adapter/GetProduct/BusinessProcesses/getLoadRequestFromHBS/SendLoadRequestFromHBStoBE.process</processName>
+            </config>
+            <pd:inputBindings>
+                <pfx:requestProductInformationRequest>
+                    <grpArtNo>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/grpArtNo"/>
+                    </grpArtNo>
+                    <MarketArea>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/MarketArea"/>
+                    </MarketArea>
+                    <MarketChanel>
+                        <xsl:value-of select="$SOAPEventSource/inputMessage/MarketChanel"/>
+                    </MarketChanel>
+                </pfx:requestProductInformationRequest>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditStart">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>482</pd:x>
+            <pd:y>56</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Start.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <payload>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </payload>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID,&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;Audit Start: Before CallProcess - PublishHBSArticleRequestMessagetoBE&quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Request Received at&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;grpArtNo&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$SOAPEventSource/requestProductInformation/grpArtNo"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;MarketArea&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$SOAPEventSource/requestProductInformation/MarketArea"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;MarketChanel&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$SOAPEventSource/requestProductInformation/MarketChanel"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditLog">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>584</pd:x>
+            <pd:y>144</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID,&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;Atter Call_PublishHBSArticleRequestMessagetoBE&quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Request Sent at&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Status&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$CallProcess_PublishHBSArticleRequestMessagetoBE/root/Status"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditError">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>793</pd:x>
+            <pd:y>56</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Error.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:choose>
+                    <xsl:when test="$Call_getHBSPriceBookData/root/Status=&quot;Error&quot;">
+                        <root>
+                            <station>
+                                <xsl:value-of select="concat(&quot;PID,&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;Audit Error: Error in Call_getHBSPriceBookData&quot;)"/>
+                            </station>
+                            <xsl:if test="$Call_getHBSPriceBookData/root/StackTrace">
+                                <additionalInfo>
+                                    <xsl:value-of select="$Call_getHBSPriceBookData/root/StackTrace"/>
+                                </additionalInfo>
+                            </xsl:if>
+                            <errorCode>
+                                <xsl:value-of select="$Call_getHBSPriceBookData/root/errorCode"/>
+                            </errorCode>
+                            <attributes>
+                                <name>
+                                    <xsl:value-of select="&quot;StackTrace&quot;"/>
+                                </name>
+                                <value>
+                                    <xsl:value-of select="$Call_getHBSPriceBookData/root/StackTrace"/>
+                                </value>
+                            </attributes>
+                        </root>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <root>
+                            <station>
+                                <xsl:value-of select="&quot;Audit Error: Successfully Sent Request to BE&quot;"/>
+                            </station>
+                            <errorCode>
+                                <xsl:value-of select="$CallProcess_PublishHBSArticleRequestMessagetoBE/root/errorCode"/>
+                            </errorCode>
+                            <attributes>
+                                <name>
+                                    <xsl:value-of select="&quot;StackTrace&quot;"/>
+                                </name>
+                                <value>
+                                    <xsl:value-of select="$CallProcess_PublishHBSArticleRequestMessagetoBE/root/StackTrace"/>
+                                </value>
+                            </attributes>
+                        </root>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Call_getHBSPriceBookData">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>698</pd:x>
+            <pd:y>142</pd:y>
+            <config>
+                <processName>/Adapter/GetProduct/BusinessProcesses/getHBSPriceBookData/getHBSPriceBookData.process</processName>
+            </config>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="AuditEnd-1">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>826</pd:x>
+            <pd:y>142</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit End.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID,&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;Audit End: Atter Call_getHBSPriceBookData - Successfully Sent Request to BE&quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Request Sent at&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="LogUnexpectedFatalError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>61</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/LogUnexpectedFatalError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorMsg>
+                    <xsl:value-of select="concat(&quot;Unexpected exception in BW_aCanWebPortal_DeliveryNote_Subscription_Process : &quot;, tib:render-xml($_error/ns:ErrorReport, false(),true()))"/>
+                </errorMsg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SOAPSendReply-1">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReplyUI</pd:resourceType>
+        <pd:x>432</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <eventSource>SOAPEventSource</eventSource>
+        </config>
+        <pd:inputBindings>
+            <requestProductInformationResponse>
+                <Status>
+                    <xsl:value-of select="&quot;Request Received. Error in Parsing Request&quot;"/>
+                </Status>
+            </requestProductInformationResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogAuditAndUnexpectedFatalError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1056</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/LogAuditAndUnexpectedFatalError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <station>
+                    <xsl:value-of select="&quot;Unexpexted Error in Impl. CallProcess_PublishHBSArticleRequestMessagetoBE&quot;"/>
+                </station>
+                <errorCode>
+                    <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                </errorCode>
+                <attributes>
+                    <name>
+                        <xsl:value-of select="&quot;RequestErrored At&quot;"/>
+                    </name>
+                    <value>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </value>
+                </attributes>
+                <errorMsg>
+                    <xsl:value-of select="concat(&quot;Unexpected Error occured in CallProcess_PublishHBSArticleRequestMessagetoBE: &quot;, &quot;boId: &quot;, $InitializeAudit/root/boId, &quot;&#xD;&#xA;&quot;,tib:render-xml($_error/ns:ErrorReport, false(), true()))"/>
+                </errorMsg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>Group (1)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPEventSource</pd:from>
+        <pd:to>LogUnexpectedFatalError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group (1)</pd:from>
+        <pd:to>LogUnexpectedFatalError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogUnexpectedFatalError</pd:from>
+        <pd:to>SOAPSendReply-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SOAPSendReply-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>LogAuditAndUnexpectedFatalError</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogAuditAndUnexpectedFatalError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

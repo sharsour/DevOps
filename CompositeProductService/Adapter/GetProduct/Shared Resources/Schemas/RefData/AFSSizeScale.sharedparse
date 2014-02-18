@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>AFSSizeScale</name>
+    <resourceType>ae.shared.ParseSharedResource</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <FormatType>Delimiter separated</FormatType>
+        <ColumnSeparator>;</ColumnSeparator>
+        <ColSeparatorRule>Treat all characters as entered as a single column separator string</ColSeparatorRule>
+        <LineSeparator>
+</LineSeparator>
+        <FillCharacter>Space</FillCharacter>
+        <LineLength>1</LineLength>
+        <DataFormat>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="MANDT" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3AGDCTYP" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3ABEZG" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3ASTXT" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3AENTX8" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3AENTX" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3ANOTE" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="J_3ALTPO" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </DataFormat>
+    </config>
+</BWSharedResource>

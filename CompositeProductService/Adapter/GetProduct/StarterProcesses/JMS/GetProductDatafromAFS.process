@@ -1,0 +1,2094 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/MaterialMaster" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPM_TempSchema.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/ACS/ACSSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPM_TempSchema.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_TempSchema.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/xmlns/ae2xsd/2002/05/ae/MaterialMaster" schemaLocation="/AESchemas/ae/MaterialMaster.aeschema"/>
+    <pd:name>Adapter/GetProduct/StarterProcesses/JMS/GetProductDatafromAFS.process</pd:name>
+    <pd:startName>ReceiveAFSData</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="ReceiveAFSData">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>118</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>23</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%BusinessProcesses/CPSInbound/AFSProductData/InputQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx3:MaterialMaster"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1045</pd:endX>
+    <pd:endY>133</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1384850916690</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>311</pd:x>
+        <pd:y>1</pd:y>
+        <pd:width>501</pd:width>
+        <pd:height>245</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AuditStart</pd:to>
+            <pd:lineType>Curved</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditEnd</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditError</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditFilter</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_ProductDataFromAFS</pd:from>
+            <pd:to>AuditEnd</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Call_ProductDataFromAFS</pd:from>
+            <pd:to>AuditError</pd:to>
+            <pd:xpathDescription>Error</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-52480</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$Call_ProductDataFromAFS/root/Status="Error"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditStart</pd:from>
+            <pd:to>Call_ProductDataFromAFS</pd:to>
+            <pd:xpathDescription>Route_To_CPS</pd:xpathDescription>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Logical__Destination__II = "MA_55"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditStart</pd:from>
+            <pd:to>AuditFilter</pd:to>
+            <pd:lineType>One Bend</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="AuditEnd">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>715</pd:x>
+            <pd:y>138</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit End.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;After CCall_ProductDataFromAFS : CDM data send successfully&quot;)"/>
+                    </station>
+                    <additionalInfo>
+                        <xsl:value-of select="&quot;Data sent to  Queue Successfully  &quot;"/>
+                    </additionalInfo>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;ArticleNo&quot;"/>
+                        </name>
+                        <xsl:if test="not(($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;true&quot;)) or ($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;1&quot;)))">
+                            <value>
+                                <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number"/>
+                            </value>
+                        </xsl:if>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;OutboundTicketNumber&quot;"/>
+                        </name>
+                        <xsl:if test="not(($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Outbound__Ticket__Number/@xsi:nil=(&quot;true&quot;)) or ($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Outbound__Ticket__Number/@xsi:nil=(&quot;1&quot;)))">
+                            <value>
+                                <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Outbound__Ticket__Number"/>
+                            </value>
+                        </xsl:if>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Logical Destination II&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Logical__Destination__II"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditError">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>601</pd:x>
+            <pd:y>63</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Error.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;Error in Call_ProductDataFromAFS&quot;)"/>
+                    </station>
+                    <xsl:if test="$Call_ProductDataFromAFS/root/StackTrace">
+                        <additionalInfo>
+                            <xsl:value-of select="$Call_ProductDataFromAFS/root/StackTrace"/>
+                        </additionalInfo>
+                    </xsl:if>
+                    <errorCode>
+                        <xsl:value-of select="$Call_ProductDataFromAFS/root/errorCode"/>
+                    </errorCode>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;StackTrace&quot;"/>
+                        </name>
+                        <xsl:if test="$Call_ProductDataFromAFS/root/StackTrace">
+                            <value>
+                                <xsl:value-of select="$Call_ProductDataFromAFS/root/StackTrace"/>
+                            </value>
+                        </xsl:if>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditStart">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>398</pd:x>
+            <pd:y>99</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit Start.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:choose>
+                        <xsl:when test="$_globalVariables/ns2:GlobalVariables/Lib/Settings/DefaultSettings/PayloadEnabled=&quot;1&quot; or $_globalVariables/ns2:GlobalVariables/Lib/Settings/DefaultSettings/PayloadEnabled=&quot;true&quot;">
+                            <payload>
+                                <xsl:value-of select="tib:render-xml($ReceiveAFSData/ns4:ActivityOutput/Body)"/>
+                            </payload>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <payload>
+                                <xsl:value-of select="&quot;&quot;"/>
+                            </payload>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;Before Call_ProductDataFromAFS&quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Article No&quot;"/>
+                        </name>
+                        <xsl:if test="not(($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;true&quot;)) or ($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;1&quot;)))">
+                            <value>
+                                <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number"/>
+                            </value>
+                        </xsl:if>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Outbound Ticket No&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Outbound__Ticket__Number"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Logical Destination II&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Logical__Destination__II"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Call_ProductDataFromAFS">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>538</pd:x>
+            <pd:y>134</pd:y>
+            <config>
+                <processName>/Adapter/GetProduct/BusinessProcesses/getProductFromSAPAFS/getProductDataFromAFS.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:for-each select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster">
+                    <pfx3:MaterialMaster>
+                        <xsl:for-each select="Header__Material__General__Data__MARA">
+                            <Header__Material__General__Data__MARA>
+                                <xsl:if test="Record__Identifier">
+                                    <Record__Identifier>
+                                        <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                        <xsl:value-of select="Record__Identifier"/>
+                                    </Record__Identifier>
+                                </xsl:if>
+                                <xsl:if test="SAP__System__Id">
+                                    <SAP__System__Id>
+                                        <xsl:copy-of select="SAP__System__Id/@xsi:nil"/>
+                                        <xsl:value-of select="SAP__System__Id"/>
+                                    </SAP__System__Id>
+                                </xsl:if>
+                                <xsl:if test="Outbound__Ticket__Number">
+                                    <Outbound__Ticket__Number>
+                                        <xsl:copy-of select="Outbound__Ticket__Number/@xsi:nil"/>
+                                        <xsl:value-of select="Outbound__Ticket__Number"/>
+                                    </Outbound__Ticket__Number>
+                                </xsl:if>
+                                <xsl:if test="Transaction__Identifier">
+                                    <Transaction__Identifier>
+                                        <xsl:copy-of select="Transaction__Identifier/@xsi:nil"/>
+                                        <xsl:value-of select="Transaction__Identifier"/>
+                                    </Transaction__Identifier>
+                                </xsl:if>
+                                <xsl:if test="Material__Number">
+                                    <Material__Number>
+                                        <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                        <xsl:value-of select="Material__Number"/>
+                                    </Material__Number>
+                                </xsl:if>
+                                <xsl:if test="Industry__Standard__Description">
+                                    <Industry__Standard__Description>
+                                        <xsl:copy-of select="Industry__Standard__Description/@xsi:nil"/>
+                                        <xsl:value-of select="Industry__Standard__Description"/>
+                                    </Industry__Standard__Description>
+                                </xsl:if>
+                                <xsl:if test="Division">
+                                    <Division>
+                                        <xsl:copy-of select="Division/@xsi:nil"/>
+                                        <xsl:value-of select="Division"/>
+                                    </Division>
+                                </xsl:if>
+                                <xsl:if test="Material__Group">
+                                    <Material__Group>
+                                        <xsl:copy-of select="Material__Group/@xsi:nil"/>
+                                        <xsl:value-of select="Material__Group"/>
+                                    </Material__Group>
+                                </xsl:if>
+                                <xsl:if test="Base__Unit__Of__Measure">
+                                    <Base__Unit__Of__Measure>
+                                        <xsl:copy-of select="Base__Unit__Of__Measure/@xsi:nil"/>
+                                        <xsl:value-of select="Base__Unit__Of__Measure"/>
+                                    </Base__Unit__Of__Measure>
+                                </xsl:if>
+                                <xsl:if test="Material__Conversion__Id">
+                                    <Material__Conversion__Id>
+                                        <xsl:copy-of select="Material__Conversion__Id/@xsi:nil"/>
+                                        <xsl:value-of select="Material__Conversion__Id"/>
+                                    </Material__Conversion__Id>
+                                </xsl:if>
+                                <xsl:if test="Target__Group">
+                                    <Target__Group>
+                                        <xsl:copy-of select="Target__Group/@xsi:nil"/>
+                                        <xsl:value-of select="Target__Group"/>
+                                    </Target__Group>
+                                </xsl:if>
+                                <xsl:if test="Material__Grid__Number">
+                                    <Material__Grid__Number>
+                                        <xsl:copy-of select="Material__Grid__Number/@xsi:nil"/>
+                                        <xsl:value-of select="Material__Grid__Number"/>
+                                    </Material__Grid__Number>
+                                </xsl:if>
+                                <xsl:if test="Product__Division">
+                                    <Product__Division>
+                                        <xsl:copy-of select="Product__Division/@xsi:nil"/>
+                                        <xsl:value-of select="Product__Division"/>
+                                    </Product__Division>
+                                </xsl:if>
+                                <xsl:if test="Corporate__Marketing__Line">
+                                    <Corporate__Marketing__Line>
+                                        <xsl:copy-of select="Corporate__Marketing__Line/@xsi:nil"/>
+                                        <xsl:value-of select="Corporate__Marketing__Line"/>
+                                    </Corporate__Marketing__Line>
+                                </xsl:if>
+                                <xsl:if test="Sports__Code">
+                                    <Sports__Code>
+                                        <xsl:copy-of select="Sports__Code/@xsi:nil"/>
+                                        <xsl:value-of select="Sports__Code"/>
+                                    </Sports__Code>
+                                </xsl:if>
+                                <xsl:if test="Category__Marketing__Line">
+                                    <Category__Marketing__Line>
+                                        <xsl:copy-of select="Category__Marketing__Line/@xsi:nil"/>
+                                        <xsl:value-of select="Category__Marketing__Line"/>
+                                    </Category__Marketing__Line>
+                                </xsl:if>
+                                <xsl:if test="Sales__Line">
+                                    <Sales__Line>
+                                        <xsl:copy-of select="Sales__Line/@xsi:nil"/>
+                                        <xsl:value-of select="Sales__Line"/>
+                                    </Sales__Line>
+                                </xsl:if>
+                                <xsl:if test="Brand__Code">
+                                    <Brand__Code>
+                                        <xsl:copy-of select="Brand__Code/@xsi:nil"/>
+                                        <xsl:value-of select="Brand__Code"/>
+                                    </Brand__Code>
+                                </xsl:if>
+                                <xsl:if test="Material__Content__Code">
+                                    <Material__Content__Code>
+                                        <xsl:copy-of select="Material__Content__Code/@xsi:nil"/>
+                                        <xsl:value-of select="Material__Content__Code"/>
+                                    </Material__Content__Code>
+                                </xsl:if>
+                                <xsl:if test="Royalty__Code">
+                                    <Royalty__Code>
+                                        <xsl:copy-of select="Royalty__Code/@xsi:nil"/>
+                                        <xsl:value-of select="Royalty__Code"/>
+                                    </Royalty__Code>
+                                </xsl:if>
+                                <xsl:if test="Color__Description1">
+                                    <Color__Description1>
+                                        <xsl:copy-of select="Color__Description1/@xsi:nil"/>
+                                        <xsl:value-of select="Color__Description1"/>
+                                    </Color__Description1>
+                                </xsl:if>
+                                <xsl:if test="Color__Description2">
+                                    <Color__Description2>
+                                        <xsl:copy-of select="Color__Description2/@xsi:nil"/>
+                                        <xsl:value-of select="Color__Description2"/>
+                                    </Color__Description2>
+                                </xsl:if>
+                                <xsl:if test="Color__Description3">
+                                    <Color__Description3>
+                                        <xsl:copy-of select="Color__Description3/@xsi:nil"/>
+                                        <xsl:value-of select="Color__Description3"/>
+                                    </Color__Description3>
+                                </xsl:if>
+                                <xsl:if test="Color__Description4">
+                                    <Color__Description4>
+                                        <xsl:copy-of select="Color__Description4/@xsi:nil"/>
+                                        <xsl:value-of select="Color__Description4"/>
+                                    </Color__Description4>
+                                </xsl:if>
+                                <xsl:if test="Last__Saison">
+                                    <Last__Saison>
+                                        <xsl:copy-of select="Last__Saison/@xsi:nil"/>
+                                        <xsl:value-of select="Last__Saison"/>
+                                    </Last__Saison>
+                                </xsl:if>
+                                <xsl:if test="Creation__Saison">
+                                    <Creation__Saison>
+                                        <xsl:copy-of select="Creation__Saison/@xsi:nil"/>
+                                        <xsl:value-of select="Creation__Saison"/>
+                                    </Creation__Saison>
+                                </xsl:if>
+                                <xsl:if test="Product__Group">
+                                    <Product__Group>
+                                        <xsl:copy-of select="Product__Group/@xsi:nil"/>
+                                        <xsl:value-of select="Product__Group"/>
+                                    </Product__Group>
+                                </xsl:if>
+                                <xsl:if test="Product__Type">
+                                    <Product__Type>
+                                        <xsl:copy-of select="Product__Type/@xsi:nil"/>
+                                        <xsl:value-of select="Product__Type"/>
+                                    </Product__Type>
+                                </xsl:if>
+                                <xsl:if test="Surface__Type">
+                                    <Surface__Type>
+                                        <xsl:copy-of select="Surface__Type/@xsi:nil"/>
+                                        <xsl:value-of select="Surface__Type"/>
+                                    </Surface__Type>
+                                </xsl:if>
+                                <xsl:if test="Surface__Hardness">
+                                    <Surface__Hardness>
+                                        <xsl:copy-of select="Surface__Hardness/@xsi:nil"/>
+                                        <xsl:value-of select="Surface__Hardness"/>
+                                    </Surface__Hardness>
+                                </xsl:if>
+                                <xsl:if test="Technical__Notation">
+                                    <Technical__Notation>
+                                        <xsl:copy-of select="Technical__Notation/@xsi:nil"/>
+                                        <xsl:value-of select="Technical__Notation"/>
+                                    </Technical__Notation>
+                                </xsl:if>
+                                <xsl:if test="Order__Lock__Status">
+                                    <Order__Lock__Status>
+                                        <xsl:copy-of select="Order__Lock__Status/@xsi:nil"/>
+                                        <xsl:value-of select="Order__Lock__Status"/>
+                                    </Order__Lock__Status>
+                                </xsl:if>
+                                <xsl:if test="Special__Purpose">
+                                    <Special__Purpose>
+                                        <xsl:copy-of select="Special__Purpose/@xsi:nil"/>
+                                        <xsl:value-of select="Special__Purpose"/>
+                                    </Special__Purpose>
+                                </xsl:if>
+                                <xsl:if test="Lead__Time">
+                                    <Lead__Time>
+                                        <xsl:copy-of select="Lead__Time/@xsi:nil"/>
+                                        <xsl:value-of select="Lead__Time"/>
+                                    </Lead__Time>
+                                </xsl:if>
+                                <xsl:if test="Lead__Time__From">
+                                    <Lead__Time__From>
+                                        <xsl:copy-of select="Lead__Time__From/@xsi:nil"/>
+                                        <xsl:value-of select="Lead__Time__From"/>
+                                    </Lead__Time__From>
+                                </xsl:if>
+                                <xsl:if test="Marketing__Division">
+                                    <Marketing__Division>
+                                        <xsl:copy-of select="Marketing__Division/@xsi:nil"/>
+                                        <xsl:value-of select="Marketing__Division"/>
+                                    </Marketing__Division>
+                                </xsl:if>
+                                <xsl:if test="Business__Segment">
+                                    <Business__Segment>
+                                        <xsl:copy-of select="Business__Segment/@xsi:nil"/>
+                                        <xsl:value-of select="Business__Segment"/>
+                                    </Business__Segment>
+                                </xsl:if>
+                                <xsl:if test="Working__Number">
+                                    <Working__Number>
+                                        <xsl:copy-of select="Working__Number/@xsi:nil"/>
+                                        <xsl:value-of select="Working__Number"/>
+                                    </Working__Number>
+                                </xsl:if>
+                                <xsl:if test="Weight__Unit">
+                                    <Weight__Unit>
+                                        <xsl:copy-of select="Weight__Unit/@xsi:nil"/>
+                                        <xsl:value-of select="Weight__Unit"/>
+                                    </Weight__Unit>
+                                </xsl:if>
+                                <xsl:if test="Volume__Unit">
+                                    <Volume__Unit>
+                                        <xsl:copy-of select="Volume__Unit/@xsi:nil"/>
+                                        <xsl:value-of select="Volume__Unit"/>
+                                    </Volume__Unit>
+                                </xsl:if>
+                                <xsl:if test="Segment">
+                                    <Segment>
+                                        <xsl:copy-of select="Segment/@xsi:nil"/>
+                                        <xsl:value-of select="Segment"/>
+                                    </Segment>
+                                </xsl:if>
+                                <xsl:if test="Department">
+                                    <Department>
+                                        <xsl:copy-of select="Department/@xsi:nil"/>
+                                        <xsl:value-of select="Department"/>
+                                    </Department>
+                                </xsl:if>
+                                <xsl:if test="Sub__Segment">
+                                    <Sub__Segment>
+                                        <xsl:copy-of select="Sub__Segment/@xsi:nil"/>
+                                        <xsl:value-of select="Sub__Segment"/>
+                                    </Sub__Segment>
+                                </xsl:if>
+                                <xsl:if test="Class">
+                                    <Class>
+                                        <xsl:copy-of select="Class/@xsi:nil"/>
+                                        <xsl:value-of select="Class"/>
+                                    </Class>
+                                </xsl:if>
+                                <xsl:if test="Sub__Class">
+                                    <Sub__Class>
+                                        <xsl:copy-of select="Sub__Class/@xsi:nil"/>
+                                        <xsl:value-of select="Sub__Class"/>
+                                    </Sub__Class>
+                                </xsl:if>
+                                <xsl:if test="Horizontal__concept">
+                                    <Horizontal__concept>
+                                        <xsl:copy-of select="Horizontal__concept/@xsi:nil"/>
+                                        <xsl:value-of select="Horizontal__concept"/>
+                                    </Horizontal__concept>
+                                </xsl:if>
+                                <xsl:if test="Royalty__status">
+                                    <Royalty__status>
+                                        <xsl:copy-of select="Royalty__status/@xsi:nil"/>
+                                        <xsl:value-of select="Royalty__status"/>
+                                    </Royalty__status>
+                                </xsl:if>
+                                <xsl:if test="Range">
+                                    <Range>
+                                        <xsl:copy-of select="Range/@xsi:nil"/>
+                                        <xsl:value-of select="Range"/>
+                                    </Range>
+                                </xsl:if>
+                                <xsl:if test="Logical__Destination__I">
+                                    <Logical__Destination__I>
+                                        <xsl:copy-of select="Logical__Destination__I/@xsi:nil"/>
+                                        <xsl:value-of select="Logical__Destination__I"/>
+                                    </Logical__Destination__I>
+                                </xsl:if>
+                                <xsl:if test="Logical__Destination__II">
+                                    <Logical__Destination__II>
+                                        <xsl:copy-of select="Logical__Destination__II/@xsi:nil"/>
+                                        <xsl:value-of select="Logical__Destination__II"/>
+                                    </Logical__Destination__II>
+                                </xsl:if>
+                                <xsl:if test="Subscriber__Routing__List">
+                                    <Subscriber__Routing__List>
+                                        <xsl:copy-of select="Subscriber__Routing__List/@xsi:nil"/>
+                                        <xsl:value-of select="Subscriber__Routing__List"/>
+                                    </Subscriber__Routing__List>
+                                </xsl:if>
+                                <xsl:if test="User__code__men">
+                                    <User__code__men>
+                                        <xsl:copy-of select="User__code__men/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__men"/>
+                                    </User__code__men>
+                                </xsl:if>
+                                <xsl:if test="User__code__ladies">
+                                    <User__code__ladies>
+                                        <xsl:copy-of select="User__code__ladies/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__ladies"/>
+                                    </User__code__ladies>
+                                </xsl:if>
+                                <xsl:if test="User__code__boys">
+                                    <User__code__boys>
+                                        <xsl:copy-of select="User__code__boys/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__boys"/>
+                                    </User__code__boys>
+                                </xsl:if>
+                                <xsl:if test="User__code__girls">
+                                    <User__code__girls>
+                                        <xsl:copy-of select="User__code__girls/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__girls"/>
+                                    </User__code__girls>
+                                </xsl:if>
+                                <xsl:if test="User__code__children">
+                                    <User__code__children>
+                                        <xsl:copy-of select="User__code__children/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__children"/>
+                                    </User__code__children>
+                                </xsl:if>
+                                <xsl:if test="User__code__babies">
+                                    <User__code__babies>
+                                        <xsl:copy-of select="User__code__babies/@xsi:nil"/>
+                                        <xsl:value-of select="User__code__babies"/>
+                                    </User__code__babies>
+                                </xsl:if>
+                                <xsl:if test="Product__Line">
+                                    <Product__Line>
+                                        <xsl:copy-of select="Product__Line/@xsi:nil"/>
+                                        <xsl:value-of select="Product__Line"/>
+                                    </Product__Line>
+                                </xsl:if>
+                                <xsl:if test="Div__Rep__Line">
+                                    <Div__Rep__Line>
+                                        <xsl:copy-of select="Div__Rep__Line/@xsi:nil"/>
+                                        <xsl:value-of select="Div__Rep__Line"/>
+                                    </Div__Rep__Line>
+                                </xsl:if>
+                                <xsl:if test="Marketing__Segment">
+                                    <Marketing__Segment>
+                                        <xsl:copy-of select="Marketing__Segment/@xsi:nil"/>
+                                        <xsl:value-of select="Marketing__Segment"/>
+                                    </Marketing__Segment>
+                                </xsl:if>
+                                <xsl:if test="Old__Material__Number">
+                                    <Old__Material__Number>
+                                        <xsl:copy-of select="Old__Material__Number/@xsi:nil"/>
+                                        <xsl:value-of select="Old__Material__Number"/>
+                                    </Old__Material__Number>
+                                </xsl:if>
+                                <xsl:if test="Gross__Weight">
+                                    <Gross__Weight>
+                                        <xsl:copy-of select="Gross__Weight/@xsi:nil"/>
+                                        <xsl:value-of select="Gross__Weight"/>
+                                    </Gross__Weight>
+                                </xsl:if>
+                                <xsl:if test="Information__Field__Color">
+                                    <Information__Field__Color>
+                                        <xsl:copy-of select="Information__Field__Color/@xsi:nil"/>
+                                        <xsl:value-of select="Information__Field__Color"/>
+                                    </Information__Field__Color>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__1">
+                                    <Change__Flag__Level__1>
+                                        <xsl:copy-of select="Change__Flag__Level__1/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__1"/>
+                                    </Change__Flag__Level__1>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__2">
+                                    <Change__Flag__Level__2>
+                                        <xsl:copy-of select="Change__Flag__Level__2/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__2"/>
+                                    </Change__Flag__Level__2>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__3">
+                                    <Change__Flag__Level__3>
+                                        <xsl:copy-of select="Change__Flag__Level__3/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__3"/>
+                                    </Change__Flag__Level__3>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__4">
+                                    <Change__Flag__Level__4>
+                                        <xsl:copy-of select="Change__Flag__Level__4/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__4"/>
+                                    </Change__Flag__Level__4>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__5">
+                                    <Change__Flag__Level__5>
+                                        <xsl:copy-of select="Change__Flag__Level__5/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__5"/>
+                                    </Change__Flag__Level__5>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__6">
+                                    <Change__Flag__Level__6>
+                                        <xsl:copy-of select="Change__Flag__Level__6/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__6"/>
+                                    </Change__Flag__Level__6>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__7">
+                                    <Change__Flag__Level__7>
+                                        <xsl:copy-of select="Change__Flag__Level__7/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__7"/>
+                                    </Change__Flag__Level__7>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__8">
+                                    <Change__Flag__Level__8>
+                                        <xsl:copy-of select="Change__Flag__Level__8/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__8"/>
+                                    </Change__Flag__Level__8>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__9">
+                                    <Change__Flag__Level__9>
+                                        <xsl:copy-of select="Change__Flag__Level__9/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__9"/>
+                                    </Change__Flag__Level__9>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__10">
+                                    <Change__Flag__Level__10>
+                                        <xsl:copy-of select="Change__Flag__Level__10/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__10"/>
+                                    </Change__Flag__Level__10>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__11">
+                                    <Change__Flag__Level__11>
+                                        <xsl:copy-of select="Change__Flag__Level__11/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__11"/>
+                                    </Change__Flag__Level__11>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__12">
+                                    <Change__Flag__Level__12>
+                                        <xsl:copy-of select="Change__Flag__Level__12/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__12"/>
+                                    </Change__Flag__Level__12>
+                                </xsl:if>
+                                <xsl:if test="Change__Flag__Level__13">
+                                    <Change__Flag__Level__13>
+                                        <xsl:copy-of select="Change__Flag__Level__13/@xsi:nil"/>
+                                        <xsl:value-of select="Change__Flag__Level__13"/>
+                                    </Change__Flag__Level__13>
+                                </xsl:if>
+                                <xsl:if test="Gender">
+                                    <Gender>
+                                        <xsl:copy-of select="Gender/@xsi:nil"/>
+                                        <xsl:value-of select="Gender"/>
+                                    </Gender>
+                                </xsl:if>
+                                <xsl:if test="PRODUCT__DIVISION__RMH">
+                                    <PRODUCT__DIVISION__RMH>
+                                        <xsl:copy-of select="PRODUCT__DIVISION__RMH/@xsi:nil"/>
+                                        <xsl:value-of select="PRODUCT__DIVISION__RMH"/>
+                                    </PRODUCT__DIVISION__RMH>
+                                </xsl:if>
+                                <xsl:if test="GENDER__AGE">
+                                    <GENDER__AGE>
+                                        <xsl:copy-of select="GENDER__AGE/@xsi:nil"/>
+                                        <xsl:value-of select="GENDER__AGE"/>
+                                    </GENDER__AGE>
+                                </xsl:if>
+                                <xsl:if test="CATEGORY">
+                                    <CATEGORY>
+                                        <xsl:copy-of select="CATEGORY/@xsi:nil"/>
+                                        <xsl:value-of select="CATEGORY"/>
+                                    </CATEGORY>
+                                </xsl:if>
+                                <xsl:if test="PRODUCT__TYPE__RMH">
+                                    <PRODUCT__TYPE__RMH>
+                                        <xsl:copy-of select="PRODUCT__TYPE__RMH/@xsi:nil"/>
+                                        <xsl:value-of select="PRODUCT__TYPE__RMH"/>
+                                    </PRODUCT__TYPE__RMH>
+                                </xsl:if>
+                                <xsl:if test="ARTICLE__TYPE__SPM">
+                                    <ARTICLE__TYPE__SPM>
+                                        <xsl:copy-of select="ARTICLE__TYPE__SPM/@xsi:nil"/>
+                                        <xsl:value-of select="ARTICLE__TYPE__SPM"/>
+                                    </ARTICLE__TYPE__SPM>
+                                </xsl:if>
+                                <xsl:if test="ARTICLE__LIFECYCLE__SPM">
+                                    <ARTICLE__LIFECYCLE__SPM>
+                                        <xsl:copy-of select="ARTICLE__LIFECYCLE__SPM/@xsi:nil"/>
+                                        <xsl:value-of select="ARTICLE__LIFECYCLE__SPM"/>
+                                    </ARTICLE__LIFECYCLE__SPM>
+                                </xsl:if>
+                                <xsl:if test="NRF__COLORCODE__SPM">
+                                    <NRF__COLORCODE__SPM>
+                                        <xsl:copy-of select="NRF__COLORCODE__SPM/@xsi:nil"/>
+                                        <xsl:value-of select="NRF__COLORCODE__SPM"/>
+                                    </NRF__COLORCODE__SPM>
+                                </xsl:if>
+                                <xsl:if test="Graphic__Code">
+                                    <Graphic__Code>
+                                        <xsl:copy-of select="Graphic__Code/@xsi:nil"/>
+                                        <xsl:value-of select="Graphic__Code"/>
+                                    </Graphic__Code>
+                                </xsl:if>
+                                <xsl:if test="Royalty__Code__2">
+                                    <Royalty__Code__2>
+                                        <xsl:copy-of select="Royalty__Code__2/@xsi:nil"/>
+                                        <xsl:value-of select="Royalty__Code__2"/>
+                                    </Royalty__Code__2>
+                                </xsl:if>
+                                <xsl:if test="Royalty__Code__3">
+                                    <Royalty__Code__3>
+                                        <xsl:copy-of select="Royalty__Code__3/@xsi:nil"/>
+                                        <xsl:value-of select="Royalty__Code__3"/>
+                                    </Royalty__Code__3>
+                                </xsl:if>
+                                <xsl:if test="AGE__GROUP">
+                                    <AGE__GROUP>
+                                        <xsl:copy-of select="AGE__GROUP/@xsi:nil"/>
+                                        <xsl:value-of select="AGE__GROUP"/>
+                                    </AGE__GROUP>
+                                </xsl:if>
+                            </Header__Material__General__Data__MARA>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Language__Dependent__Fields">
+                            <Child__Language__Dependent__Fields>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Language__Key">
+                                            <Language__Key>
+                                                <xsl:copy-of select="Language__Key/@xsi:nil"/>
+                                                <xsl:value-of select="Language__Key"/>
+                                            </Language__Key>
+                                        </xsl:if>
+                                        <xsl:if test="Short__Description__Color1">
+                                            <Short__Description__Color1>
+                                                <xsl:copy-of select="Short__Description__Color1/@xsi:nil"/>
+                                                <xsl:value-of select="Short__Description__Color1"/>
+                                            </Short__Description__Color1>
+                                        </xsl:if>
+                                        <xsl:if test="Short__Description__Color2">
+                                            <Short__Description__Color2>
+                                                <xsl:copy-of select="Short__Description__Color2/@xsi:nil"/>
+                                                <xsl:value-of select="Short__Description__Color2"/>
+                                            </Short__Description__Color2>
+                                        </xsl:if>
+                                        <xsl:if test="Short__Description__Color3">
+                                            <Short__Description__Color3>
+                                                <xsl:copy-of select="Short__Description__Color3/@xsi:nil"/>
+                                                <xsl:value-of select="Short__Description__Color3"/>
+                                            </Short__Description__Color3>
+                                        </xsl:if>
+                                        <xsl:if test="Short__Description__Color4">
+                                            <Short__Description__Color4>
+                                                <xsl:copy-of select="Short__Description__Color4/@xsi:nil"/>
+                                                <xsl:value-of select="Short__Description__Color4"/>
+                                            </Short__Description__Color4>
+                                        </xsl:if>
+                                        <xsl:if test="Description__Color__1">
+                                            <Description__Color__1>
+                                                <xsl:copy-of select="Description__Color__1/@xsi:nil"/>
+                                                <xsl:value-of select="Description__Color__1"/>
+                                            </Description__Color__1>
+                                        </xsl:if>
+                                        <xsl:if test="Description__Color__2">
+                                            <Description__Color__2>
+                                                <xsl:copy-of select="Description__Color__2/@xsi:nil"/>
+                                                <xsl:value-of select="Description__Color__2"/>
+                                            </Description__Color__2>
+                                        </xsl:if>
+                                        <xsl:if test="Description__Color__3">
+                                            <Description__Color__3>
+                                                <xsl:copy-of select="Description__Color__3/@xsi:nil"/>
+                                                <xsl:value-of select="Description__Color__3"/>
+                                            </Description__Color__3>
+                                        </xsl:if>
+                                        <xsl:if test="Description__Color__4">
+                                            <Description__Color__4>
+                                                <xsl:copy-of select="Description__Color__4/@xsi:nil"/>
+                                                <xsl:value-of select="Description__Color__4"/>
+                                            </Description__Color__4>
+                                        </xsl:if>
+                                        <xsl:if test="IAM__Material__Description">
+                                            <IAM__Material__Description>
+                                                <xsl:copy-of select="IAM__Material__Description/@xsi:nil"/>
+                                                <xsl:value-of select="IAM__Material__Description"/>
+                                            </IAM__Material__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Model__Description">
+                                            <Model__Description>
+                                                <xsl:copy-of select="Model__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Model__Description"/>
+                                            </Model__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Color__Combination__Long">
+                                            <Color__Combination__Long>
+                                                <xsl:copy-of select="Color__Combination__Long/@xsi:nil"/>
+                                                <xsl:value-of select="Color__Combination__Long"/>
+                                            </Color__Combination__Long>
+                                        </xsl:if>
+                                        <xsl:if test="Color__Combination__Short">
+                                            <Color__Combination__Short>
+                                                <xsl:copy-of select="Color__Combination__Short/@xsi:nil"/>
+                                                <xsl:value-of select="Color__Combination__Short"/>
+                                            </Color__Combination__Short>
+                                        </xsl:if>
+                                        <xsl:if test="Last__saison__Description">
+                                            <Last__saison__Description>
+                                                <xsl:copy-of select="Last__saison__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Last__saison__Description"/>
+                                            </Last__saison__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Creation__saison__Description">
+                                            <Creation__saison__Description>
+                                                <xsl:copy-of select="Creation__saison__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Creation__saison__Description"/>
+                                            </Creation__saison__Description>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__Color__Code1">
+                                            <NRF__Color__Code1>
+                                                <xsl:copy-of select="NRF__Color__Code1/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__Color__Code1"/>
+                                            </NRF__Color__Code1>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__Color__Code2">
+                                            <NRF__Color__Code2>
+                                                <xsl:copy-of select="NRF__Color__Code2/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__Color__Code2"/>
+                                            </NRF__Color__Code2>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__Color__Code3">
+                                            <NRF__Color__Code3>
+                                                <xsl:copy-of select="NRF__Color__Code3/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__Color__Code3"/>
+                                            </NRF__Color__Code3>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__Color__Code4">
+                                            <NRF__Color__Code4>
+                                                <xsl:copy-of select="NRF__Color__Code4/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__Color__Code4"/>
+                                            </NRF__Color__Code4>
+                                        </xsl:if>
+                                        <xsl:if test="US__abbreviation__1">
+                                            <US__abbreviation__1>
+                                                <xsl:copy-of select="US__abbreviation__1/@xsi:nil"/>
+                                                <xsl:value-of select="US__abbreviation__1"/>
+                                            </US__abbreviation__1>
+                                        </xsl:if>
+                                        <xsl:if test="US__abbreviation__2">
+                                            <US__abbreviation__2>
+                                                <xsl:copy-of select="US__abbreviation__2/@xsi:nil"/>
+                                                <xsl:value-of select="US__abbreviation__2"/>
+                                            </US__abbreviation__2>
+                                        </xsl:if>
+                                        <xsl:if test="US__abbreviation__3">
+                                            <US__abbreviation__3>
+                                                <xsl:copy-of select="US__abbreviation__3/@xsi:nil"/>
+                                                <xsl:value-of select="US__abbreviation__3"/>
+                                            </US__abbreviation__3>
+                                        </xsl:if>
+                                        <xsl:if test="US__abbreviation__4">
+                                            <US__abbreviation__4>
+                                                <xsl:copy-of select="US__abbreviation__4/@xsi:nil"/>
+                                                <xsl:value-of select="US__abbreviation__4"/>
+                                            </US__abbreviation__4>
+                                        </xsl:if>
+                                        <xsl:if test="Sports__Description">
+                                            <Sports__Description>
+                                                <xsl:copy-of select="Sports__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Sports__Description"/>
+                                            </Sports__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Description">
+                                            <Material__Description>
+                                                <xsl:copy-of select="Material__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Description"/>
+                                            </Material__Description>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Language__Dependent__Fields>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Material__Plant__Data__MARC">
+                            <Child__Material__Plant__Data__MARC>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="PLANT">
+                                            <PLANT>
+                                                <xsl:copy-of select="PLANT/@xsi:nil"/>
+                                                <xsl:value-of select="PLANT"/>
+                                            </PLANT>
+                                        </xsl:if>
+                                        <xsl:if test="Purchasing__Group">
+                                            <Purchasing__Group>
+                                                <xsl:copy-of select="Purchasing__Group/@xsi:nil"/>
+                                                <xsl:value-of select="Purchasing__Group"/>
+                                            </Purchasing__Group>
+                                        </xsl:if>
+                                        <xsl:if test="Plant__Specific__Material__Status">
+                                            <Plant__Specific__Material__Status>
+                                                <xsl:copy-of select="Plant__Specific__Material__Status/@xsi:nil"/>
+                                                <xsl:value-of select="Plant__Specific__Material__Status"/>
+                                            </Plant__Specific__Material__Status>
+                                        </xsl:if>
+                                        <xsl:if test="DATE__From__Which__Status__Valid">
+                                            <DATE__From__Which__Status__Valid>
+                                                <xsl:copy-of select="DATE__From__Which__Status__Valid/@xsi:nil"/>
+                                                <xsl:value-of select="DATE__From__Which__Status__Valid"/>
+                                            </DATE__From__Which__Status__Valid>
+                                        </xsl:if>
+                                        <xsl:if test="Checking__Group__Availability__Check">
+                                            <Checking__Group__Availability__Check>
+                                                <xsl:copy-of select="Checking__Group__Availability__Check/@xsi:nil"/>
+                                                <xsl:value-of select="Checking__Group__Availability__Check"/>
+                                            </Checking__Group__Availability__Check>
+                                        </xsl:if>
+                                        <xsl:if test="MRP__Controller">
+                                            <MRP__Controller>
+                                                <xsl:copy-of select="MRP__Controller/@xsi:nil"/>
+                                                <xsl:value-of select="MRP__Controller"/>
+                                            </MRP__Controller>
+                                        </xsl:if>
+                                        <xsl:if test="Safety__Stock">
+                                            <Safety__Stock>
+                                                <xsl:copy-of select="Safety__Stock/@xsi:nil"/>
+                                                <xsl:value-of select="Safety__Stock"/>
+                                            </Safety__Stock>
+                                        </xsl:if>
+                                        <xsl:if test="Planned__Delivery__Time__Days">
+                                            <Planned__Delivery__Time__Days>
+                                                <xsl:copy-of select="Planned__Delivery__Time__Days/@xsi:nil"/>
+                                                <xsl:value-of select="Planned__Delivery__Time__Days"/>
+                                            </Planned__Delivery__Time__Days>
+                                        </xsl:if>
+                                        <xsl:if test="Period__Indicator">
+                                            <Period__Indicator>
+                                                <xsl:copy-of select="Period__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Period__Indicator"/>
+                                            </Period__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Splitting__Indicator">
+                                            <Splitting__Indicator>
+                                                <xsl:copy-of select="Splitting__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Splitting__Indicator"/>
+                                            </Splitting__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Consumption__Period__Backward">
+                                            <Consumption__Period__Backward>
+                                                <xsl:copy-of select="Consumption__Period__Backward/@xsi:nil"/>
+                                                <xsl:value-of select="Consumption__Period__Backward"/>
+                                            </Consumption__Period__Backward>
+                                        </xsl:if>
+                                        <xsl:if test="Consumption__Period__Forward">
+                                            <Consumption__Period__Forward>
+                                                <xsl:copy-of select="Consumption__Period__Forward/@xsi:nil"/>
+                                                <xsl:value-of select="Consumption__Period__Forward"/>
+                                            </Consumption__Period__Forward>
+                                        </xsl:if>
+                                        <xsl:if test="Total__Replenishment__Lead__Time">
+                                            <Total__Replenishment__Lead__Time>
+                                                <xsl:copy-of select="Total__Replenishment__Lead__Time/@xsi:nil"/>
+                                                <xsl:value-of select="Total__Replenishment__Lead__Time"/>
+                                            </Total__Replenishment__Lead__Time>
+                                        </xsl:if>
+                                        <xsl:if test="Follow__Up__Material">
+                                            <Follow__Up__Material>
+                                                <xsl:copy-of select="Follow__Up__Material/@xsi:nil"/>
+                                                <xsl:value-of select="Follow__Up__Material"/>
+                                            </Follow__Up__Material>
+                                        </xsl:if>
+                                        <xsl:if test="Discontinuation__Indicator">
+                                            <Discontinuation__Indicator>
+                                                <xsl:copy-of select="Discontinuation__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Discontinuation__Indicator"/>
+                                            </Discontinuation__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Effective__Out__Date">
+                                            <Effective__Out__Date>
+                                                <xsl:copy-of select="Effective__Out__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Effective__Out__Date"/>
+                                            </Effective__Out__Date>
+                                        </xsl:if>
+                                        <xsl:if test="MRP__Indicator">
+                                            <MRP__Indicator>
+                                                <xsl:copy-of select="MRP__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="MRP__Indicator"/>
+                                            </MRP__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="AFS__Risk__Factor">
+                                            <AFS__Risk__Factor>
+                                                <xsl:copy-of select="AFS__Risk__Factor/@xsi:nil"/>
+                                                <xsl:value-of select="AFS__Risk__Factor"/>
+                                            </AFS__Risk__Factor>
+                                        </xsl:if>
+                                        <xsl:if test="Default__Version__AFS__Planned__Independent__Requirements">
+                                            <Default__Version__AFS__Planned__Independent__Requirements>
+                                                <xsl:copy-of select="Default__Version__AFS__Planned__Independent__Requirements/@xsi:nil"/>
+                                                <xsl:value-of select="Default__Version__AFS__Planned__Independent__Requirements"/>
+                                            </Default__Version__AFS__Planned__Independent__Requirements>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Profile">
+                                            <Grid__Profile>
+                                                <xsl:copy-of select="Grid__Profile/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Profile"/>
+                                            </Grid__Profile>
+                                        </xsl:if>
+                                        <xsl:if test="Goods__Receipt__Processing__Time__Days">
+                                            <Goods__Receipt__Processing__Time__Days>
+                                                <xsl:copy-of select="Goods__Receipt__Processing__Time__Days/@xsi:nil"/>
+                                                <xsl:value-of select="Goods__Receipt__Processing__Time__Days"/>
+                                            </Goods__Receipt__Processing__Time__Days>
+                                        </xsl:if>
+                                        <xsl:if test="Flag__Material__Deletion__Plant_sp_Level">
+                                            <Flag__Material__Deletion__Plant_sp_Level>
+                                                <xsl:copy-of select="Flag__Material__Deletion__Plant_sp_Level/@xsi:nil"/>
+                                                <xsl:value-of select="Flag__Material__Deletion__Plant_sp_Level"/>
+                                            </Flag__Material__Deletion__Plant_sp_Level>
+                                        </xsl:if>
+                                        <xsl:if test="Country__of__Origin">
+                                            <Country__of__Origin>
+                                                <xsl:copy-of select="Country__of__Origin/@xsi:nil"/>
+                                                <xsl:value-of select="Country__of__Origin"/>
+                                            </Country__of__Origin>
+                                        </xsl:if>
+                                        <xsl:if test="Commodity__Code">
+                                            <Commodity__Code>
+                                                <xsl:copy-of select="Commodity__Code/@xsi:nil"/>
+                                                <xsl:value-of select="Commodity__Code"/>
+                                            </Commodity__Code>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Material__Plant__Data__MARC>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Sales__Data__Material__MVKE">
+                            <Child__Sales__Data__Material__MVKE>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Organization">
+                                            <Sales__Organization>
+                                                <xsl:copy-of select="Sales__Organization/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Organization"/>
+                                            </Sales__Organization>
+                                        </xsl:if>
+                                        <xsl:if test="Distribution__Channel">
+                                            <Distribution__Channel>
+                                                <xsl:copy-of select="Distribution__Channel/@xsi:nil"/>
+                                                <xsl:value-of select="Distribution__Channel"/>
+                                            </Distribution__Channel>
+                                        </xsl:if>
+                                        <xsl:if test="Distribution__Chain__Material__Status">
+                                            <Distribution__Chain__Material__Status>
+                                                <xsl:copy-of select="Distribution__Chain__Material__Status/@xsi:nil"/>
+                                                <xsl:value-of select="Distribution__Chain__Material__Status"/>
+                                            </Distribution__Chain__Material__Status>
+                                        </xsl:if>
+                                        <xsl:if test="DATE__From__Which__Dist__Material__Status__Valid">
+                                            <DATE__From__Which__Dist__Material__Status__Valid>
+                                                <xsl:copy-of select="DATE__From__Which__Dist__Material__Status__Valid/@xsi:nil"/>
+                                                <xsl:value-of select="DATE__From__Which__Dist__Material__Status__Valid"/>
+                                            </DATE__From__Which__Dist__Material__Status__Valid>
+                                        </xsl:if>
+                                        <xsl:if test="Delivering__Plant">
+                                            <Delivering__Plant>
+                                                <xsl:copy-of select="Delivering__Plant/@xsi:nil"/>
+                                                <xsl:value-of select="Delivering__Plant"/>
+                                            </Delivering__Plant>
+                                        </xsl:if>
+                                        <xsl:if test="Product__Hierarchy">
+                                            <Product__Hierarchy>
+                                                <xsl:copy-of select="Product__Hierarchy/@xsi:nil"/>
+                                                <xsl:value-of select="Product__Hierarchy"/>
+                                            </Product__Hierarchy>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Group4">
+                                            <Material__Group4>
+                                                <xsl:copy-of select="Material__Group4/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Group4"/>
+                                            </Material__Group4>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Group5">
+                                            <Material__Group5>
+                                                <xsl:copy-of select="Material__Group5/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Group5"/>
+                                            </Material__Group5>
+                                        </xsl:if>
+                                        <xsl:if test="Sport__Category">
+                                            <Sport__Category>
+                                                <xsl:copy-of select="Sport__Category/@xsi:nil"/>
+                                                <xsl:value-of select="Sport__Category"/>
+                                            </Sport__Category>
+                                        </xsl:if>
+                                        <xsl:if test="Silhouette">
+                                            <Silhouette>
+                                                <xsl:copy-of select="Silhouette/@xsi:nil"/>
+                                                <xsl:value-of select="Silhouette"/>
+                                            </Silhouette>
+                                        </xsl:if>
+                                        <xsl:if test="Gender__size">
+                                            <Gender__size>
+                                                <xsl:copy-of select="Gender__size/@xsi:nil"/>
+                                                <xsl:value-of select="Gender__size"/>
+                                            </Gender__size>
+                                        </xsl:if>
+                                        <xsl:if test="Range__Type">
+                                            <Range__Type>
+                                                <xsl:copy-of select="Range__Type/@xsi:nil"/>
+                                                <xsl:value-of select="Range__Type"/>
+                                            </Range__Type>
+                                        </xsl:if>
+                                        <xsl:if test="Dim__Width">
+                                            <Dim__Width>
+                                                <xsl:copy-of select="Dim__Width/@xsi:nil"/>
+                                                <xsl:value-of select="Dim__Width"/>
+                                            </Dim__Width>
+                                        </xsl:if>
+                                        <xsl:if test="Tooling__Group">
+                                            <Tooling__Group>
+                                                <xsl:copy-of select="Tooling__Group/@xsi:nil"/>
+                                                <xsl:value-of select="Tooling__Group"/>
+                                            </Tooling__Group>
+                                        </xsl:if>
+                                        <xsl:if test="Macro__Model">
+                                            <Macro__Model>
+                                                <xsl:copy-of select="Macro__Model/@xsi:nil"/>
+                                                <xsl:value-of select="Macro__Model"/>
+                                            </Macro__Model>
+                                        </xsl:if>
+                                        <xsl:if test="Blank__T">
+                                            <Blank__T>
+                                                <xsl:copy-of select="Blank__T/@xsi:nil"/>
+                                                <xsl:value-of select="Blank__T"/>
+                                            </Blank__T>
+                                        </xsl:if>
+                                        <xsl:if test="Launch__date">
+                                            <Launch__date>
+                                                <xsl:copy-of select="Launch__date/@xsi:nil"/>
+                                                <xsl:value-of select="Launch__date"/>
+                                            </Launch__date>
+                                        </xsl:if>
+                                        <xsl:if test="Business__unit">
+                                            <Business__unit>
+                                                <xsl:copy-of select="Business__unit/@xsi:nil"/>
+                                                <xsl:value-of select="Business__unit"/>
+                                            </Business__unit>
+                                        </xsl:if>
+                                        <xsl:if test="Managed__Allocation">
+                                            <Managed__Allocation>
+                                                <xsl:copy-of select="Managed__Allocation/@xsi:nil"/>
+                                                <xsl:value-of select="Managed__Allocation"/>
+                                            </Managed__Allocation>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Text1">
+                                            <Sales__Text1>
+                                                <xsl:copy-of select="Sales__Text1/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Text1"/>
+                                            </Sales__Text1>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Text2">
+                                            <Sales__Text2>
+                                                <xsl:copy-of select="Sales__Text2/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Text2"/>
+                                            </Sales__Text2>
+                                        </xsl:if>
+                                        <xsl:if test="Sports__Category__Description">
+                                            <Sports__Category__Description>
+                                                <xsl:copy-of select="Sports__Category__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Sports__Category__Description"/>
+                                            </Sports__Category__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Unit">
+                                            <Sales__Unit>
+                                                <xsl:copy-of select="Sales__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Unit"/>
+                                            </Sales__Unit>
+                                        </xsl:if>
+                                        <xsl:if test="Min__Delivery__Quantity">
+                                            <Min__Delivery__Quantity>
+                                                <xsl:copy-of select="Min__Delivery__Quantity/@xsi:nil"/>
+                                                <xsl:value-of select="Min__Delivery__Quantity"/>
+                                            </Min__Delivery__Quantity>
+                                        </xsl:if>
+                                        <xsl:if test="Delivery__Unit">
+                                            <Delivery__Unit>
+                                                <xsl:copy-of select="Delivery__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Delivery__Unit"/>
+                                            </Delivery__Unit>
+                                        </xsl:if>
+                                        <xsl:if test="Pricing__Indicator">
+                                            <Pricing__Indicator>
+                                                <xsl:copy-of select="Pricing__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Pricing__Indicator"/>
+                                            </Pricing__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Sell__In__Quarter">
+                                            <Sell__In__Quarter>
+                                                <xsl:copy-of select="Sell__In__Quarter/@xsi:nil"/>
+                                                <xsl:value-of select="Sell__In__Quarter"/>
+                                            </Sell__In__Quarter>
+                                        </xsl:if>
+                                        <xsl:if test="Time__Period">
+                                            <Time__Period>
+                                                <xsl:copy-of select="Time__Period/@xsi:nil"/>
+                                                <xsl:value-of select="Time__Period"/>
+                                            </Time__Period>
+                                        </xsl:if>
+                                        <xsl:if test="Retail__Exit__Date">
+                                            <Retail__Exit__Date>
+                                                <xsl:copy-of select="Retail__Exit__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Retail__Exit__Date"/>
+                                            </Retail__Exit__Date>
+                                        </xsl:if>
+                                        <xsl:if test="Theme">
+                                            <Theme>
+                                                <xsl:copy-of select="Theme/@xsi:nil"/>
+                                                <xsl:value-of select="Theme"/>
+                                            </Theme>
+                                        </xsl:if>
+                                        <xsl:if test="SCA__Marketing__Segment">
+                                            <SCA__Marketing__Segment>
+                                                <xsl:copy-of select="SCA__Marketing__Segment/@xsi:nil"/>
+                                                <xsl:value-of select="SCA__Marketing__Segment"/>
+                                            </SCA__Marketing__Segment>
+                                        </xsl:if>
+                                        <xsl:if test="Category__Manager">
+                                            <Category__Manager>
+                                                <xsl:copy-of select="Category__Manager/@xsi:nil"/>
+                                                <xsl:value-of select="Category__Manager"/>
+                                            </Category__Manager>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Pricing__Group">
+                                            <Material__Pricing__Group>
+                                                <xsl:copy-of select="Material__Pricing__Group/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Pricing__Group"/>
+                                            </Material__Pricing__Group>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Sales__Data__Material__MVKE>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Size__Data__Material__MEAN">
+                            <Child__Size__Data__Material__MEAN>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Value">
+                                            <Grid__Value>
+                                                <xsl:copy-of select="Grid__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Value"/>
+                                            </Grid__Value>
+                                        </xsl:if>
+                                        <xsl:if test="International__Article__Number__EAN">
+                                            <International__Article__Number__EAN>
+                                                <xsl:copy-of select="International__Article__Number__EAN/@xsi:nil"/>
+                                                <xsl:value-of select="International__Article__Number__EAN"/>
+                                            </International__Article__Number__EAN>
+                                        </xsl:if>
+                                        <xsl:if test="International__Article__Number__UPC">
+                                            <International__Article__Number__UPC>
+                                                <xsl:copy-of select="International__Article__Number__UPC/@xsi:nil"/>
+                                                <xsl:value-of select="International__Article__Number__UPC"/>
+                                            </International__Article__Number__UPC>
+                                        </xsl:if>
+                                        <xsl:if test="Volume">
+                                            <Volume>
+                                                <xsl:copy-of select="Volume/@xsi:nil"/>
+                                                <xsl:value-of select="Volume"/>
+                                            </Volume>
+                                        </xsl:if>
+                                        <xsl:if test="Gross__Weight">
+                                            <Gross__Weight>
+                                                <xsl:copy-of select="Gross__Weight/@xsi:nil"/>
+                                                <xsl:value-of select="Gross__Weight"/>
+                                            </Gross__Weight>
+                                        </xsl:if>
+                                        <xsl:if test="Net__Weight">
+                                            <Net__Weight>
+                                                <xsl:copy-of select="Net__Weight/@xsi:nil"/>
+                                                <xsl:value-of select="Net__Weight"/>
+                                            </Net__Weight>
+                                        </xsl:if>
+                                        <xsl:if test="Inner__Carton">
+                                            <Inner__Carton>
+                                                <xsl:copy-of select="Inner__Carton/@xsi:nil"/>
+                                                <xsl:value-of select="Inner__Carton"/>
+                                            </Inner__Carton>
+                                        </xsl:if>
+                                        <xsl:if test="Outer__Carton">
+                                            <Outer__Carton>
+                                                <xsl:copy-of select="Outer__Carton/@xsi:nil"/>
+                                                <xsl:value-of select="Outer__Carton"/>
+                                            </Outer__Carton>
+                                        </xsl:if>
+                                        <xsl:if test="Gross__Sales__Weight">
+                                            <Gross__Sales__Weight>
+                                                <xsl:copy-of select="Gross__Sales__Weight/@xsi:nil"/>
+                                                <xsl:value-of select="Gross__Sales__Weight"/>
+                                            </Gross__Sales__Weight>
+                                        </xsl:if>
+                                        <xsl:if test="Gross__Sales__Volume">
+                                            <Gross__Sales__Volume>
+                                                <xsl:copy-of select="Gross__Sales__Volume/@xsi:nil"/>
+                                                <xsl:value-of select="Gross__Sales__Volume"/>
+                                            </Gross__Sales__Volume>
+                                        </xsl:if>
+                                        <xsl:if test="Volume__Unit">
+                                            <Volume__Unit>
+                                                <xsl:copy-of select="Volume__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Volume__Unit"/>
+                                            </Volume__Unit>
+                                        </xsl:if>
+                                        <xsl:if test="Weight__Unit">
+                                            <Weight__Unit>
+                                                <xsl:copy-of select="Weight__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Weight__Unit"/>
+                                            </Weight__Unit>
+                                        </xsl:if>
+                                        <xsl:if test="Rounding__Factor">
+                                            <Rounding__Factor>
+                                                <xsl:copy-of select="Rounding__Factor/@xsi:nil"/>
+                                                <xsl:value-of select="Rounding__Factor"/>
+                                            </Rounding__Factor>
+                                        </xsl:if>
+                                        <xsl:if test="Old__Material__Number">
+                                            <Old__Material__Number>
+                                                <xsl:copy-of select="Old__Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Old__Material__Number"/>
+                                            </Old__Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__SIZE__ID">
+                                            <NRF__SIZE__ID>
+                                                <xsl:copy-of select="NRF__SIZE__ID/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__SIZE__ID"/>
+                                            </NRF__SIZE__ID>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Size__Data__Material__MEAN>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__AFS__Season__data">
+                            <Child__AFS__Season__data>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Value">
+                                            <Grid__Value>
+                                                <xsl:copy-of select="Grid__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Value"/>
+                                            </Grid__Value>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__organization">
+                                            <Sales__organization>
+                                                <xsl:copy-of select="Sales__organization/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__organization"/>
+                                            </Sales__organization>
+                                        </xsl:if>
+                                        <xsl:if test="Country__Key">
+                                            <Country__Key>
+                                                <xsl:copy-of select="Country__Key/@xsi:nil"/>
+                                                <xsl:value-of select="Country__Key"/>
+                                            </Country__Key>
+                                        </xsl:if>
+                                        <xsl:if test="Deletion__Indicator">
+                                            <Deletion__Indicator>
+                                                <xsl:copy-of select="Deletion__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Deletion__Indicator"/>
+                                            </Deletion__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Size__Description">
+                                            <Size__Description>
+                                                <xsl:copy-of select="Size__Description/@xsi:nil"/>
+                                                <xsl:value-of select="Size__Description"/>
+                                            </Size__Description>
+                                        </xsl:if>
+                                        <xsl:if test="Size__Run">
+                                            <Size__Run>
+                                                <xsl:copy-of select="Size__Run/@xsi:nil"/>
+                                                <xsl:value-of select="Size__Run"/>
+                                            </Size__Run>
+                                        </xsl:if>
+                                        <xsl:if test="Technical__Index__2Digits">
+                                            <Technical__Index__2Digits>
+                                                <xsl:copy-of select="Technical__Index__2Digits/@xsi:nil"/>
+                                                <xsl:value-of select="Technical__Index__2Digits"/>
+                                            </Technical__Index__2Digits>
+                                        </xsl:if>
+                                        <xsl:if test="NRF__Size__Code">
+                                            <NRF__Size__Code>
+                                                <xsl:copy-of select="NRF__Size__Code/@xsi:nil"/>
+                                                <xsl:value-of select="NRF__Size__Code"/>
+                                            </NRF__Size__Code>
+                                        </xsl:if>
+                                        <xsl:if test="Tax__classification">
+                                            <Tax__classification>
+                                                <xsl:copy-of select="Tax__classification/@xsi:nil"/>
+                                                <xsl:value-of select="Tax__classification"/>
+                                            </Tax__classification>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__AFS__Season__data>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Classification">
+                            <Child__Classification>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Class__Type">
+                                            <Class__Type>
+                                                <xsl:copy-of select="Class__Type/@xsi:nil"/>
+                                                <xsl:value-of select="Class__Type"/>
+                                            </Class__Type>
+                                        </xsl:if>
+                                        <xsl:if test="Class__Number">
+                                            <Class__Number>
+                                                <xsl:copy-of select="Class__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Class__Number"/>
+                                            </Class__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Characteristic__Name">
+                                            <Characteristic__Name>
+                                                <xsl:copy-of select="Characteristic__Name/@xsi:nil"/>
+                                                <xsl:value-of select="Characteristic__Name"/>
+                                            </Characteristic__Name>
+                                        </xsl:if>
+                                        <xsl:if test="Characteristic__Value">
+                                            <Characteristic__Value>
+                                                <xsl:copy-of select="Characteristic__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Characteristic__Value"/>
+                                            </Characteristic__Value>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Classification>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Product__Costing__Fields">
+                            <Child__Product__Costing__Fields>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Plant">
+                                            <Plant>
+                                                <xsl:copy-of select="Plant/@xsi:nil"/>
+                                                <xsl:value-of select="Plant"/>
+                                            </Plant>
+                                        </xsl:if>
+                                        <xsl:if test="Costing__Variant">
+                                            <Costing__Variant>
+                                                <xsl:copy-of select="Costing__Variant/@xsi:nil"/>
+                                                <xsl:value-of select="Costing__Variant"/>
+                                            </Costing__Variant>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field1">
+                                            <Costs__Field1>
+                                                <xsl:copy-of select="Costs__Field1/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field1"/>
+                                            </Costs__Field1>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field3">
+                                            <Costs__Field3>
+                                                <xsl:copy-of select="Costs__Field3/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field3"/>
+                                            </Costs__Field3>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field5">
+                                            <Costs__Field5>
+                                                <xsl:copy-of select="Costs__Field5/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field5"/>
+                                            </Costs__Field5>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field7">
+                                            <Costs__Field7>
+                                                <xsl:copy-of select="Costs__Field7/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field7"/>
+                                            </Costs__Field7>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field9">
+                                            <Costs__Field9>
+                                                <xsl:copy-of select="Costs__Field9/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field9"/>
+                                            </Costs__Field9>
+                                        </xsl:if>
+                                        <xsl:if test="Costs__Field11">
+                                            <Costs__Field11>
+                                                <xsl:copy-of select="Costs__Field11/@xsi:nil"/>
+                                                <xsl:value-of select="Costs__Field11"/>
+                                            </Costs__Field11>
+                                        </xsl:if>
+                                        <xsl:if test="Currency__Key">
+                                            <Currency__Key>
+                                                <xsl:copy-of select="Currency__Key/@xsi:nil"/>
+                                                <xsl:value-of select="Currency__Key"/>
+                                            </Currency__Key>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Product__Costing__Fields>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Pricing__Fields">
+                            <Child__Pricing__Fields>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Organisation">
+                                            <Sales__Organisation>
+                                                <xsl:copy-of select="Sales__Organisation/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Organisation"/>
+                                            </Sales__Organisation>
+                                        </xsl:if>
+                                        <xsl:if test="Distribution__Channel">
+                                            <Distribution__Channel>
+                                                <xsl:copy-of select="Distribution__Channel/@xsi:nil"/>
+                                                <xsl:value-of select="Distribution__Channel"/>
+                                            </Distribution__Channel>
+                                        </xsl:if>
+                                        <xsl:if test="Condition__Type">
+                                            <Condition__Type>
+                                                <xsl:copy-of select="Condition__Type/@xsi:nil"/>
+                                                <xsl:value-of select="Condition__Type"/>
+                                            </Condition__Type>
+                                        </xsl:if>
+                                        <xsl:if test="Validity__End__Date">
+                                            <Validity__End__Date>
+                                                <xsl:copy-of select="Validity__End__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Validity__End__Date"/>
+                                            </Validity__End__Date>
+                                        </xsl:if>
+                                        <xsl:if test="Validity__Start__Date">
+                                            <Validity__Start__Date>
+                                                <xsl:copy-of select="Validity__Start__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Validity__Start__Date"/>
+                                            </Validity__Start__Date>
+                                        </xsl:if>
+                                        <xsl:if test="Rate">
+                                            <Rate>
+                                                <xsl:copy-of select="Rate/@xsi:nil"/>
+                                                <xsl:value-of select="Rate"/>
+                                            </Rate>
+                                        </xsl:if>
+                                        <xsl:if test="Rate__Unit">
+                                            <Rate__Unit>
+                                                <xsl:copy-of select="Rate__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Rate__Unit"/>
+                                            </Rate__Unit>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Pricing__Fields>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Pricing__Fields__Article__Size">
+                            <Child__Pricing__Fields__Article__Size>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Organisation">
+                                            <Sales__Organisation>
+                                                <xsl:copy-of select="Sales__Organisation/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Organisation"/>
+                                            </Sales__Organisation>
+                                        </xsl:if>
+                                        <xsl:if test="Distribution__Channel">
+                                            <Distribution__Channel>
+                                                <xsl:copy-of select="Distribution__Channel/@xsi:nil"/>
+                                                <xsl:value-of select="Distribution__Channel"/>
+                                            </Distribution__Channel>
+                                        </xsl:if>
+                                        <xsl:if test="Condition__Type">
+                                            <Condition__Type>
+                                                <xsl:copy-of select="Condition__Type/@xsi:nil"/>
+                                                <xsl:value-of select="Condition__Type"/>
+                                            </Condition__Type>
+                                        </xsl:if>
+                                        <xsl:if test="Validity__End__Date">
+                                            <Validity__End__Date>
+                                                <xsl:copy-of select="Validity__End__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Validity__End__Date"/>
+                                            </Validity__End__Date>
+                                        </xsl:if>
+                                        <xsl:if test="Validity__Start__Date">
+                                            <Validity__Start__Date>
+                                                <xsl:copy-of select="Validity__Start__Date/@xsi:nil"/>
+                                                <xsl:value-of select="Validity__Start__Date"/>
+                                            </Validity__Start__Date>
+                                        </xsl:if>
+                                        <xsl:if test="Rate">
+                                            <Rate>
+                                                <xsl:copy-of select="Rate/@xsi:nil"/>
+                                                <xsl:value-of select="Rate"/>
+                                            </Rate>
+                                        </xsl:if>
+                                        <xsl:if test="Rate__Unit">
+                                            <Rate__Unit>
+                                                <xsl:copy-of select="Rate__Unit/@xsi:nil"/>
+                                                <xsl:value-of select="Rate__Unit"/>
+                                            </Rate__Unit>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Value">
+                                            <Grid__Value>
+                                                <xsl:copy-of select="Grid__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Value"/>
+                                            </Grid__Value>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Pricing__Fields__Article__Size>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__Seasonal__Indicators">
+                            <Child__Seasonal__Indicators>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Seasonal__Indicator">
+                                            <Seasonal__Indicator>
+                                                <xsl:copy-of select="Seasonal__Indicator/@xsi:nil"/>
+                                                <xsl:value-of select="Seasonal__Indicator"/>
+                                            </Seasonal__Indicator>
+                                        </xsl:if>
+                                        <xsl:if test="Collection">
+                                            <Collection>
+                                                <xsl:copy-of select="Collection/@xsi:nil"/>
+                                                <xsl:value-of select="Collection"/>
+                                            </Collection>
+                                        </xsl:if>
+                                        <xsl:if test="Theme">
+                                            <Theme>
+                                                <xsl:copy-of select="Theme/@xsi:nil"/>
+                                                <xsl:value-of select="Theme"/>
+                                            </Theme>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Value">
+                                            <Grid__Value>
+                                                <xsl:copy-of select="Grid__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Value"/>
+                                            </Grid__Value>
+                                        </xsl:if>
+                                        <xsl:if test="Requirement__Category">
+                                            <Requirement__Category>
+                                                <xsl:copy-of select="Requirement__Category/@xsi:nil"/>
+                                                <xsl:value-of select="Requirement__Category"/>
+                                            </Requirement__Category>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__Seasonal__Indicators>
+                        </xsl:for-each>
+                        <xsl:for-each select="Child__AFS__Sales__Data__Level12">
+                            <Child__AFS__Sales__Data__Level12>
+                                <xsl:for-each select="item">
+                                    <item>
+                                        <xsl:if test="Record__Identifier">
+                                            <Record__Identifier>
+                                                <xsl:copy-of select="Record__Identifier/@xsi:nil"/>
+                                                <xsl:value-of select="Record__Identifier"/>
+                                            </Record__Identifier>
+                                        </xsl:if>
+                                        <xsl:if test="Material__Number">
+                                            <Material__Number>
+                                                <xsl:copy-of select="Material__Number/@xsi:nil"/>
+                                                <xsl:value-of select="Material__Number"/>
+                                            </Material__Number>
+                                        </xsl:if>
+                                        <xsl:if test="Sales__Organization">
+                                            <Sales__Organization>
+                                                <xsl:copy-of select="Sales__Organization/@xsi:nil"/>
+                                                <xsl:value-of select="Sales__Organization"/>
+                                            </Sales__Organization>
+                                        </xsl:if>
+                                        <xsl:if test="Distribution__Channel">
+                                            <Distribution__Channel>
+                                                <xsl:copy-of select="Distribution__Channel/@xsi:nil"/>
+                                                <xsl:value-of select="Distribution__Channel"/>
+                                            </Distribution__Channel>
+                                        </xsl:if>
+                                        <xsl:if test="Grid__Value">
+                                            <Grid__Value>
+                                                <xsl:copy-of select="Grid__Value/@xsi:nil"/>
+                                                <xsl:value-of select="Grid__Value"/>
+                                            </Grid__Value>
+                                        </xsl:if>
+                                        <xsl:if test="Requirement__Category">
+                                            <Requirement__Category>
+                                                <xsl:copy-of select="Requirement__Category/@xsi:nil"/>
+                                                <xsl:value-of select="Requirement__Category"/>
+                                            </Requirement__Category>
+                                        </xsl:if>
+                                        <xsl:if test="AFS__Pack__Quantity">
+                                            <AFS__Pack__Quantity>
+                                                <xsl:copy-of select="AFS__Pack__Quantity/@xsi:nil"/>
+                                                <xsl:value-of select="AFS__Pack__Quantity"/>
+                                            </AFS__Pack__Quantity>
+                                        </xsl:if>
+                                        <xsl:if test="AFS__Unit__Of__Pack__Quantity">
+                                            <AFS__Unit__Of__Pack__Quantity>
+                                                <xsl:copy-of select="AFS__Unit__Of__Pack__Quantity/@xsi:nil"/>
+                                                <xsl:value-of select="AFS__Unit__Of__Pack__Quantity"/>
+                                            </AFS__Unit__Of__Pack__Quantity>
+                                        </xsl:if>
+                                    </item>
+                                </xsl:for-each>
+                            </Child__AFS__Sales__Data__Level12>
+                        </xsl:for-each>
+                    </pfx3:MaterialMaster>
+                </xsl:for-each>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditFilter">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>458</pd:x>
+            <pd:y>184</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit End.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;After Call_ProductDataFromAFS : CDM data Filtered Out&quot;)"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;ArticleNo&quot;"/>
+                        </name>
+                        <xsl:if test="not(($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;true&quot;)) or ($ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number/@xsi:nil=(&quot;1&quot;)))">
+                            <value>
+                                <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Material__Number"/>
+                            </value>
+                        </xsl:if>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;OutboundTicketNumber&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Outbound__Ticket__Number"/>
+                        </value>
+                    </attributes>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;Logical Destination II&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$ReceiveAFSData/ns4:ActivityOutput/Body/pfx3:MaterialMaster/Header__Material__General__Data__MARA/Logical__Destination__II"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Confirm">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>941</pd:x>
+        <pd:y>134</pd:y>
+        <config>
+            <ConfirmEvent>ReceiveAFSData</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="InitializeAudit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>239</pd:x>
+        <pd:y>127</pd:y>
+        <config>
+            <processName>/Base/Initialization/InitializeAudit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <payload>
+                    <xsl:value-of select="&quot;&quot;"/>
+                </payload>
+                <duplicateKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </duplicateKey>
+                <targetApp>
+                    <xsl:value-of select="&quot;CompositeProductService-BE-Engine&quot;"/>
+                </targetApp>
+                <sourceApp>
+                    <xsl:value-of select="&quot;AFS&quot;"/>
+                </sourceApp>
+                <bpName>
+                    <xsl:value-of select="&quot;AFSProductDataToCPS&quot;"/>
+                </bpName>
+                <boType>
+                    <xsl:value-of select="&quot;CPSInbound-AFSProductData&quot;"/>
+                </boType>
+                <checkpoint>
+                    <xsl:value-of select="0"/>
+                </checkpoint>
+                <DBPayloadAuditEnabled>
+                    <xsl:value-of select="0"/>
+                </DBPayloadAuditEnabled>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogAuditAndUnexpectedFatalError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>953</pd:x>
+        <pd:y>37</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/LogAuditAndUnexpectedFatalError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="&quot;Unexpected Error in process Call_ProductDataFromAFS in Group&quot;"/>
+                </station>
+                <errorCode>
+                    <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                </errorCode>
+                <errorMsg>
+                    <xsl:value-of select="concat(&quot;Unexpected Error occured in GetProductDataFromAFS: &quot;, &quot;boId: &quot;, $InitializeAudit/root/boId, &quot;&#xD;&#xA;&quot;,tib:render-xml($_error/ns1:ErrorReport, false(), true()))"/>
+                </errorMsg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogUnexpectedFatalError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>230</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/LogUnexpectedFatalError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorMsg>
+                    <xsl:value-of select="concat('Error at the time of receiving the data in process GetProductDatafromAFS   , Error ::  ' , tib:render-xml($_error/ns1:ErrorReport))"/>
+                </errorMsg>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>ReceiveAFSData</pd:from>
+        <pd:to>InitializeAudit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitializeAudit</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>LogAuditAndUnexpectedFatalError</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogAuditAndUnexpectedFatalError</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ReceiveAFSData</pd:from>
+        <pd:to>LogUnexpectedFatalError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitializeAudit</pd:from>
+        <pd:to>LogUnexpectedFatalError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-6750208</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogUnexpectedFatalError</pd:from>
+        <pd:to>Confirm</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

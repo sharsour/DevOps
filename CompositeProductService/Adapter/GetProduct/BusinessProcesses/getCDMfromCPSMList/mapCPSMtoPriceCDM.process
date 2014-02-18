@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://adidasGroup/schema/cdm/basicTypes/v1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.adidas.de/EAI/Audit.xsd" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://adidasGroup.com/schema/cdm/sharedObjects/v2" xmlns:pfx2="http://adidasGroup/schema/cdm/product/catalogue/v1" xmlns:pfx="http://adidasGroup.com/schema/local/entity/be/product/v1">
+    <xsd:import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/SharedObjects/SharedObjects_v2_0.xsd"/>
+    <xsd:import namespace="http://adidasGroup.com/schema/local/entity/be/product/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/CPSMSchemaV1.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/catalogue/v1"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getCDMfromCPSMList/mapCPSMtoPriceCDM.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:CPSMList"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>94</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:choose>
+                <xsl:when test="string-length($getErrorCode/error/errorCode)>0">
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$getErrorCode/error/errorCode">
+                <errorCode>
+                    <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                </errorCode>
+            </xsl:if>
+            <xsl:if test="$getErrorCode/error/errorInformation">
+                <StackTrace>
+                    <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                </StackTrace>
+            </xsl:if>
+            <xsl:copy-of select="$Map-Data/pfx3:Prices"/>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="pfx3:Prices" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>680</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1388466142177</pd:targetNamespace>
+    <pd:activity name="AuditLogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>680</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;, &quot;-----&quot;,&quot;In Process(PID:&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;)  - mapCPSMtoPriceCDM: Error for ID: &quot;,$PriceCPSM/pfx:cpsm/pfx:header/@globalArtNr)"/>
+                </station>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>398</pd:x>
+        <pd:y>153</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <error>
+                <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                    <errorCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </errorCode>
+                </xsl:if>
+                <errorInformation>
+                    <xsl:value-of select="$_error/ns:ErrorReport/StackTrace"/>
+                </errorInformation>
+                <sourceApp>
+                    <xsl:value-of select="&quot;mapCPSMtoPriceCDM&quot;"/>
+                </sourceApp>
+            </error>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>493</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>208</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/sourceApp">
+                    <errorApplication>
+                        <xsl:value-of select="$getErrorCode/error/sourceApp"/>
+                    </errorApplication>
+                </xsl:if>
+                <processStack>
+                    <xsl:value-of select="&quot;mapCPSMtoCtlCDM&quot;"/>
+                </processStack>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>87</pd:x>
+        <pd:y>5</pd:y>
+        <pd:width>247</pd:width>
+        <pd:height>164</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx:CPSMList/pfx:cpsm[pfx:header/@sourceObjType=$_globalVariables/pfx4:GlobalVariables/BusinessProcesses/CPSOutbound/GetProductDataFromBE/GEPS/PriceObject]</pd:over>
+            <pd:iterationElementSlot>PriceCPSM</pd:iterationElementSlot>
+            <pd:indexSlot>j</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>AuditLog</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AuditLog</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>258</pd:x>
+            <pd:y>91</pd:y>
+            <config>
+                <element ref="pfx3:Prices"/>
+            </config>
+            <pd:inputBindings>
+                <pfx3:Prices>
+                    <xsl:for-each select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                        <xsl:if test="contains(current()/@name,&quot;grpArtno.&quot;) and contains(current()/@name,&quot;currency.&quot;) and contains(current()/@name,&quot;conditionCurrencyValue&quot;)">
+                            <pfx3:priceCondition>
+                                <xsl:variable name="var_Key" select="substring-before(current()/@name,&quot;.currency&quot;)"/>
+                                <xsl:attribute name="conditionType">
+                                    <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.RegionCode.&quot;),&quot;.ConditionType.&quot;)"/>
+                                </xsl:attribute>
+                                <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionClass&quot;)]/@value!=''">
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionClass&quot;)]/@value">
+                                        <xsl:attribute name="conditionClass">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionClass&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </xsl:if>
+                                <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.calculationType&quot;)]/@value!=''">
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.calculationType&quot;)]/@value">
+                                        <xsl:attribute name="calculationType">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.calculationType&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </xsl:if>
+                                <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.pricingUnit&quot;)]/@value!=''">
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.pricingUnit&quot;)]/@value">
+                                        <xsl:attribute name="pricingUnit">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.pricingUnit&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </xsl:if>
+                                <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.deletionFlag&quot;)]/@value!=''">
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.deletionFlag&quot;)]/@value">
+                                        <xsl:attribute name="deletionFlag">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.deletionFlag&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </xsl:if>
+                                <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionUnit&quot;)]/@value!=''">
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionUnit&quot;)]/@value">
+                                        <xsl:attribute name="conditionUnit">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.conditionUnit&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </xsl:if>
+                                <pfx3:validity>
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.purpose&quot;)]/@value!=''">
+                                        <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.purpose&quot;)]/@value">
+                                            <xsl:attribute name="purpose">
+                                                <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.purpose&quot;)]/@value"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validFrom&quot;)]/@value!=''">
+                                        <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validFrom&quot;)]/@value">
+                                            <ns2:validFrom>
+                                                <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validFrom&quot;)]/@value"/>
+                                            </ns2:validFrom>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validTo&quot;)]/@value!=''">
+                                        <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validTo&quot;)]/@value">
+                                            <ns2:validTo>
+                                                <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.validity.validTo&quot;)]/@value"/>
+                                            </ns2:validTo>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx3:validity>
+                                <pfx3:conditionCurrencyValue>
+                                    <xsl:attribute name="currency">
+                                        <xsl:value-of select="substring-after(substring-before(current()/@name,&quot;.conditionCurrencyValue&quot;),&quot;.currency.&quot;)"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.unitOfMeasure&quot;)]/@value!=''">
+                                        <xsl:attribute name="unitOfMeasure">
+                                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute[@name=concat(substring-before(current()/@name,&quot;.currency&quot;),&quot;.unitOfMeasure&quot;)]/@value"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:value-of select="current()/@value"/>
+                                </pfx3:conditionCurrencyValue>
+                                <pfx3:referenceList>
+                                    <xsl:for-each select="$PriceCPSM/pfx:cpsm/pfx:attributeList/pfx:attribute">
+                                        <xsl:if test="contains(current()/@name,&quot;referenceDocument&quot;)">
+                                            <ns2:referenceDocument>
+                                                <xsl:attribute name="name">
+                                                    <xsl:value-of select="substring-after(current()/@name,&quot;.referenceDocument.&quot;)"/>
+                                                </xsl:attribute>
+                                                <xsl:attribute name="key">
+                                                    <xsl:value-of select="current()/@value"/>
+                                                </xsl:attribute>
+                                            </ns2:referenceDocument>
+                                        </xsl:if>
+                                    </xsl:for-each>
+                                </pfx3:referenceList>
+                            </pfx3:priceCondition>
+                        </xsl:if>
+                    </xsl:for-each>
+                </pfx3:Prices>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="AuditLog">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>160</pd:x>
+            <pd:y>89</pd:y>
+            <config>
+                <processName>/Base/Logging/Audit/Audit.process</processName>
+                <spawn>true</spawn>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <customKey>
+                        <xsl:value-of select="$_processContext/ns:ProcessContext/ProcessId"/>
+                    </customKey>
+                    <station>
+                        <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;, &quot;-----&quot;,&quot;In Process(PID:&quot;,$_processContext/ns:ProcessContext/ProcessId,&quot;)  - mapCPSMtoPriceCDM: Before mapper Activity , Unique Identifier: &quot;, $PriceCPSM/pfx:cpsm/pfx:header/@globalArtNr )"/>
+                    </station>
+                    <attributes>
+                        <name>
+                            <xsl:value-of select="&quot;globalArtNr&quot;"/>
+                        </name>
+                        <value>
+                            <xsl:value-of select="$PriceCPSM/pfx:cpsm/pfx:header/@globalArtNr"/>
+                        </value>
+                    </attributes>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3407821</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>AuditLogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLogError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

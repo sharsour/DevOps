@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>DSN</name>
+			<value>DSN_ECOM</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>JDBC_URL</name>
+			<value>jdbc:tibcosoftwareinc:sqlserver://DEHEREMCL045.emea.adsint.biz\TEST:1433;</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>Peluru24</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Username</name>
+			<value>GetProduct_user</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1389626047235</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

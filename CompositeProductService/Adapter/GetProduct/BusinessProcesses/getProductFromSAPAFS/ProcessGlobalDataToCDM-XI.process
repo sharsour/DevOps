@@ -1,0 +1,1018 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.adidas.de/EAI/Audit.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://adidasGroup/schema/cdm/product/global/v1" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd" xmlns:pfx2="urn:sap-com:document:sap:rfc:functions" xmlns:pfx="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" schemaLocation="/SharedResources/Schemas/CDM/CPSM_Schema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd" schemaLocation="/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd"/>
+    <xsd:import namespace="urn:sap-com:document:sap:rfc:functions" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/SAP/Z_BAPI_MATERIAL_OUTBOUND.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/global/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/GlblProduct_MessageSchema.xsd"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getProductFromSAPAFS/ProcessGlobalDataToCDM-XI.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="group">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:Z_BAPI_MATERIAL_OUTBOUND"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>51</pd:startX>
+    <pd:startY>49</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="string-length($getErrorCode/error/errorCode)>0">
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                    <xsl:if test="$getErrorCode/error/errorCode">
+                        <errorCode>
+                            <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                        </errorCode>
+                    </xsl:if>
+                    <xsl:if test="$getErrorCode/error/errorInformation">
+                        <StackTrace>
+                            <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                        </StackTrace>
+                    </xsl:if>
+                </root>
+            </xsl:when>
+            <xsl:otherwise>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </root>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>689</pd:endX>
+    <pd:endY>49</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1361282995383</pd:targetNamespace>
+    <pd:activity name="DataValidation_AFSSource">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>59</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <processName>/Adapter/GetProduct/BusinessProcesses/getProductFromSAPAFS/ProcessDataValidationService.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR">
+                    <param>
+                        <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                    </param>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>353</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$DataValidation_AFSSource/root/Status=&quot;Error&quot;">
+                    <error>
+                        <xsl:if test="$DataValidation_AFSSource/root/errorCode">
+                            <errorCode>
+                                <xsl:value-of select="$DataValidation_AFSSource/root/errorCode"/>
+                            </errorCode>
+                        </xsl:if>
+                        <xsl:if test="$DataValidation_AFSSource/root/StackTrace">
+                            <errorInformation>
+                                <xsl:value-of select="$DataValidation_AFSSource/root/StackTrace"/>
+                            </errorInformation>
+                        </xsl:if>
+                        <sourceApp>
+                            <xsl:value-of select="&quot;DataValidationService &quot;"/>
+                        </sourceApp>
+                    </error>
+                </xsl:when>
+                <xsl:when test="string-length($_error_SendGlblArticle_To_CPS/ActivityErrors)>0">
+                    <error>
+                        <errorCode>
+                            <xsl:value-of select="&quot;JMS Error&quot;"/>
+                        </errorCode>
+                        <errorInformation>
+                            <xsl:value-of select="tib:render-xml($_error_SendGlblArticle_To_CPS/ActivityErrors)"/>
+                        </errorInformation>
+                        <sourceApp>
+                            <xsl:value-of select="&quot;&quot;"/>
+                        </sourceApp>
+                    </error>
+                </xsl:when>
+                <xsl:otherwise>
+                    <error>
+                        <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                            <errorCode>
+                                <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                            </errorCode>
+                        </xsl:if>
+                        <xsl:if test="$_error/ns1:ErrorReport/StackTrace">
+                            <errorInformation>
+                                <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                            </errorInformation>
+                        </xsl:if>
+                    </error>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getSizeScale">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>198</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <variableConfig>/Adapter/GetProduct/Shared Resources/Variables/SharedVariable_SizeScale.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>523</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="MapDataAFSArticle">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>358</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <element ref="pfx5:Article"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$DataValidation_AFSSource/root/ArticleExists = &quot;False&quot;">
+                    <pfx5:Article>
+                        <pfx5:glbArtVerInfo>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                            </xsl:attribute>
+                        </pfx5:glbArtVerInfo>
+                        <pfx5:glbArticle>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BISMT">
+                                <xsl:attribute name="origArtNo">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BISMT"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="grpMdlNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATKL"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/EXTWG">
+                                <xsl:attribute name="altMdlNo">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/EXTWG"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="artType">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_ARTTYP"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="artCreationSeason">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMCS"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="artActiveSeason">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMLS"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_ARTLIFESTA">
+                                <xsl:attribute name="artLifeCycleSts">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_ARTLIFESTA"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMBC">
+                                <xsl:attribute name="brand">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMBC"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMSC">
+                                <xsl:attribute name="sportsCat">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMSC"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="prodGrp">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMPG"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="prodType">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMPT"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMDV">
+                                <xsl:attribute name="mktgDiv">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMDV"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMCO">
+                                <xsl:attribute name="corpMktgLine">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMCO"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMCA">
+                                <xsl:attribute name="catMktgLine">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMCA"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMRC)>0">
+                                <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMRC">
+                                    <xsl:attribute name="royalityContract1">
+                                        <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMRC"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC1">
+                                <xsl:attribute name="color1">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC1"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC2">
+                                <xsl:attribute name="color2">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC2"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC3">
+                                <xsl:attribute name="color3">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC3"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC4">
+                                <xsl:attribute name="color4">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMC4"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_NRFCOLORCODE)>0">
+                                <xsl:attribute name="nRFColorCd">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_NRFCOLORCODE"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_M_AGEGROUP">
+                                <xsl:attribute name="ageGrp">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_M_AGEGROUP"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_M_GEN">
+                                <xsl:attribute name="gender">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_M_GEN"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCY)>0">
+                                <xsl:attribute name="userCdBabies">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCY = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCY = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCC)>0">
+                                <xsl:attribute name="userCdChildren">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCC = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCC = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCG)>0">
+                                <xsl:attribute name="userCdGirls">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCG = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCG = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCB)>0">
+                                <xsl:attribute name="userCdBoys">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCB = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCB = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCM)>0">
+                                <xsl:attribute name="userCdMen">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCM = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCM = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCL)>0">
+                                <xsl:attribute name="userCdLadies">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCL = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZUCL = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZLOSTATUS)>0">
+                                <xsl:attribute name="ordLockedInd">
+                                    <xsl:value-of select="if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZLOSTATUS = &quot;Y&quot;) then &quot;1&quot; else &#xA;if($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZLOSTATUS = &quot;N&quot;) then &quot;0&quot; else &quot;&quot;"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="srcSizeScale">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMSL">
+                                <xsl:attribute name="salesLine">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMSL"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMPC">
+                                <xsl:attribute name="productLine">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMPC"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="specialUsage">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZSPP"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="retailIntroDate">
+                                <xsl:value-of select="tib:create-date(tib:get-year-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILINTRO), tib:get-month-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILINTRO), tib:get-day-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILINTRO))"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="retailExitDate">
+                                <xsl:value-of select="tib:create-date(tib:get-year-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILEND), tib:get-month-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILEND), tib:get-day-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_RETAILEND))"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZLDT">
+                                <xsl:attribute name="productionLeadTime">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZLDT"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="productionStartDate">
+                                <xsl:value-of select="tib:create-date(tib:get-year-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZLTF), tib:get-month-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZLTF), tib:get-day-from-date($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZLTF))"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID">
+                                <xsl:attribute name="materialConversionID">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3APGNR">
+                                <xsl:attribute name="masterGridNumber">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3APGNR"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGEND">
+                                <xsl:attribute name="targetGroup">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGEND"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL)>1">
+                                <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL">
+                                    <xsl:attribute name="color">
+                                        <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SPART">
+                                <xsl:attribute name="division">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SPART"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BRGEW">
+                                <xsl:attribute name="grossWeight">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BRGEW"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMASG">
+                                <xsl:attribute name="marketingSegment">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMASG"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MEINS">
+                                <xsl:attribute name="baseUnitofMeasure">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MEINS"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="volumeUnit">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/VOLEH"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="workingMdlNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_WORKING"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="busSeg">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZBSG"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="techConcept">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/HORI_CON"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="weightUnit">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/GEWEI"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BISMT">
+                                <xsl:attribute name="altArtNo">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BISMT"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <pfx5:glbArtRMH>
+                                <xsl:attribute name="grpArtNo">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="rMHMktgDiv">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SEGMENT"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="rMHProdDiv">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZRPD"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="rMHGender">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZRGA"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="rMHCategory">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZRCA"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="rMHProdType">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZRPT"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="retailDept">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/DEPT"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="retailSubDept">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SUB_SGMT"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="retailClass">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/CLASS"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="retailSubClass">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SUB_CLASS"/>
+                                </xsl:attribute>
+                            </pfx5:glbArtRMH>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT05/item">
+                                <pfx5:glbArtClassification>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="className">
+                                        <xsl:value-of select="current()/CLASS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="classType">
+                                        <xsl:value-of select="current()/KLART"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtClassification>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT05/item">
+                                <pfx5:glbArtCharacteristics>
+                                    <xsl:attribute name="className">
+                                        <xsl:value-of select="current()/CLASS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="classType">
+                                        <xsl:value-of select="current()/KLART"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="atrName">
+                                        <xsl:value-of select="current()/ATNAM"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="atrValue">
+                                        <xsl:value-of select="current()/ATWRT"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtCharacteristics>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;01&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="current()/ZZIAD"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:variable name="var2" select="if (current()/SPRAS = &quot;D&quot;) then &quot;DE&quot;&#xA;else if (current()/SPRAS = &quot;E&quot;) then &quot;EN&quot;&#xA;else if (current()/SPRAS = &quot;F&quot;) then &quot;FR&quot;&#xA;else if (current()/SPRAS = &quot;S&quot;) then &quot;ES&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;02&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="current()/ZZMMD"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:variable name="var3" select="if (current()/SPRAS = &quot;D&quot;) then &quot;DE&quot;&#xA;else if (current()/SPRAS = &quot;E&quot;) then &quot;EN&quot;&#xA;else if (current()/SPRAS = &quot;F&quot;) then &quot;FR&quot;&#xA;else if (current()/SPRAS = &quot;S&quot;) then &quot;ES&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;03&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="current()/ZZMCL"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:variable name="var4" select="if (current()/SPRAS = &quot;D&quot;) then &quot;DE&quot;&#xA;else if (current()/SPRAS = &quot;E&quot;) then &quot;EN&quot;&#xA;else if (current()/SPRAS = &quot;F&quot;) then &quot;FR&quot;&#xA;else if (current()/SPRAS = &quot;S&quot;) then &quot;ES&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;04&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="current()/ZZMCC"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:variable name="var5" select="if (current()/SPRAS = &quot;D&quot;) then &quot;DE&quot;&#xA;else if (current()/SPRAS = &quot;E&quot;) then &quot;EN&quot;&#xA;else if (current()/SPRAS = &quot;F&quot;) then &quot;FR&quot;&#xA;else if (current()/SPRAS = &quot;S&quot;) then &quot;ES&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;05&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="current()/MAKTX"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT06/item">
+                                <pfx5:glbArtSKU>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="current()/J_3AKORDX"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="eANNo">
+                                        <xsl:value-of select="current()/EAN_NUMBER"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="uPCNo">
+                                        <xsl:value-of select="current()/UPC_NUMBER"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeScale">
+                                        <xsl:value-of select="&quot;12&quot;"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtSKU>
+                            </xsl:for-each>
+                        </pfx5:glbArticle>
+                    </pfx5:Article>
+                </xsl:when>
+                <xsl:otherwise>
+                    <pfx5:Article>
+                        <pfx5:glbArtVerInfo>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                            </xsl:attribute>
+                        </pfx5:glbArtVerInfo>
+                        <pfx5:glbArticle>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="grpMdlNo">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATKL"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="artType">
+                                <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZ_ARTTYP"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID">
+                                <xsl:attribute name="materialConversionID">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3APGNR">
+                                <xsl:attribute name="masterGridNumber">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3APGNR"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGEND">
+                                <xsl:attribute name="targetGroup">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGEND"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="string-length($Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL)>0">
+                                <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL">
+                                    <xsl:attribute name="color">
+                                        <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3ACOL"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SPART">
+                                <xsl:attribute name="division">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/SPART"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/GEWEI">
+                                <xsl:attribute name="weightUnit">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/GEWEI"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BRGEW">
+                                <xsl:attribute name="grossWeight">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/BRGEW"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMASG">
+                                <xsl:attribute name="marketingSegment">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZZMASG"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MEINS">
+                                <xsl:attribute name="baseUnitofMeasure">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MEINS"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/VOLEH">
+                                <xsl:attribute name="volumeUnit">
+                                    <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/VOLEH"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT05/item">
+                                <pfx5:glbArtClassification>
+                                    <xsl:if test="current()/MATNR">
+                                        <xsl:attribute name="grpArtNo">
+                                            <xsl:value-of select="current()/MATNR"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/CLASS">
+                                        <xsl:attribute name="className">
+                                            <xsl:value-of select="current()/CLASS"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/KLART">
+                                        <xsl:attribute name="classType">
+                                            <xsl:value-of select="current()/KLART"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx5:glbArtClassification>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT05/item">
+                                <pfx5:glbArtCharacteristics>
+                                    <xsl:if test="current()/CLASS">
+                                        <xsl:attribute name="className">
+                                            <xsl:value-of select="current()/CLASS"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/KLART">
+                                        <xsl:attribute name="classType">
+                                            <xsl:value-of select="current()/KLART"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/ATNAM">
+                                        <xsl:attribute name="atrName">
+                                            <xsl:value-of select="current()/ATNAM"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/ATWRT">
+                                        <xsl:attribute name="atrValue">
+                                            <xsl:value-of select="current()/ATWRT"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx5:glbArtCharacteristics>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;01&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/ZZIAD)>0">
+                                        <xsl:if test="current()/ZZIAD">
+                                            <xsl:attribute name="desc">
+                                                <xsl:value-of select="current()/ZZIAD"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;02&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/ZZMMD)>0">
+                                        <xsl:if test="current()/ZZMMD">
+                                            <xsl:attribute name="desc">
+                                                <xsl:value-of select="current()/ZZMMD"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;03&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/ZZMCL)>0">
+                                        <xsl:if test="current()/ZZMCL">
+                                            <xsl:attribute name="desc">
+                                                <xsl:value-of select="current()/ZZMCL"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;04&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/ZZMCC)>0">
+                                        <xsl:if test="current()/ZZMCC">
+                                            <xsl:attribute name="desc">
+                                                <xsl:value-of select="current()/ZZMCC"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT02/item">
+                                <pfx5:glbArtDescription>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;05&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="SPRAS"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/MAKTX)>0">
+                                        <xsl:if test="current()/MAKTX">
+                                            <xsl:attribute name="desc">
+                                                <xsl:value-of select="current()/MAKTX"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                </pfx5:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/T_ZADI_M_1001_MAT06/item">
+                                <pfx5:glbArtSKU>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="current()/MATNR"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="current()/J_3AKORDX"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="string-length(current()/EAN_NUMBER)>0">
+                                        <xsl:if test="current()/EAN_NUMBER">
+                                            <xsl:attribute name="eANNo">
+                                                <xsl:value-of select="current()/EAN_NUMBER"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:if test="string-length(current()/UPC_NUMBER)>0">
+                                        <xsl:if test="current()/UPC_NUMBER">
+                                            <xsl:attribute name="uPCNo">
+                                                <xsl:value-of select="current()/UPC_NUMBER"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                    </xsl:if>
+                                    <xsl:attribute name="srcSizeScale">
+                                        <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/J_3AGMID"/>
+                                    </xsl:attribute>
+                                </pfx5:glbArtSKU>
+                            </xsl:for-each>
+                        </pfx5:glbArticle>
+                    </pfx5:Article>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SendGlblArticle_To_CPS">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>514</pd:x>
+        <pd:y>49</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%BusinessProcesses/CPSInbound/SharedProcesses/CDMDataToBE/GlbArticleInputQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ApplicationProperties>/Adapter/GetProduct/Shared Resources/Schemas/Shared/ACSCatalogInfo.sharedjmsapp</ApplicationProperties>
+            <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx5:Article"/>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR">
+                        <GlobalArtNr>
+                            <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/MATNR"/>
+                        </GlobalArtNr>
+                    </xsl:if>
+                    <SourceApp>
+                        <xsl:value-of select="&quot;AFS&quot;"/>
+                    </SourceApp>
+                    <SourceTimeStamp>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </SourceTimeStamp>
+                    <xsl:if test="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_ZCOM_TICKET">
+                        <SourceMsgID>
+                            <xsl:value-of select="$Start/group/pfx2:Z_BAPI_MATERIAL_OUTBOUND/I_ZADI_M_1001_MAT01/ZADI_ZCOM_TICKET"/>
+                        </SourceMsgID>
+                    </xsl:if>
+                    <SourceVer>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </SourceVer>
+                    <SourceObjType>
+                        <xsl:value-of select="&quot;GlblArticle&quot;"/>
+                    </SourceObjType>
+                </OtherProperties>
+                <Body>
+                    <xsl:copy-of select="$MapDataAFSArticle/pfx5:Article"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>689</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/sourceApp">
+                    <errorApplication>
+                        <xsl:value-of select="$getErrorCode/error/sourceApp"/>
+                    </errorApplication>
+                </xsl:if>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns:AuditDetails/ns:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns:AuditDetails/ns:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns:AuditDetails/ns:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns:AuditDetails/ns:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns:AuditDetails/ns:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>DataValidation_AFSSource</pd:to>
+        <pd:xpathDescription>Byepassed Temp</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>1=11</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DataValidation_AFSSource</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$DataValidation_AFSSource/root/Status="Error"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DataValidation_AFSSource</pd:from>
+        <pd:to>MapDataAFSArticle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapDataAFSArticle</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendGlblArticle_To_CPS</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65485</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapDataAFSArticle</pd:from>
+        <pd:to>SendGlblArticle_To_CPS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendGlblArticle_To_CPS</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getSizeScale</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getSizeScale</pd:from>
+        <pd:to>MapDataAFSArticle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

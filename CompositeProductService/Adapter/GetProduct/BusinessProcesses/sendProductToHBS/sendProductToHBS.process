@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://adidasGroup/schema/cdm/product/catalogue/v1" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.adidas.de/EAI/Audit.xsd" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx5="http://adidasGroup/schema/cdm/product/reference/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/schemas/CompositeProductServicev2/Adapter/GetProduct/Shared Resources/Schemas/CDM/Schema.xsd" xmlns:pfx3="http://adidasGroup/schema/cdm/product/global/v1" xmlns:pfx2="http://adidasGroup/schema/cdm/product/market/v1" xmlns:pfx7="http://schemas.columbus2050.de/ColumbusCatalog/1.1" xmlns:pfx6="http://adidasGroup.com/schema/cdm/sharedObjects/v2">
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/market/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/MktProduct_MessageSchema.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/global/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/GlblProduct_MessageSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/CompositeProductServicev2/Adapter/GetProduct/Shared Resources/Schemas/CDM/Schema.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/PriceProduct_MessageSchema.xsd"/>
+    <xsd:import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/SharedObjects/SharedObjects_v2_0.xsd"/>
+    <xsd:import namespace="http://schemas.columbus2050.de/ColumbusCatalog/1.1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/HBS/ColumbusCatalog.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/catalogue/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/CtlProduct_MessageSchemav1.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/reference/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/RefData_MessageSchemav1.xsd"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/sendProductToHBS/sendProductToHBS.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:CatalogInformation" minOccurs="0"/>
+                    <xsd:element ref="pfx2:MarketArticle" minOccurs="0"/>
+                    <xsd:element ref="pfx3:Article" minOccurs="0"/>
+                    <xsd:element ref="pfx6:Prices" minOccurs="0"/>
+                    <xsd:element ref="pfx5:ReferenceData" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>27</pd:startX>
+    <pd:startY>92</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <Status>
+                <xsl:value-of select="if(string-length($getErrorCode/error/errorInformation)>0) then &quot;Error&quot; else &quot;Success&quot;"/>
+            </Status>
+            <xsl:if test="$getErrorCode/error/errorCode">
+                <errorCode>
+                    <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                </errorCode>
+            </xsl:if>
+            <xsl:if test="$getErrorCode/error/errorInformation">
+                <StackTrace>
+                    <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                </StackTrace>
+            </xsl:if>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>567</pd:endX>
+    <pd:endY>93</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1390080669100</pd:targetNamespace>
+    <pd:group name="CreateHBSProductXML">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>88</pd:x>
+        <pd:y>12</pd:y>
+        <pd:width>358</pd:width>
+        <pd:height>155</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Render XML</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Write File</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Render XML</pd:from>
+            <pd:to>Write File</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Render XML">
+            <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
+            <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
+            <pd:x>169</pd:x>
+            <pd:y>93</pd:y>
+            <config>
+                <renderAsText>text</renderAsText>
+                <validateInput>false</validateInput>
+                <renderDefaultPrefix>true</renderDefaultPrefix>
+                <textEncoding>UTF-8</textEncoding>
+                <term ref="pfx7:catalog"/>
+            </config>
+            <pd:inputBindings>
+                <pfx7:catalog>
+                    <xsl:attribute name="version">
+                        <xsl:value-of select="&quot;1.1&quot;"/>
+                    </xsl:attribute>
+                    <pfx7:init>
+                        <xsl:attribute name="clientId">
+                            <xsl:value-of select="&quot;HBS&quot;"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="timestamp">
+                            <xsl:value-of select="current-dateTime()"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="filename">
+                            <xsl:value-of select="&quot;catalog.xml&quot;"/>
+                        </xsl:attribute>
+                    </pfx7:init>
+                    <pfx7:products>
+                        <pfx7:product>
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@grpMdlNo"/>
+                            </xsl:attribute>
+                            <pfx7:type>
+                                <xsl:value-of select="&quot;master&quot;"/>
+                            </pfx7:type>
+                            <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2cModelName!=&quot;&quot;])">
+                                <pfx7:customAttributes>
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;repModelName&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode=&quot;en&quot;]/@b2cModelName"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2cModelName!=&quot;&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@b2cModelName"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </pfx7:customAttributes>
+                            </xsl:if>
+                            <pfx7:productAttributeReferences>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repGender&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@gender">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@gender"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repAgeGroup&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@ageGrp">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@ageGrp"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repSportCategory&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@sportsCat">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@sportsCat"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repProdGroup&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@prodGrp">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@prodGrp"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repProdType&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@prodType">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@prodType"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repProdLine&quot;"/>
+                                    </xsl:attribute>
+                                    <pfx7:value>
+                                        <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtSeason[1]/@prodLine"/>
+                                    </pfx7:value>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repBusiness&quot;"/>
+                                    </xsl:attribute>
+                                    <pfx7:value>
+                                        <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtSeason[1]/@busUnit"/>
+                                    </pfx7:value>
+                                </pfx7:productAttributeReference>
+                                <pfx7:productAttributeReference>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;repKeyCat&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@keyCategory">
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@keyCategory"/>
+                                        </pfx7:value>
+                                    </xsl:if>
+                                </pfx7:productAttributeReference>
+                                <xsl:if test="string-length($Start/root/pfx3:Article/pfx3:glbArticle/@prodDiv)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;repProdDiv&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@prodDiv"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                            </pfx7:productAttributeReferences>
+                            <pfx7:categoryAssignments>
+                                <xsl:for-each select="$Start/root/pfx2:MarketArticle/pfx2:mktArticleToNode">
+                                    <pfx7:categoryAssignment>
+                                        <xsl:attribute name="categoryId">
+                                            <xsl:value-of select="@nodeId"/>
+                                        </xsl:attribute>
+                                    </pfx7:categoryAssignment>
+                                </xsl:for-each>
+                            </pfx7:categoryAssignments>
+                        </pfx7:product>
+                        <pfx7:product>
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@grpArtNo"/>
+                            </xsl:attribute>
+                            <pfx7:type>
+                                <xsl:value-of select="&quot;sub-master&quot;"/>
+                            </pfx7:type>
+                            <xsl:if test="$Start/root/pfx3:Article/pfx3:glbArticle/@grpMdlNo">
+                                <pfx7:master>
+                                    <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/@grpMdlNo"/>
+                                </pfx7:master>
+                            </xsl:if>
+                            <pfx7:displayName>
+                                <pfx7:value>
+                                    <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode=&quot;en&quot;]/@b2cCopyShort"/>
+                                </pfx7:value>
+                                <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2cCopyShort!=&quot;&quot;]">
+                                    <pfx7:value>
+                                        <xsl:attribute name="locale">
+                                            <xsl:value-of select="@languageCode"/>
+                                        </xsl:attribute>
+                                        <xsl:value-of select="@b2cCopyShort"/>
+                                    </pfx7:value>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2cCopyShort!=&quot;&quot;]">
+                                    <pfx7:value>
+                                        <xsl:attribute name="locale">
+                                            <xsl:value-of select="@languageCode"/>
+                                        </xsl:attribute>
+                                        <xsl:value-of select="@b2cCopyShort"/>
+                                    </pfx7:value>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2bCopy!=&quot;&quot;]">
+                                    <pfx7:value>
+                                        <xsl:attribute name="locale">
+                                            <xsl:value-of select="@languageCode"/>
+                                        </xsl:attribute>
+                                        <xsl:value-of select="@b2bCopy"/>
+                                    </pfx7:value>
+                                </xsl:for-each>
+                                <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@b2cCopy!=&quot;&quot;]">
+                                    <pfx7:value>
+                                        <xsl:attribute name="locale">
+                                            <xsl:value-of select="@languageCode"/>
+                                        </xsl:attribute>
+                                        <xsl:value-of select="@b2cCopy"/>
+                                    </pfx7:value>
+                                </xsl:for-each>
+                            </pfx7:displayName>
+                            <pfx7:online>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailIntroDate)>0 or string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailExitDate)>0">
+                                    <pfx7:value>
+                                        <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailIntroDate)>0">
+                                            <pfx7:onlineFrom>
+                                                <xsl:value-of select="tib:format-dateTime('YYYYMMdd',$Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailIntroDate)"/>
+                                            </pfx7:onlineFrom>
+                                        </xsl:if>
+                                        <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailExitDate)>0">
+                                            <pfx7:onlineTo>
+                                                <xsl:value-of select="tib:format-dateTime('YYYYMMdd',$Start/root/pfx2:MarketArticle/pfx2:mktArticle/@retailExitDate)"/>
+                                            </pfx7:onlineTo>
+                                        </xsl:if>
+                                    </pfx7:value>
+                                </xsl:if>
+                            </pfx7:online>
+                            <pfx7:new>
+                                <pfx7:value/>
+                            </pfx7:new>
+                            <pfx7:customAttributes>
+                                <pfx7:customAttribute>
+                                    <xsl:attribute name="attributeId">
+                                        <xsl:value-of select="&quot;colorName&quot;"/>
+                                    </xsl:attribute>
+                                    <pfx7:value>
+                                        <xsl:value-of select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtDescription[@txtTypeCd='04' and @lang='EN']/@desc"/>
+                                    </pfx7:value>
+                                    <xsl:for-each select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtDescription[@txtTypeCd='04' and (@lang=&quot;EN&quot; or@lang=&quot;DE&quot; or@lang=&quot;FR&quot; or@lang=&quot;ES&quot; or@lang=&quot;IT&quot;) ]">
+                                        <pfx7:value>
+                                            <xsl:attribute name="locale">
+                                                <xsl:value-of select="lower-case(@lang)"/>
+                                            </xsl:attribute>
+                                            <xsl:value-of select="@desc"/>
+                                        </pfx7:value>
+                                    </xsl:for-each>
+                                </pfx7:customAttribute>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets1)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet1&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets1"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets1"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets2)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet2&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets2"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets2"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets3)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet3&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets3"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets3"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets4)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet4&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets4"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets4"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets5)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet5&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets5"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets5"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage/@bullets6)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;bullet6&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]/@bullets6"/>
+                                        </pfx7:value>
+                                        <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode = &quot;en&quot;]">
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@languageCode"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@bullets6"/>
+                                            </pfx7:value>
+                                        </xsl:for-each>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="exists($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSKeyProductInd)">
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;IsKeyProd&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSKeyProductInd">
+                                            <pfx7:value>
+                                                <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSKeyProductInd"/>
+                                            </pfx7:value>
+                                        </xsl:if>
+                                    </pfx7:customAttribute>
+                                </xsl:if>
+                                <xsl:if test="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSKeyProductInd = &quot;true&quot;">
+                                    <xsl:for-each select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktArtDescription[@txtTypeCd = 'H3']">
+                                        <pfx7:customAttribute>
+                                            <xsl:attribute name="attributeId">
+                                                <xsl:value-of select="&quot;keyProdDesc&quot;"/>
+                                            </xsl:attribute>
+                                            <pfx7:value>
+                                                <xsl:attribute name="locale">
+                                                    <xsl:value-of select="@lang"/>
+                                                </xsl:attribute>
+                                                <xsl:value-of select="@desc"/>
+                                            </pfx7:value>
+                                        </pfx7:customAttribute>
+                                    </xsl:for-each>
+                                </xsl:if>
+                            </pfx7:customAttributes>
+                            <pfx7:productAttributeReferences>
+                                <xsl:for-each select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHBSTechnologies">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;technology&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="@hBSTechnology"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:for-each>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSProductCategory)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;prodCategory&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSProductCategory"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSProductType)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;prodType&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSProductType"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter1)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;specialFilter1&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter1)>0"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter2)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;specialFilter2&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter2">
+                                            <pfx7:value>
+                                                <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter2"/>
+                                            </pfx7:value>
+                                        </xsl:if>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter3)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;specialFilter3&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSSpecialFilter3"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSMainColorCode)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;color&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSMainColorCode"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                                <xsl:if test="string-length($Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSGender)>0">
+                                    <pfx7:productAttributeReference>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;gender&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="$Start/root/pfx2:MarketArticle/pfx2:mktArticle/pfx2:mktHeartBeatSports/@hBSGender"/>
+                                        </pfx7:value>
+                                    </pfx7:productAttributeReference>
+                                </xsl:if>
+                            </pfx7:productAttributeReferences>
+                            <pfx7:categoryAssignments>
+                                <xsl:for-each select="$Start/root/pfx2:MarketArticle/pfx2:mktArticleToNode">
+                                    <pfx7:categoryAssignment>
+                                        <xsl:attribute name="categoryId">
+                                            <xsl:value-of select="@nodeId"/>
+                                        </xsl:attribute>
+                                    </pfx7:categoryAssignment>
+                                </xsl:for-each>
+                            </pfx7:categoryAssignments>
+                            <pfx7:description>
+                                <pfx7:value>
+                                    <xsl:value-of select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode='en']/@b2cCopy"/>
+                                </pfx7:value>
+                                <xsl:for-each select="$Start/root/pfx:CatalogInformation/pfx:ctlModelLanguage[@languageCode=&quot;en&quot;]">
+                                    <pfx7:value>
+                                        <xsl:attribute name="locale">
+                                            <xsl:value-of select="@languageCode"/>
+                                        </xsl:attribute>
+                                        <xsl:value-of select="@b2cCopy"/>
+                                    </pfx7:value>
+                                </xsl:for-each>
+                            </pfx7:description>
+                            <pfx7:productReferences>
+                                <pfx7:productLinks>
+                                    <xsl:attribute name="type">
+                                        <xsl:value-of select="&quot;variants&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:for-each select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtSKU">
+                                        <pfx7:productLink>
+                                            <xsl:attribute name="productId">
+                                                <xsl:value-of select="concat(@grpArtNo,&quot;-&quot;,@srcSizeScale,&quot;-&quot;,@srcSizeCd3)"/>
+                                            </xsl:attribute>
+                                        </pfx7:productLink>
+                                    </xsl:for-each>
+                                </pfx7:productLinks>
+                            </pfx7:productReferences>
+                        </pfx7:product>
+                        <xsl:for-each select="$Start/root/pfx3:Article/pfx3:glbArticle/pfx3:glbArtSKU">
+                            <pfx7:product>
+                                <xsl:attribute name="id">
+                                    <xsl:value-of select="concat(@grpArtNo,&quot;-&quot;,@srcSizeScale,&quot;-&quot;,@srcSizeCd3)"/>
+                                </xsl:attribute>
+                                <pfx7:type>
+                                    <xsl:value-of select="&quot;variant&quot;"/>
+                                </pfx7:type>
+                                <pfx7:master>
+                                    <xsl:value-of select="../../../pfx:CatalogInformation/pfx:ctlModel/@grpMdlNo"/>
+                                </pfx7:master>
+                                <pfx7:customAttributes>
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;sizePage&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="../@sizePage">
+                                            <pfx7:value>
+                                                <xsl:value-of select="../@sizePage"/>
+                                            </pfx7:value>
+                                        </xsl:if>
+                                    </pfx7:customAttribute>
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;sourceSizeScale&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="../@srcSizeScale">
+                                            <pfx7:value>
+                                                <xsl:value-of select="../@srcSizeScale"/>
+                                            </pfx7:value>
+                                        </xsl:if>
+                                    </pfx7:customAttribute>
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;sourcingSize&quot;"/>
+                                        </xsl:attribute>
+                                        <xsl:if test="@srcSizeCd2">
+                                            <pfx7:value>
+                                                <xsl:value-of select="@srcSizeCd2"/>
+                                            </pfx7:value>
+                                        </xsl:if>
+                                    </pfx7:customAttribute>
+                                    <pfx7:customAttribute>
+                                        <xsl:attribute name="attributeId">
+                                            <xsl:value-of select="&quot;technicalSize&quot;"/>
+                                        </xsl:attribute>
+                                        <pfx7:value>
+                                            <xsl:value-of select="@srcSizeCd3"/>
+                                        </pfx7:value>
+                                    </pfx7:customAttribute>
+                                </pfx7:customAttributes>
+                                <pfx7:charges>
+                                    <xsl:for-each select=".">
+                                        <pfx7:charge>
+                                            <xsl:attribute name="id">
+                                                <xsl:value-of select="concat(@grpArtNo,&quot;-&quot;,@srcSizeScale,&quot;-&quot;,@srcSizeCd3,&quot;.EAN&quot;)"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@eANNo">
+                                                <pfx7:gtin>
+                                                    <xsl:value-of select="@eANNo"/>
+                                                </pfx7:gtin>
+                                            </xsl:if>
+                                        </pfx7:charge>
+                                        <pfx7:charge>
+                                            <xsl:attribute name="id">
+                                                <xsl:value-of select="concat(@grpArtNo,&quot;-&quot;,@srcSizeScale,&quot;-&quot;,@srcSizeCd3,&quot;.UPC&quot;)"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="@uPCNo">
+                                                <pfx7:gtin>
+                                                    <xsl:value-of select="@uPCNo"/>
+                                                </pfx7:gtin>
+                                            </xsl:if>
+                                        </pfx7:charge>
+                                    </xsl:for-each>
+                                </pfx7:charges>
+                            </pfx7:product>
+                        </xsl:for-each>
+                    </pfx7:products>
+                </pfx7:catalog>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Write File">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>299</pd:x>
+            <pd:y>93</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+                <createMissingDirectories>true</createMissingDirectories>
+            </config>
+            <pd:inputBindings>
+                <ns0:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/BusinessProcesses/CPSOutbound/GetProductDataFromBE/HBS/LocalFilePath,&quot;HBSArticle_&quot;,$Start/root/pfx3:Article/pfx3:glbArticle/@grpArtNo,&quot;_&quot;,&#xA;tib:get-year-from-dateTime(current-dateTime()),&#xA;tib:get-month-from-dateTime(current-dateTime()),&#xA;tib:get-day-from-dateTime(current-dateTime()),&#xA;tib:get-hours-from-dateTime(current-dateTime()),&#xA;tib:get-minutes-from-dateTime(current-dateTime()),&#xA;tib:get-seconds-from-dateTime(current-dateTime()),&quot;.xml&quot;)"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="$Render-XML/xmlString"/>
+                    </textContent>
+                </ns0:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>268</pd:x>
+        <pd:y>253</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <error>
+                <errorCode>
+                    <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                </errorCode>
+                <errorInformation>
+                    <xsl:value-of select="$_error/ns:ErrorReport/StackTrace"/>
+                </errorInformation>
+                <sourceApp>
+                    <xsl:value-of select="&quot;CPSBE&quot;"/>
+                </sourceApp>
+            </error>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>432</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>567</pd:x>
+        <pd:y>257</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <errorApplication>
+                    <xsl:value-of select="&quot;sendProductToHBS&quot;"/>
+                </errorApplication>
+                <processStack>
+                    <xsl:value-of select="$_error/ns:ErrorReport/ProcessStack"/>
+                </processStack>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns1:AuditDetails/ns1:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CreateHBSProductXML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateHBSProductXML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreateHBSProductXML</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

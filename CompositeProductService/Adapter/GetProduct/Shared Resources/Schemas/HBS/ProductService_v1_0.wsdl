@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://adidasGroup.com/eai/schema/orchestrator/HBS/product/requestProductInformation/v1">
+    <message name="requestProductInformationRequest">
+        <part name="grpArtNo" type="xsd:string"/>
+        <part name="MarketArea" type="xsd:string"/>
+        <part name="MarketChanel" type="xsd:string"/>
+    </message>
+    <message name="requestProductInformationResponse">
+        <part name="Status" type="xsd:string"/>
+    </message>
+    <portType name="product.asynch">
+        <operation name="requestProductInformation">
+            <input message="tns:requestProductInformationRequest"/>
+            <output message="tns:requestProductInformationResponse"/>
+        </operation>
+    </portType>
+</definitions>

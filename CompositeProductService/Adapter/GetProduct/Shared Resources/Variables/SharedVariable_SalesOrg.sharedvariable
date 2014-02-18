@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/schemas/CompositeProductServicev2test/Adapter/GetProduct/Shared Resources/Schemas/SPM/Schema.xsd">
+    <import namespace="http://www.tibco.com/schemas/CompositeProductServicev2test/Adapter/GetProduct/Shared Resources/Schemas/SPM/Schema.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/SPM/TimePeriodCode.xsd"/>
+    <name>SharedVariable_SalesOrg</name>
+    <resourceType>ae.shared.sharedVariable</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <persistent>false</persistent>
+        <multi-engine>false</multi-engine>
+        <initialValue>none</initialValue>
+        <xsdString>
+            <xsd:element name="SalesOrg">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="param" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="SalesOrganization" type="xsd:string"/>
+                                    <xsd:element name="DistributionChannel" type="xsd:string"/>
+                                    <xsd:element name="RegionCode" type="xsd:string"/>
+                                    <xsd:element name="AreaCode" type="xsd:string"/>
+                                    <xsd:element name="CountryCode" type="xsd:string"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsdString>
+    </config>
+</BWSharedResource>

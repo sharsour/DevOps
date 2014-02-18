@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>ACSFTPConnection</name>
+    <resourceType>ae.shared.FTPuserChannel</resourceType>
+    <config>
+        <Timeout>60000</Timeout>
+        <Port>%%Common/Shared/Connections/FTP/FTPACSCatalogInfo/Port%%</Port>
+        <Encoding>UTF8</Encoding>
+        <FireWall>false</FireWall>
+        <Mode>Active</Mode>
+        <Host>%%Common/Shared/Connections/FTP/FTPACSCatalogInfo/Host%%</Host>
+        <UserName>%%Common/Shared/Connections/FTP/FTPACSCatalogInfo/Username%%</UserName>
+        <Password>%%Common/Shared/Connections/FTP/FTPACSCatalogInfo/Password%%</Password>
+    </config>
+</BWSharedResource>

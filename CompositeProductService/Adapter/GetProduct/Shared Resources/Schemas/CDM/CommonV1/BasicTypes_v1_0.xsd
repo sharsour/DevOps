@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO) -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bt="http://adidasGroup/schema/cdm/basicTypes/v1" targetNamespace="http://adidasGroup/schema/cdm/basicTypes/v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<simpleType name="PhoneNumberITUType">
+		<annotation>
+			<documentation>Represents a phone number in the ITU format (E.164). For example: +49 (0)791234567.</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="\+\d{1,4}\s(\(0\)){0,1}\d{7,12}"/>
+			<pattern value=""/>
+		</restriction>
+	</simpleType>
+	<simpleType name="ExchangeRateType">
+		<restriction base="decimal"/>
+	</simpleType>
+	<simpleType name="CountryType">
+		<annotation>
+			<documentation>Enumerates Country codes</documentation>
+		</annotation>
+		<restriction base="string"/>
+	</simpleType>
+	<simpleType name="LanguageType">
+		<annotation>
+			<documentation>Enumerates Language codes</documentation>
+		</annotation>
+		<restriction base="string"/>
+	</simpleType>
+	<simpleType name="EmailAddressType">
+		<annotation>
+			<documentation>Defines Email address format</documentation>
+		</annotation>
+		<restriction base="string"/>
+	</simpleType>
+	<simpleType name="UnitOfMeasureType">
+		<annotation>
+			<documentation>Enumerates the units of Measure</documentation>
+		</annotation>
+		<restriction base="string"/>
+	</simpleType>
+	<simpleType name="AmountType">
+		<annotation>
+			<documentation>A number of monetary units</documentation>
+		</annotation>
+		<restriction base="decimal"/>
+	</simpleType>
+	<simpleType name="CurrencyCodeType">
+		<annotation>
+			<documentation>Enumerates the possible currency code values</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="EUR"/>
+			<enumeration value="CHF"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="TitleType">
+		<annotation>
+			<documentation>Defines how to represent a title</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="Mr."/>
+			<enumeration value="Mrs."/>
+			<enumeration value="Miss"/>
+		</restriction>
+	</simpleType>
+	<complexType name="CurrencyAmountType">
+		<annotation>
+			<documentation>Defines how to represent a currency amount with a currency attribute</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="bt:AmountType">
+				<attribute name="currency" type="bt:CurrencyCodeType"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<simpleType name="GenderType">
+		<annotation>
+			<documentation>Enumerates gender</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="male"/>
+			<enumeration value="female"/>
+		</restriction>
+	</simpleType>
+	<complexType name="ValidityType">
+		<annotation>
+			<documentation>defines standard representation of validity periods</documentation>
+		</annotation>
+		<sequence>
+			<element name="validFrom" type="dateTime" minOccurs="0"/>
+			<element name="validTo" type="dateTime" minOccurs="0"/>
+		</sequence>
+		<attribute name="purpose">
+			<annotation>
+				<documentation>explanation of the reason for the constrained validity</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+	<simpleType name="PhoneClassificationType">
+		<annotation>
+			<documentation>Enumerates the phone number classifications</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="landline"/>
+			<enumeration value="mobile"/>
+			<enumeration value="fax"/>
+		</restriction>
+	</simpleType>
+	<complexType name="PhoneNumberContactType">
+		<annotation>
+			<documentation>Defines how to represent a phone number</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="bt:PhoneNumberITUType">
+				<attribute name="extension" type="string"/>
+				<attribute name="contactName" type="string"/>
+				<attribute name="classification" type="bt:PhoneClassificationType"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="ExchangeRateCurrencyType">
+		<annotation>
+			<documentation>Defines how to represent exchange rate information for a pair of currencies</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="bt:ExchangeRateType">
+				<attribute name="sourceCurrency" type="bt:CurrencyCodeType"/>
+				<attribute name="targetCurrency" type="bt:CurrencyCodeType"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="EmailAddressContactType">
+		<annotation>
+			<documentation>Defines how to represent an email address</documentation>
+		</annotation>
+		<simpleContent>
+			<extension base="bt:EmailAddressType">
+				<attribute name="contactName" type="string"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	<complexType name="EntityKeysType">
+		<annotation>
+			<documentation>Defines how to represent keys for an entity</documentation>
+		</annotation>
+		<sequence>
+			<element name="primaryKey" type="bt:PrimaryKeyType" minOccurs="0"/>
+		</sequence>
+	</complexType>
+	<simpleType name="PrimaryKeyType">
+		<restriction base="string"/>
+	</simpleType>
+	<simpleType name="StatusType">
+		<restriction base="string">
+			<enumeration value="active"/>
+			<enumeration value="inactive"/>
+			<enumeration value="deleted"/>
+		</restriction>
+	</simpleType>
+	<complexType name="ReferenceDocumentListType">
+		<sequence>
+			<element name="referenceDocument" minOccurs="0" maxOccurs="unbounded">
+				<complexType>
+					<attribute name="name" type="string"/>
+					<attribute name="key" type="string"/>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+</schema>

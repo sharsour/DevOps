@@ -1,0 +1,1546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO) -->
+<!--
+edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by Richard Anderton (TIBCO)
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:bt="http://adidasGroup/schema/cdm/basicTypes/v1"
+	 xmlns:glb="http://adidasGroup/schema/cdm/product/global/v1"
+	 xmlns:sho="http://adidasGroup.com/schema/cdm/sharedObjects/v2"
+	 targetNamespace="http://adidasGroup/schema/cdm/product/global/v1"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<import namespace="http://adidasGroup.com/schema/cdm/sharedObjects/v2" schemaLocation="SharedObjects/SharedObjects_v2_0.xsd"/>
+	<import namespace="http://adidasGroup/schema/cdm/basicTypes/v1" schemaLocation="CommonV1/BasicTypes_v1_0.xsd"/>
+	<complexType name="GlobalArticleType">
+		<sequence>
+			<element name="glbArtVerInfo" type="glb:GlbArtVerInfoType"/>
+
+			<!--
+         Model\SPM (Article)
+         -->
+			<element name="glbArticle" type="glb:GlbArticleType"/>
+		</sequence>
+	</complexType>
+	<complexType name="GlbArtSeasonType">
+		<sequence>
+			<element name="glbArtSeasonFactory" type="glb:GlbArtSeasonFactoryType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtMdlMtrlSeason" type="glb:GlbArtMdlMtrlSeasonType" minOccurs="0" maxOccurs="unbounded"/>
+
+			<!--
+         GlobalArtSeasonSKUSize
+         -->
+			<element name="glbArtFeasSize" type="glb:GlbArtFeasSizeType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timePeriodCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="seasonCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mktgFC">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="placeholderStyleCount">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="prodPlaceholder" type="boolean"/>
+		<attribute name="replenishmentFlag" type="string"/>
+		<attribute name="designer" type="string"/>
+		<attribute name="developer" type="string"/>
+		<attribute name="lODeveloper" type="string"/>
+		<attribute name="productManager" type="string"/>
+		<attribute name="cADPatternMaker" type="string"/>
+		<attribute name="directDevelopment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="transportationleadTime">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="salesLine" type="string"/>
+		<attribute name="consumerSegment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="priceSeg">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="salesRgn">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="devType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="distChan">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="specialUsg">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="prodLine">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="busUnit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="firstExFactoryDt" type="date"/>
+		<attribute name="lastExFactoryDt" type="date"/>
+		<attribute name="prdnLeadTm">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="retailIntroDt" type="date"/>
+		<attribute name="retailIExitDt" type="date"/>
+		<attribute name="prodLifecycleSeasonSts">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="purOrdMinQty">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="quarterCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timelineCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="busMdlAttCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mktgClassificationCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="fulfillmentMdlCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="buyReadyDt" type="date"/>
+		<attribute name="buyReadySetDt" type="date"/>
+		<attribute name="revisedBuyReadyDt" type="date"/>
+		<attribute name="artSeasonSts">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mdlSeasonSts">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="seasonState">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="sMUCustomer">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="colorwayDelayReason">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="GlbArtSKUType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeScale" use="required">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd2">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="localSizeCountry">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="localSize">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="eANNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="13"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="uPCNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="12"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="feasInd" type="boolean"/>
+		<attribute name="activeInd" type="boolean"/>
+	</complexType>
+	<complexType name="GlbArtDescriptionType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="txtTypeCd" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="lang" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="desc">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="50"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="GlbArtBTIType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="bTINo">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="50"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="importCountry">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="bTIValidFrom" type="date"/>
+	</complexType>
+	<complexType name="GlbArtCharacteristicsType">
+		<attribute name="className" type="string"/>
+		<attribute name="classType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="atrName" type="string"/>
+		<attribute name="atrValue" type="string"/>
+	</complexType>
+	<complexType name="GlbArtMdlMtrlSeasonType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timePeriodCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mtrlRefNo" type="string" use="required"/>
+		<attribute name="seasonCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="colorOverwriteInd" type="boolean"/>
+		<attribute name="mtrlSupplier" type="string"/>
+	</complexType>
+	<complexType name="GlbArtSeasonCostingType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timePeriodCode" type="string" use="required"/>
+		<attribute name="factoryCd" use="required">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="fOB" type="decimal"/>
+		<attribute name="targetFOBCurr">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pricingMilestone">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="priceType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd2">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd3">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="fOBValidFrom" type="date"/>
+		<attribute name="fOBValidTo" type="date"/>
+		<attribute name="confirmed" type="boolean"/>
+	</complexType>
+	<complexType name="GlbArtFeasSizeType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timePeriodCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd2">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="feasInd" type="boolean"/>
+	</complexType>
+	<complexType name="GlbArtSeasonFactoryType">
+		<sequence>
+			<element name="glbArtSeasonCosting" type="glb:GlbArtSeasonCostingType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="timePeriodCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="seasonCode" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="factoryPriorityInd" type="string"/>
+		<attribute name="factoryCd" type="string" use="required"/>
+		<attribute name="devFactInd" type="string"/>
+		<attribute name="prdnLeadTm">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="shortLeadTm">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="minMdlQty">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="minimumArticleQuantity">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="GlbArtCompositionType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="importCountry" type="string" use="required"/>
+		<attribute name="customsCompTxtEN" type="string"/>
+		<attribute name="pictogramCompTxtEN" type="string"/>
+		<attribute name="protectedAnimalIND" type="string"/>
+		<attribute name="animalType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="GlbArtSizeType">
+		<attribute name="grpArtSize">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd2">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeCd3" type="string" use="required"/>
+		<attribute name="localSize">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="feasInd" type="boolean"/>
+		<attribute name="prodWgt" type="decimal"/>
+		<attribute name="inPkg">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="inPkgLen" type="decimal"/>
+		<attribute name="inPkgWid" type="decimal"/>
+		<attribute name="inPkgHgt" type="decimal"/>
+		<attribute name="inPkgWgt" type="decimal"/>
+		<attribute name="outPkg">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="outPkgQty" type="decimal"/>
+		<attribute name="outPkgLen" type="decimal"/>
+		<attribute name="outPkgWid" type="decimal"/>
+		<attribute name="outPkgHgt" type="decimal"/>
+		<attribute name="outPkgWgt" type="decimal"/>
+	</complexType>
+	<complexType name="GlbArtLabelType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="lbl" type="string" use="required"/>
+		<attribute name="lblCnt" type="int"/>
+	</complexType>
+	<complexType name="GlbArtCustomsType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="importCountry" type="string" use="required"/>
+		<attribute name="prodPartNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeScale">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeIndCd2">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeIndCd3">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="customsNo" type="string"/>
+		<attribute name="dutyQualifier">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pkgCompCountry">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pkgCompCurr">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pkgCompDesc" type="string"/>
+		<attribute name="pkgCompVal">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pkgCompPercentage" type="string"/>
+		<attribute name="lDPFlag" type="boolean"/>
+	</complexType>
+	<complexType name="GlbArtRMHType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="rMHMktgDiv" type="string" use="required"/>
+		<attribute name="rMHProdDiv" type="string" use="required"/>
+		<attribute name="rMHGender" type="string" use="required"/>
+		<attribute name="rMHCategory" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="rMHProdType" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="retailDept" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="retailSubDept" type="string" use="required"/>
+		<attribute name="retailClass" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="retailSubClass" type="string" use="required"/>
+	</complexType>
+	<complexType name="GlbArtClassificationType">
+		<attribute name="grpArtNo">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="className" type="string"/>
+		<attribute name="classType" type="string"/>
+	</complexType>
+	<complexType name="GlbArticleType">
+		<sequence>
+			<element name="glbArtComposition" type="glb:GlbArtCompositionType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtSize" type="glb:GlbArtSizeType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtLabel" type="glb:GlbArtLabelType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtCustoms" type="glb:GlbArtCustomsType" minOccurs="0" maxOccurs="unbounded"/>
+
+			<!--
+         Artcle assigned to RMH
+         -->
+			<element name="glbArtRMH" type="glb:GlbArtRMHType" minOccurs="0"/>
+			<element name="glbArtClassification" type="glb:GlbArtClassificationType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtCharacteristics" type="glb:GlbArtCharacteristicsType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtBTI" type="glb:GlbArtBTIType" minOccurs="0" maxOccurs="unbounded"/>
+
+			<!--
+         Article description multiple language
+         -->
+			<element name="glbArtDescription" type="glb:GlbArtDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+
+			<!--
+         SKU Size\SPM
+         -->
+			<element name="glbArtSKU" type="glb:GlbArtSKUType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="glbArtSeason" type="glb:GlbArtSeasonType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="18"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="altArtNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="origArtNo" type="string"/>
+		<attribute name="vendorArtNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="baseArtNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="grpMdlNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="origMdlNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="altMdlNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="workingMdlNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="lIicensedVendor">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="macroMdlCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="artType" use="required">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="artCreationSeason">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="artActiveSeason">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="5"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="artLifeCycleSts">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="artLifeCycleStsDt" type="date"/>
+		<attribute name="artSrcSys">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="50"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="brandGrp">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="brand">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="sportsCat">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="prodDiv" type="string"/>
+		<attribute name="prodGrp">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="prodType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mktgDiv">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="busSeg">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="corpMktgLine">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="catMktgLine">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="techConcept" type="string"/>
+		<attribute name="royalityContract1">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="royalityContract2">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="royalityContract3">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="baseUnit" type="string"/>
+		<attribute name="outsoleToolingNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="outsoleToolingDesc" type="string"/>
+		<attribute name="color1" type="string"/>
+		<attribute name="color2" type="string"/>
+		<attribute name="color3" type="string"/>
+		<attribute name="color4" type="string"/>
+		<attribute name="nRFColorCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="altColorCd" type="string"/>
+		<attribute name="graphicCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="10"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="graphicDesc" type="string"/>
+		<attribute name="ageGrp" type="string"/>
+		<attribute name="gender" type="string"/>
+		<attribute name="userCdBabies" type="boolean"/>
+		<attribute name="userCdChildren" type="boolean"/>
+		<attribute name="userCdGirls" type="boolean"/>
+		<attribute name="userCdBoys" type="boolean"/>
+		<attribute name="userCdMen" type="boolean"/>
+		<attribute name="userCdLadies" type="boolean"/>
+		<attribute name="ordLockedInd" type="boolean"/>
+		<attribute name="devOrg" type="string"/>
+		<attribute name="devLocn">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="qtyUnit">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="outPkgQty">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="mtrlTech">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="pIictoGramCompCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="upperMainMtrl" type="string"/>
+		<attribute name="liningMainMtrl" type="string"/>
+		<attribute name="inSoleMainMtrl" type="string"/>
+		<attribute name="outSoleMainMtrl" type="string"/>
+		<attribute name="sizePage">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSizeScale">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSampleSizeCd2">
+			<simpleType>
+				<restriction base="string">
+					<minLength value="1"/>
+					<maxLength value="2"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="srcSampleSizeCd3" type="string"/>
+		<attribute name="localSizeCountry">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="localSampleSize">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="localSizeList">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="localSizeRange">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="prodSet">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="salesLine">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="consumerSegment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="priceSegment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="productLine">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="businessUnit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="salesRegion" type="string"/>
+		<attribute name="icgsCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="tgtMtrlCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="tgtSrcCd">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="tgtMtrlTech">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="allocCatCd" type="string"/>
+		<attribute name="prodSpecialityCd" type="string"/>
+		<attribute name="pDUOM_to_be_renamed">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="length" type="decimal"/>
+		<attribute name="width" type="decimal"/>
+		<attribute name="height" type="decimal"/>
+		<attribute name="pDUOV_to_be-renamed">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="volume" type="decimal"/>
+		<attribute name="weight" type="decimal"/>
+		<attribute name="consumerBenefit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="featuresandBenefits" type="string"/>
+		<attribute name="keyCategory">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="upperToolingNo">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="manufactoringType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="manufactoringCapability">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="constructionType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="boxLblCategory">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="managementBrand">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="productFit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="dropReason">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="colorwayName" type="string"/>
+		<attribute name="modelSourceSystem" type="string"/>
+		<attribute name="modelBusinessSegment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="specialUsage">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="distributionChannel" type="string"/>
+		<attribute name="retailIntroDate" type="date"/>
+		<attribute name="retailExitDate" type="date"/>
+		<attribute name="productionLeadTime" type="int"/>
+		<attribute name="productionStartDate" type="date"/>
+		<attribute name="productionEndDate" type="date"/>
+		<attribute name="purchaseOrderMinimumQuantity" type="int"/>
+		<attribute name="developmentType">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="materialConversionID">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="masterGridNumber">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="targetGroup">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="color">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="5"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="division">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="2"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="weightUnit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="grossWeight" type="decimal"/>
+		<attribute name="marketingSegment">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="baseUnitofMeasure">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="volumeUnit">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="3"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+	<complexType name="GlbArtVerInfoType">
+		<attribute name="grpArtNo" use="required">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="18"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="systemCode">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="8"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="verId">
+			<simpleType>
+				<restriction base="string">
+					<maxLength value="20"/>
+					<minLength value="1"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="versionDate" type="date"/>
+		<attribute name="artChange" type="boolean"/>
+		<attribute name="artMainChange" type="boolean"/>
+		<attribute name="artSizeChange" type="boolean"/>
+		<attribute name="artCompChange" type="boolean"/>
+		<attribute name="artCustomChange" type="boolean"/>
+		<attribute name="artCustomsBITChange" type="boolean"/>
+		<attribute name="artFactoryChange" type="boolean"/>
+		<attribute name="artDescChange" type="boolean"/>
+		<attribute name="artColorWayChange" type="boolean"/>
+		<attribute name="artSKUChange" type="boolean"/>
+		<attribute name="artRMHChange" type="boolean"/>
+		<attribute name="artSeasonChange" type="boolean"/>
+		<attribute name="artCostingChange" type="boolean"/>
+		<attribute name="artMainMaterialChange" type="boolean"/>
+		<attribute name="artAddAttrChange" type="boolean"/>
+		<attribute name="artAddOnAttrDt" type="date"/>
+	</complexType>
+	<element name="Article" type="glb:GlobalArticleType"/>
+</schema>

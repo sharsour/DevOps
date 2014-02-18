@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="urn:agrp:rma" xmlns:pfx="urn:agrp:acs">
+    <xsd:import namespace="urn:agrp:acs" schemaLocation="/SharedResources/Schemas/RMA/Schema_RMAArticle_Hierarchial.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" schemaLocation="/SharedResources/Schemas/CDM/CPSM_Schema.xsd"/>
+    <xsd:import namespace="urn:agrp:rma" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/RMA/Schema_RMAArticle.xsd"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getProductFromRMA/MktArticleSeason/ProcessMktArticle.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:mt_tfArticle"/>
+    <pd:startX>30</pd:startX>
+    <pd:startY>45</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="$Call_MapAreaArtTimePeriodToCDM/root/Status=&quot;Error&quot;">
+                <root>
+                    <xsl:if test="$Call_MapAreaArtTimePeriodToCDM/root/Status">
+                        <Status>
+                            <xsl:value-of select="$Call_MapAreaArtTimePeriodToCDM/root/Status"/>
+                        </Status>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapAreaArtTimePeriodToCDM/root/errorCode">
+                        <errorCode>
+                            <xsl:value-of select="$Call_MapAreaArtTimePeriodToCDM/root/errorCode"/>
+                        </errorCode>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapAreaArtTimePeriodToCDM/root/StackTrace">
+                        <StackTrace>
+                            <xsl:value-of select="$Call_MapAreaArtTimePeriodToCDM/root/StackTrace"/>
+                        </StackTrace>
+                    </xsl:if>
+                </root>
+            </xsl:when>
+            <xsl:when test="$Call_MapCountryArtTimePeriodToCDM/root/Status=&quot;Error&quot;">
+                <root>
+                    <xsl:if test="$Call_MapCountryArtTimePeriodToCDM/root/Status">
+                        <Status>
+                            <xsl:value-of select="$Call_MapCountryArtTimePeriodToCDM/root/Status"/>
+                        </Status>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapCountryArtTimePeriodToCDM/root/errorCode">
+                        <errorCode>
+                            <xsl:value-of select="$Call_MapCountryArtTimePeriodToCDM/root/errorCode"/>
+                        </errorCode>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapCountryArtTimePeriodToCDM/root/StackTrace">
+                        <StackTrace>
+                            <xsl:value-of select="$Call_MapCountryArtTimePeriodToCDM/root/StackTrace"/>
+                        </StackTrace>
+                    </xsl:if>
+                </root>
+            </xsl:when>
+            <xsl:when test="$Call_MapCountryArtSelectSizesToCDM/root/Status=&quot;Error&quot;">
+                <root>
+                    <xsl:if test="$Call_MapCountryArtSelectSizesToCDM/root/Status">
+                        <Status>
+                            <xsl:value-of select="$Call_MapCountryArtSelectSizesToCDM/root/Status"/>
+                        </Status>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapCountryArtSelectSizesToCDM/root/errorCode">
+                        <errorCode>
+                            <xsl:value-of select="$Call_MapCountryArtSelectSizesToCDM/root/errorCode"/>
+                        </errorCode>
+                    </xsl:if>
+                    <xsl:if test="$Call_MapCountryArtSelectSizesToCDM/root/StackTrace">
+                        <StackTrace>
+                            <xsl:value-of select="$Call_MapCountryArtSelectSizesToCDM/root/StackTrace"/>
+                        </StackTrace>
+                    </xsl:if>
+                </root>
+            </xsl:when>
+            <xsl:when test="string-length($_error/ns1:ErrorReport/StackTrace)>0">
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                    <xsl:if test="$_error/ns1:ErrorReport/Msg">
+                        <errorCode>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                        </errorCode>
+                    </xsl:if>
+                    <xsl:if test="$_error/ns1:ErrorReport/StackTrace">
+                        <StackTrace>
+                            <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                        </StackTrace>
+                    </xsl:if>
+                </root>
+            </xsl:when>
+            <xsl:otherwise>
+                <root>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </root>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>775</pd:endX>
+    <pd:endY>53</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1361435745477</pd:targetNamespace>
+    <pd:activity name="AuditLog1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>127</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP4  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;)ProcessMktArticle  ---- before  Call_MapAreaArtTimePeriodToCDM&quot;)"/>
+                </station>
+                <attributes>
+                    <name>
+                        <xsl:value-of select="&quot;ARTICLE_CD&quot;"/>
+                    </name>
+                    <value>
+                        <xsl:value-of select="$Start/pfx2:mt_tfArticle/row[1]/ARTICLE_CD"/>
+                    </value>
+                </attributes>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AuditLog2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>336</pd:x>
+        <pd:y>47</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP6  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;) ProcessMktArticle ---- before  Call_MapCountryArtTimePeriodToCDM&quot;)"/>
+                </station>
+                <attributes>
+                    <name>
+                        <xsl:value-of select="&quot;ARTICLE_CD&quot;"/>
+                    </name>
+                    <value>
+                        <xsl:value-of select="$Start/pfx2:mt_tfArticle/row[1]/ARTICLE_CD"/>
+                    </value>
+                </attributes>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AuditLog3">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>612</pd:x>
+        <pd:y>163</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP8  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;) ProcessMktArticle ---- before  Call_MapCountryArtSelectSizesToCDM&quot;)"/>
+                </station>
+                <attributes>
+                    <name>
+                        <xsl:value-of select="&quot;ARTICLE_CD&quot;"/>
+                    </name>
+                    <value>
+                        <xsl:value-of select="$Start/pfx2:mt_tfArticle/row[1]/ARTICLE_CD"/>
+                    </value>
+                </attributes>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="AuditLog4">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>617</pd:x>
+        <pd:y>52</pd:y>
+        <config>
+            <processName>/Base/Logging/Audit/Audit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <customKey>
+                    <xsl:value-of select="$_processContext/ns1:ProcessContext/ProcessId"/>
+                </customKey>
+                <station>
+                    <xsl:value-of select="concat(&quot;&#xD;&#xA;&quot;,&quot; STEP8  ~   In Process(PID:&quot;,$_processContext/ns1:ProcessContext/ProcessId,&quot;) ProcessMktArticle ---- after  Call_MapCountryArtSelectSizesToCDM&quot;)"/>
+                </station>
+                <attributes>
+                    <name>
+                        <xsl:value-of select="&quot;ARTICLE_CD&quot;"/>
+                    </name>
+                    <value>
+                        <xsl:value-of select="$Start/pfx2:mt_tfArticle/row[1]/ARTICLE_CD"/>
+                    </value>
+                </attributes>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_MapAreaArtTimePeriodToCDM">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>222</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <processName>/Adapter/GetProduct/BusinessProcesses/getProductFromRMA/MktArticleSeason/ProcessMapAreaArtTimePeriodToCDM.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx2:mt_tfArticle"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_MapCountryArtSelectSizesToCDM">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>474</pd:x>
+        <pd:y>50</pd:y>
+        <config>
+            <processName>/Adapter/GetProduct/BusinessProcesses/getProductFromRMA/MktArticleSeason/ProcessMapCountryArtSelectSizesToCDM.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx2:mt_tfArticle"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call_MapCountryArtTimePeriodToCDM">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>489</pd:x>
+        <pd:y>163</pd:y>
+        <config>
+            <processName>/Adapter/GetProduct/BusinessProcesses/getProductFromRMA/MktArticleSeason/ProcessMapCountryArtTimePeriodToCDM.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx2:mt_tfArticle"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>773</pd:x>
+        <pd:y>171</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AuditLog1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_MapAreaArtTimePeriodToCDM</pd:from>
+        <pd:to>AuditLog2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_MapCountryArtTimePeriodToCDM</pd:from>
+        <pd:to>AuditLog3</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call_MapCountryArtSelectSizesToCDM</pd:from>
+        <pd:to>AuditLog4</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog1</pd:from>
+        <pd:to>Call_MapAreaArtTimePeriodToCDM</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog2</pd:from>
+        <pd:to>Call_MapCountryArtSelectSizesToCDM</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog3</pd:from>
+        <pd:to>Call_MapCountryArtSelectSizesToCDM</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog4</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AuditLog2</pd:from>
+        <pd:to>Call_MapCountryArtTimePeriodToCDM</pd:to>
+        <pd:xpathDescription>Byepassed</pd:xpathDescription>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>1=2</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

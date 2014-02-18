@@ -1,0 +1,1691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx11="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_Schema.xsd" xmlns:pfx10="http://adidasGroup/schema/cdm/product/global/v1" xmlns:ns5="http://adidas.com/cps/SPMSchema.xsd" xmlns:ns6="http://www.adidas.de/EAI/Audit.xsd" xmlns:ns7="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPMProductDataSchema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="www.tibco.com/plugin/Timer" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/DummySchemaForIAMProcessing.xsd" xmlns:pfx4="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CPSM/CPSMSchema.dtd" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPMSchema.xsd" xmlns:pfx9="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd" xmlns:pfx8="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_TempSchema.xsd" xmlns:pfx7="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPM_TempSchema.xsd">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPMProductDataSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CPSM/CPSMSchema.dtd" schemaLocation="/SharedResources/Schemas/CPSM/CPSMSchema.dtd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/CompositeProductServiceAdapter/SharedResources/Schemas/CDM/Schema.xsd" schemaLocation="/SharedResources/Schemas/CDM/CPSM_Schema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/DummySchemaForIAMProcessing.xsd" schemaLocation="/SharedResources/Schemas/SPM/DummySchemaForIAMProcessing.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/SPM/SPM_TempSchema.xsd" schemaLocation="/SharedResources/Schemas/SPM/SPM_TempSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd" schemaLocation="/SharedResources/Schemas/CDM_Latest/IDM_PCS_GLBARTICLE_XML.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_TempSchema.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_TempSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/IDM_PCS_GLBARTICLE_XML.xsd"/>
+    <xsd:import namespace="http://adidasGroup/schema/cdm/product/global/v1" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/CDM/GlblProduct_MessageSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_Schema.xsd" schemaLocation="/Adapter/GetProduct/Shared Resources/Schemas/SPM/SPM_Schema.xsd"/>
+    <pd:name>Adapter/GetProduct/BusinessProcesses/getProductFromSPM/ProcessGlblArticleToCDM.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="param" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>69</pd:startX>
+    <pd:startY>46</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:choose>
+                <xsl:when test="exists($getErrorCode/error/errorCode)">
+                    <Status>
+                        <xsl:value-of select="&quot;Error&quot;"/>
+                    </Status>
+                </xsl:when>
+                <xsl:otherwise>
+                    <Status>
+                        <xsl:value-of select="&quot;Success&quot;"/>
+                    </Status>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="$getErrorCode/error/errorCode">
+                <errorCode>
+                    <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                </errorCode>
+            </xsl:if>
+            <xsl:if test="$_error/ns3:ErrorReport/StackTrace">
+                <StackTrace>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </StackTrace>
+            </xsl:if>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="StackTrace" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>834</pd:endX>
+    <pd:endY>80</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338903321469</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>116</pd:x>
+        <pd:y>5</pd:y>
+        <pd:width>474</pd:width>
+        <pd:height>311</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>simpleGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ForEachArticle</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ForEachArticle</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="ForEachArticle">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>178</pd:x>
+            <pd:y>47</pd:y>
+            <pd:width>368</pd:width>
+            <pd:height>231</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$Parse-XML/ProductMaster/Prod/ARTCL</pd:over>
+                <pd:iterationElementSlot>Art</pd:iterationElementSlot>
+                <pd:indexSlot>Article</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>getTimePeriodCode</pd:to>
+                <pd:lineType>One Bend</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>getTimePeriodCode</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>One Bend</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>error</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>SendArtCDM</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>One Bend</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapToArticleCDM</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>One Bend</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>error</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>MapToArticleCDM</pd:from>
+                <pd:to>AuditLog</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>getTimePeriodCode</pd:from>
+                <pd:to>MapToArticleCDM</pd:to>
+                <pd:lineType>One Bend</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>AuditLog</pd:from>
+                <pd:to>SendArtCDM</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="MapToArticleCDM">
+                <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+                <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+                <pd:x>255</pd:x>
+                <pd:y>220</pd:y>
+                <config>
+                    <element ref="pfx10:Article"/>
+                </config>
+                <pd:inputBindings>
+                    <pfx10:Article>
+                        <pfx10:glbArtVerInfo>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Art/ARTCL/AVERS/GrpArtNo"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Art/ARTCL/AVERS/VerId">
+                                <xsl:attribute name="verId">
+                                    <xsl:value-of select="$Art/ARTCL/AVERS/VerId"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtChange)">
+                                <xsl:attribute name="artChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtMainChange)">
+                                <xsl:attribute name="artMainChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtMainChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtMainChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/ArtMainChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtSizeChange)">
+                                <xsl:attribute name="artSizeChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtSizeChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtSizeChange='N') then 0 else&#xA;$Art/ARTCL/AVERS/ArtSizeChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtCompChange)">
+                                <xsl:attribute name="artCompChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtCompChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtCompChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtCompChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtCustomsChange)">
+                                <xsl:attribute name="artCustomChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtCustomsChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtCustomsChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtCustomsChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtCustomsBTIChange)">
+                                <xsl:attribute name="artCustomsBITChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtCustomsBTIChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtCustomsBTIChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/ArtCustomsBTIChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtFactoryChange)">
+                                <xsl:attribute name="artFactoryChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtFactoryChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtFactoryChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtFactoryChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtDescChange)">
+                                <xsl:attribute name="artDescChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtDescChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtDescChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/ArtDescChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ColorwayDescChange)">
+                                <xsl:attribute name="artColorWayChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ColorwayDescChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ColorwayDescChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/ColorwayDescChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/SKUChange)">
+                                <xsl:attribute name="artSKUChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/SKUChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/SKUChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/SKUChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtRMHChange)">
+                                <xsl:attribute name="artRMHChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtRMHChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtRMHChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtRMHChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtSeasonChange)">
+                                <xsl:attribute name="artSeasonChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtSeasonChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtSeasonChange='N') then 0 else &#xA; $Art/ARTCL/AVERS/ArtSeasonChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtCostingChange)">
+                                <xsl:attribute name="artCostingChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtCostingChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtCostingChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtCostingChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/AVERS/ArtMainMaterialChange)">
+                                <xsl:attribute name="artMainMaterialChange">
+                                    <xsl:value-of select="if($Art/ARTCL/AVERS/ArtMainMaterialChange='Y') then 1 else&#xA; if ($Art/ARTCL/AVERS/ArtMainMaterialChange='N') then 0 else &#xA;$Art/ARTCL/AVERS/ArtMainMaterialChange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx10:glbArtVerInfo>
+                        <pfx10:glbArticle>
+                            <xsl:attribute name="grpArtNo">
+                                <xsl:value-of select="$Art/ARTCL/GrpArtNo"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Art/ARTCL/AltArtNo">
+                                <xsl:attribute name="altArtNo">
+                                    <xsl:value-of select="$Art/ARTCL/AltArtNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/OrigArtNo">
+                                <xsl:attribute name="origArtNo">
+                                    <xsl:value-of select="$Art/ARTCL/OrigArtNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/VendorArtNo">
+                                <xsl:attribute name="vendorArtNo">
+                                    <xsl:value-of select="$Art/ARTCL/VendorArtNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/BaseArtNo">
+                                <xsl:attribute name="baseArtNo">
+                                    <xsl:value-of select="$Art/ARTCL/BaseArtNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="grpMdlNo">
+                                <xsl:value-of select="$Art/ARTCL/GrpMdlNo"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Art/ARTCL/OrigMdlNo">
+                                <xsl:attribute name="origMdlNo">
+                                    <xsl:value-of select="$Art/ARTCL/OrigMdlNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/AltMdlNo">
+                                <xsl:attribute name="altMdlNo">
+                                    <xsl:value-of select="$Art/ARTCL/AltMdlNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/WorkingMdlNo">
+                                <xsl:attribute name="workingMdlNo">
+                                    <xsl:value-of select="$Art/ARTCL/WorkingMdlNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LicensedVendor">
+                                <xsl:attribute name="lIicensedVendor">
+                                    <xsl:value-of select="$Art/ARTCL/LicensedVendor"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MacroMdlCd">
+                                <xsl:attribute name="macroMdlCd">
+                                    <xsl:value-of select="$Art/ARTCL/MacroMdlCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:attribute name="artType">
+                                <xsl:value-of select="$Art/ARTCL/ArtType"/>
+                            </xsl:attribute>
+                            <xsl:if test="$Art/ARTCL/ArtCreationSeason">
+                                <xsl:attribute name="artCreationSeason">
+                                    <xsl:value-of select="$Art/ARTCL/ArtCreationSeason"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ArtActiveSeason">
+                                <xsl:attribute name="artActiveSeason">
+                                    <xsl:value-of select="$Art/ARTCL/ArtActiveSeason"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ArtLifecycle">
+                                <xsl:attribute name="artLifeCycleSts">
+                                    <xsl:value-of select="$Art/ARTCL/ArtLifecycle"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/ArtLifecycleStsDt)">
+                                <xsl:attribute name="artLifeCycleStsDt">
+                                    <xsl:value-of select="tib:create-date(substring($Art/ARTCL/ArtLifecycleStsDt,1,4),substring($Art/ARTCL/ArtLifecycleStsDt,5,2),substring($Art/ARTCL/ArtLifecycleStsDt,7,2))"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ArtSrcSys">
+                                <xsl:attribute name="artSrcSys">
+                                    <xsl:value-of select="$Art/ARTCL/ArtSrcSys"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/BrandGrp">
+                                <xsl:attribute name="brandGrp">
+                                    <xsl:value-of select="$Art/ARTCL/BrandGrp"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Brand">
+                                <xsl:attribute name="brand">
+                                    <xsl:value-of select="$Art/ARTCL/Brand"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/SportsCat">
+                                <xsl:attribute name="sportsCat">
+                                    <xsl:value-of select="$Art/ARTCL/SportsCat"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProdDiv">
+                                <xsl:attribute name="prodDiv">
+                                    <xsl:value-of select="$Art/ARTCL/ProdDiv"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProdGrp">
+                                <xsl:attribute name="prodGrp">
+                                    <xsl:value-of select="$Art/ARTCL/ProdGrp"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProdType">
+                                <xsl:attribute name="prodType">
+                                    <xsl:value-of select="$Art/ARTCL/ProdType"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MktgDiv">
+                                <xsl:attribute name="mktgDiv">
+                                    <xsl:value-of select="$Art/ARTCL/MktgDiv"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/BusSeg">
+                                <xsl:attribute name="busSeg">
+                                    <xsl:value-of select="$Art/ARTCL/BusSeg"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/CorpMktgLine">
+                                <xsl:attribute name="corpMktgLine">
+                                    <xsl:value-of select="$Art/ARTCL/CorpMktgLine"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/CatMktgLine">
+                                <xsl:attribute name="catMktgLine">
+                                    <xsl:value-of select="$Art/ARTCL/CatMktgLine"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/TechConcept">
+                                <xsl:attribute name="techConcept">
+                                    <xsl:value-of select="$Art/ARTCL/TechConcept"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/RoyaltyContract1">
+                                <xsl:attribute name="royalityContract1">
+                                    <xsl:value-of select="$Art/ARTCL/RoyaltyContract1"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/RoyaltyContract2">
+                                <xsl:attribute name="royalityContract2">
+                                    <xsl:value-of select="$Art/ARTCL/RoyaltyContract2"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/RoyaltyContract3">
+                                <xsl:attribute name="royalityContract3">
+                                    <xsl:value-of select="$Art/ARTCL/RoyaltyContract3"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/BaseUnit">
+                                <xsl:attribute name="baseUnit">
+                                    <xsl:value-of select="$Art/ARTCL/BaseUnit"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/OutsoleToolingNo">
+                                <xsl:attribute name="outsoleToolingNo">
+                                    <xsl:value-of select="$Art/ARTCL/OutsoleToolingNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/OutsoleToolingDesc">
+                                <xsl:attribute name="outsoleToolingDesc">
+                                    <xsl:value-of select="$Art/ARTCL/OutsoleToolingDesc"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Color1">
+                                <xsl:attribute name="color1">
+                                    <xsl:value-of select="$Art/ARTCL/Color1"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Color2">
+                                <xsl:attribute name="color2">
+                                    <xsl:value-of select="$Art/ARTCL/Color2"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Color3">
+                                <xsl:attribute name="color3">
+                                    <xsl:value-of select="$Art/ARTCL/Color3"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Color4">
+                                <xsl:attribute name="color4">
+                                    <xsl:value-of select="$Art/ARTCL/Color4"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/NRFColorCd">
+                                <xsl:attribute name="nRFColorCd">
+                                    <xsl:value-of select="$Art/ARTCL/NRFColorCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/AltColorCd">
+                                <xsl:attribute name="altColorCd">
+                                    <xsl:value-of select="$Art/ARTCL/AltColorCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/GraphicCd">
+                                <xsl:attribute name="graphicCd">
+                                    <xsl:value-of select="$Art/ARTCL/GraphicCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/GraphicDesc">
+                                <xsl:attribute name="graphicDesc">
+                                    <xsl:value-of select="$Art/ARTCL/GraphicDesc"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/AgeGrp">
+                                <xsl:attribute name="ageGrp">
+                                    <xsl:value-of select="$Art/ARTCL/AgeGrp"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Gender">
+                                <xsl:attribute name="gender">
+                                    <xsl:value-of select="$Art/ARTCL/Gender"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdBabies)">
+                                <xsl:attribute name="userCdBabies">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdBabies='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdBabies='N') then 0 else &#xA;$Art/ARTCL/UserCdBabies"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdChildren)">
+                                <xsl:attribute name="userCdChildren">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdChildren='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdChildren='N') then 0 else &#xA;$Art/ARTCL/UserCdChildren"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdGirls)">
+                                <xsl:attribute name="userCdGirls">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdGirls='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdGirls='N') then 0 else &#xA; $Art/ARTCL/UserCdGirls"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdBoys)">
+                                <xsl:attribute name="userCdBoys">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdBoys='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdBoys='N') then 0 else &#xA; $Art/ARTCL/UserCdBoys"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdMen)">
+                                <xsl:attribute name="userCdMen">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdMen='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdMen='N') then 0 else &#xA;$Art/ARTCL/UserCdMen"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/UserCdLadies)">
+                                <xsl:attribute name="userCdLadies">
+                                    <xsl:value-of select="if($Art/ARTCL/UserCdLadies='Y') then 1 else&#xA; if ($Art/ARTCL/UserCdLadies='N') then 0 else &#xA;$Art/ARTCL/UserCdLadies"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="exists($Art/ARTCL/OrdLockedInd)">
+                                <xsl:attribute name="ordLockedInd">
+                                    <xsl:value-of select="if($Art/ARTCL/OrdLockedInd='Y') then 1 else&#xA; if ($Art/ARTCL/OrdLockedInd='N') then 0 else &#xA;$Art/ARTCL/OrdLockedInd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/DevOrg">
+                                <xsl:attribute name="devOrg">
+                                    <xsl:value-of select="$Art/ARTCL/DevOrg"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/DevLocn">
+                                <xsl:attribute name="devLocn">
+                                    <xsl:value-of select="$Art/ARTCL/DevLocn"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/QtyUnit">
+                                <xsl:attribute name="qtyUnit">
+                                    <xsl:value-of select="$Art/ARTCL/QtyUnit"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/OutPkgQty">
+                                <xsl:attribute name="outPkgQty">
+                                    <xsl:value-of select="$Art/ARTCL/OutPkgQty"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MtrlTech">
+                                <xsl:attribute name="mtrlTech">
+                                    <xsl:value-of select="$Art/ARTCL/MtrlTech"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/PictogramCompCd">
+                                <xsl:attribute name="pIictoGramCompCd">
+                                    <xsl:value-of select="$Art/ARTCL/PictogramCompCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/UpperMainMtrl">
+                                <xsl:attribute name="upperMainMtrl">
+                                    <xsl:value-of select="$Art/ARTCL/UpperMainMtrl"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LiningMainMtrl">
+                                <xsl:attribute name="liningMainMtrl">
+                                    <xsl:value-of select="$Art/ARTCL/LiningMainMtrl"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/InSoleMainMtrl">
+                                <xsl:attribute name="inSoleMainMtrl">
+                                    <xsl:value-of select="$Art/ARTCL/InSoleMainMtrl"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/OutSoleMainMtrl">
+                                <xsl:attribute name="outSoleMainMtrl">
+                                    <xsl:value-of select="$Art/ARTCL/OutSoleMainMtrl"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/SizePage">
+                                <xsl:attribute name="sizePage">
+                                    <xsl:value-of select="$Art/ARTCL/SizePage"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/SrcSizeScale">
+                                <xsl:attribute name="srcSizeScale">
+                                    <xsl:value-of select="$Art/ARTCL/SrcSizeScale"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/SrcSampleSizeCd2">
+                                <xsl:attribute name="srcSampleSizeCd2">
+                                    <xsl:value-of select="$Art/ARTCL/SrcSampleSizeCd2"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/SrcSampleSizeCd3">
+                                <xsl:attribute name="srcSampleSizeCd3">
+                                    <xsl:value-of select="$Art/ARTCL/SrcSampleSizeCd3"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LocalSizeCountry">
+                                <xsl:attribute name="localSizeCountry">
+                                    <xsl:value-of select="$Art/ARTCL/LocalSizeCountry"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LocalSampleSize">
+                                <xsl:attribute name="localSampleSize">
+                                    <xsl:value-of select="$Art/ARTCL/LocalSampleSize"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LocalSizeList">
+                                <xsl:attribute name="localSizeList">
+                                    <xsl:value-of select="$Art/ARTCL/LocalSizeList"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/LocalSizeRange">
+                                <xsl:attribute name="localSizeRange">
+                                    <xsl:value-of select="$Art/ARTCL/LocalSizeRange"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProdSet">
+                                <xsl:attribute name="prodSet">
+                                    <xsl:value-of select="$Art/ARTCL/ProdSet"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ICGSCode">
+                                <xsl:attribute name="icgsCd">
+                                    <xsl:value-of select="$Art/ARTCL/ICGSCode"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/TgtMtrlCd">
+                                <xsl:attribute name="tgtMtrlCd">
+                                    <xsl:value-of select="$Art/ARTCL/TgtMtrlCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/TgtSrcCd">
+                                <xsl:attribute name="tgtSrcCd">
+                                    <xsl:value-of select="$Art/ARTCL/TgtSrcCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/TgtMtrlTech">
+                                <xsl:attribute name="tgtMtrlTech">
+                                    <xsl:value-of select="$Art/ARTCL/TgtMtrlTech"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/AllocCatCd">
+                                <xsl:attribute name="allocCatCd">
+                                    <xsl:value-of select="$Art/ARTCL/AllocCatCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProdSpecialityCd">
+                                <xsl:attribute name="prodSpecialityCd">
+                                    <xsl:value-of select="$Art/ARTCL/ProdSpecialityCd"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/PDUOM">
+                                <xsl:attribute name="pDUOM_to_be_renamed">
+                                    <xsl:value-of select="$Art/ARTCL/PDUOM"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Length">
+                                <xsl:attribute name="length">
+                                    <xsl:value-of select="$Art/ARTCL/Length"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Width">
+                                <xsl:attribute name="width">
+                                    <xsl:value-of select="$Art/ARTCL/Width"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Height">
+                                <xsl:attribute name="height">
+                                    <xsl:value-of select="$Art/ARTCL/Height"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/PDUOV">
+                                <xsl:attribute name="pDUOV_to_be-renamed">
+                                    <xsl:value-of select="$Art/ARTCL/PDUOV"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Volume">
+                                <xsl:attribute name="volume">
+                                    <xsl:value-of select="$Art/ARTCL/Volume"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/Weight">
+                                <xsl:attribute name="weight">
+                                    <xsl:value-of select="$Art/ARTCL/Weight"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ConsumerBenefit">
+                                <xsl:attribute name="consumerBenefit">
+                                    <xsl:value-of select="$Art/ARTCL/ConsumerBenefit"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/FeaturesandBenefits">
+                                <xsl:attribute name="featuresandBenefits">
+                                    <xsl:value-of select="$Art/ARTCL/FeaturesandBenefits"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/KeyCategory">
+                                <xsl:attribute name="keyCategory">
+                                    <xsl:value-of select="$Art/ARTCL/KeyCategory"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/UpperToolingNo">
+                                <xsl:attribute name="upperToolingNo">
+                                    <xsl:value-of select="$Art/ARTCL/UpperToolingNo"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ManufacturingType">
+                                <xsl:attribute name="manufactoringType">
+                                    <xsl:value-of select="$Art/ARTCL/ManufacturingType"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ManufacturingCapability">
+                                <xsl:attribute name="manufactoringCapability">
+                                    <xsl:value-of select="$Art/ARTCL/ManufacturingCapability"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ConstructionType">
+                                <xsl:attribute name="constructionType">
+                                    <xsl:value-of select="$Art/ARTCL/ConstructionType"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/BoxLblCategory">
+                                <xsl:attribute name="boxLblCategory">
+                                    <xsl:value-of select="$Art/ARTCL/BoxLblCategory"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MgmtBrand">
+                                <xsl:attribute name="managementBrand">
+                                    <xsl:value-of select="$Art/ARTCL/MgmtBrand"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ProductFit">
+                                <xsl:attribute name="productFit">
+                                    <xsl:value-of select="$Art/ARTCL/ProductFit"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/DropReason">
+                                <xsl:attribute name="dropReason">
+                                    <xsl:value-of select="$Art/ARTCL/DropReason"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/ColorwayName">
+                                <xsl:attribute name="colorwayName">
+                                    <xsl:value-of select="$Art/ARTCL/ColorwayName"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MdlSrcSys">
+                                <xsl:attribute name="modelSourceSystem">
+                                    <xsl:value-of select="$Art/ARTCL/MdlSrcSys"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/MdlBusSeg">
+                                <xsl:attribute name="modelBusinessSegment">
+                                    <xsl:value-of select="$Art/ARTCL/MdlBusSeg"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:for-each select="$Art/ARTCL/ACOMP">
+                                <pfx10:glbArtComposition>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="importCountry">
+                                        <xsl:value-of select="ImportCountry"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="CustomsCompTxtEN">
+                                        <xsl:attribute name="customsCompTxtEN">
+                                            <xsl:value-of select="CustomsCompTxtEN"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PictogramCompTxtEN">
+                                        <xsl:attribute name="pictogramCompTxtEN">
+                                            <xsl:value-of select="PictogramCompTxtEN"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ProtectedAnimalInd">
+                                        <xsl:attribute name="protectedAnimalIND">
+                                            <xsl:value-of select="ProtectedAnimalInd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="AnimalType">
+                                        <xsl:attribute name="animalType">
+                                            <xsl:value-of select="AnimalType"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtComposition>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ALSIZ">
+                                <pfx10:glbArtSize>
+                                    <xsl:if test="SrcSizeCd2">
+                                        <xsl:attribute name="srcSizeCd2">
+                                            <xsl:value-of select="SrcSizeCd2"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="SrcSizeCd3"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="exists(FeasInd)">
+                                        <xsl:attribute name="feasInd">
+                                            <xsl:value-of select="if(FeasInd='Y') then 1 else&#xA; if (FeasInd='N') then 0 else &#xA; FeasInd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ProdWgt">
+                                        <xsl:attribute name="prodWgt">
+                                            <xsl:value-of select="ProdWgt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="InPkg">
+                                        <xsl:attribute name="inPkg">
+                                            <xsl:value-of select="InPkg"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="InPkgLen">
+                                        <xsl:attribute name="inPkgLen">
+                                            <xsl:value-of select="InPkgLen"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="InPkgWid">
+                                        <xsl:attribute name="inPkgWid">
+                                            <xsl:value-of select="InPkgWid"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="InPkgHgt">
+                                        <xsl:attribute name="inPkgHgt">
+                                            <xsl:value-of select="InPkgHgt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="InPkgWgt">
+                                        <xsl:attribute name="inPkgWgt">
+                                            <xsl:value-of select="InPkgWgt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkg">
+                                        <xsl:attribute name="outPkg">
+                                            <xsl:value-of select="OutPkg"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkgQty">
+                                        <xsl:attribute name="outPkgQty">
+                                            <xsl:value-of select="OutPkgQty"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkgLen">
+                                        <xsl:attribute name="outPkgLen">
+                                            <xsl:value-of select="OutPkgLen"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkgWid">
+                                        <xsl:attribute name="outPkgWid">
+                                            <xsl:value-of select="OutPkgWid"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkgHgt">
+                                        <xsl:attribute name="outPkgHgt">
+                                            <xsl:value-of select="OutPkgHgt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="OutPkgWgt">
+                                        <xsl:attribute name="outPkgWgt">
+                                            <xsl:value-of select="OutPkgWgt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtSize>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ALLBL">
+                                <pfx10:glbArtLabel>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lbl">
+                                        <xsl:value-of select="Lbl"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="LblCnt">
+                                        <xsl:attribute name="lblCnt">
+                                            <xsl:value-of select="LblCnt"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtLabel>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ACUST">
+                                <pfx10:glbArtCustoms>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="importCountry">
+                                        <xsl:value-of select="ImportCountry"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="ProdPartNo">
+                                        <xsl:attribute name="prodPartNo">
+                                            <xsl:value-of select="ProdPartNo"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SrcSizeScale">
+                                        <xsl:attribute name="srcSizeScale">
+                                            <xsl:value-of select="SrcSizeScale"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SrcSizeCd2">
+                                        <xsl:attribute name="srcSizeIndCd2">
+                                            <xsl:value-of select="SrcSizeCd2"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SrcSizeCd3">
+                                        <xsl:attribute name="srcSizeIndCd3">
+                                            <xsl:value-of select="SrcSizeCd3"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="Customs_Number">
+                                        <xsl:attribute name="customsNo">
+                                            <xsl:value-of select="Customs_Number"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="DutyQualifier">
+                                        <xsl:attribute name="dutyQualifier">
+                                            <xsl:value-of select="DutyQualifier"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PkgCompCountry">
+                                        <xsl:attribute name="pkgCompCountry">
+                                            <xsl:value-of select="PkgCompCountry"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PkgCompCurr">
+                                        <xsl:attribute name="pkgCompCurr">
+                                            <xsl:value-of select="PkgCompCurr"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PkgCompDesc">
+                                        <xsl:attribute name="pkgCompDesc">
+                                            <xsl:value-of select="PkgCompDesc"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PkgCompVal">
+                                        <xsl:attribute name="pkgCompVal">
+                                            <xsl:value-of select="PkgCompVal"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PkgCompPercentage">
+                                        <xsl:attribute name="pkgCompPercentage">
+                                            <xsl:value-of select="PkgCompPercentage"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(LDPFlag)">
+                                        <xsl:attribute name="lDPFlag">
+                                            <xsl:value-of select="if(LDPFlag='Y') then 1 else&#xA; if (LDPFlag='N') then 0 else &#xA;LDPFlag"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtCustoms>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ALRMH[1]">
+                                <pfx10:glbArtRMH>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="rMHMktgDiv">
+                                        <xsl:value-of select="RMHMktDiv"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="rMHProdDiv">
+                                        <xsl:value-of select="RMHProdDiv"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="rMHGender">
+                                        <xsl:value-of select="RMHGender"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="rMHCategory">
+                                        <xsl:value-of select="RMHCategory"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="rMHProdType">
+                                        <xsl:value-of select="RMHProdType"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="retailDept">
+                                        <xsl:value-of select="RetailDept"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="retailSubDept">
+                                        <xsl:value-of select="RetailSubDept"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="retailClass">
+                                        <xsl:value-of select="RetailClass"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="retailSubClass">
+                                        <xsl:value-of select="RetailSubClass"/>
+                                    </xsl:attribute>
+                                </pfx10:glbArtRMH>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ACBTI">
+                                <pfx10:glbArtBTI>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="bTINo">
+                                        <xsl:value-of select="BTINumber"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="importCountry">
+                                        <xsl:value-of select="ImportCountry"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="exists(BTIValidFrom)">
+                                        <xsl:attribute name="bTIValidFrom">
+                                            <xsl:value-of select="tib:create-date(substring(current()/BTIValidFrom,1,4),substring(current()/BTIValidFrom,5,2),substring(current()/BTIValidFrom,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtBTI>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ACWDL">
+                                <pfx10:glbArtDescription>
+                                    <xsl:variable name="var1" select="if (current()/LangCd = &quot;01&quot;) then &quot;DE&quot;&#xA;else if (current()/LangCd = &quot;02&quot;) then &quot;EN&quot;&#xA;else if (current()/LangCd = &quot;03&quot;) then &quot;FR&quot;&#xA;else if (current()/LangCd = &quot;04&quot;) then &quot;ES&quot;&#xA;else if (current()/LangCd = &quot;05&quot;) then &quot;PT&quot;&#xA;else if (current()/LangCd = &quot;06&quot;) then &quot;SW&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;03&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="$var1"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="ColorwayLongDesc"/>
+                                    </xsl:attribute>
+                                </pfx10:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ACWDL">
+                                <pfx10:glbArtDescription>
+                                    <xsl:variable name="var2" select="if (current()/LangCd = &quot;01&quot;) then &quot;DE&quot;&#xA;else if (current()/LangCd = &quot;02&quot;) then &quot;EN&quot;&#xA;else if (current()/LangCd = &quot;03&quot;) then &quot;FR&quot;&#xA;else if (current()/LangCd = &quot;04&quot;) then &quot;ES&quot;&#xA;else if (current()/LangCd = &quot;05&quot;) then &quot;PT&quot;&#xA;else if (current()/LangCd = &quot;06&quot;) then &quot;SW&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;04&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="$var2"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="ColorwayShortDesc"/>
+                                    </xsl:attribute>
+                                </pfx10:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ADESC">
+                                <pfx10:glbArtDescription>
+                                    <xsl:variable name="var4" select="if (current()/LangCd = &quot;01&quot;) then &quot;DE&quot;&#xA;else if (current()/LangCd = &quot;02&quot;) then &quot;EN&quot;&#xA;else if (current()/LangCd = &quot;03&quot;) then &quot;FR&quot;&#xA;else if (current()/LangCd = &quot;04&quot;) then &quot;ES&quot;&#xA;else if (current()/LangCd = &quot;05&quot;) then &quot;PT&quot;&#xA;else if (current()/LangCd = &quot;06&quot;) then &quot;SW&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;02&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="$var4"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="MdlDesc"/>
+                                    </xsl:attribute>
+                                </pfx10:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ADESC">
+                                <pfx10:glbArtDescription>
+                                    <xsl:variable name="var3" select="if (current()/LangCd = &quot;01&quot;) then &quot;DE&quot;&#xA;else if (current()/LangCd = &quot;02&quot;) then &quot;EN&quot;&#xA;else if (current()/LangCd = &quot;03&quot;) then &quot;FR&quot;&#xA;else if (current()/LangCd = &quot;04&quot;) then &quot;ES&quot;&#xA;else if (current()/LangCd = &quot;05&quot;) then &quot;PT&quot;&#xA;else if (current()/LangCd = &quot;06&quot;) then &quot;SW&quot;&#xA;else &quot;&quot;"/>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="txtTypeCd">
+                                        <xsl:value-of select="&quot;01&quot;"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="lang">
+                                        <xsl:value-of select="$var3"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="desc">
+                                        <xsl:value-of select="ArtDesc"/>
+                                    </xsl:attribute>
+                                </pfx10:glbArtDescription>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ASKUS">
+                                <pfx10:glbArtSKU>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="srcSizeScale">
+                                        <xsl:value-of select="SrcSizeScale"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="SrcSizeCd2">
+                                        <xsl:attribute name="srcSizeCd2">
+                                            <xsl:value-of select="SrcSizeCd2"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:attribute name="srcSizeCd3">
+                                        <xsl:value-of select="SrcSizeCd3"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="LocalSizeCountry">
+                                        <xsl:attribute name="localSizeCountry">
+                                            <xsl:value-of select="LocalSizeCountry"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="LocalSize">
+                                        <xsl:attribute name="localSize">
+                                            <xsl:value-of select="LocalSize"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="EANNo">
+                                        <xsl:attribute name="eANNo">
+                                            <xsl:value-of select="EANNo"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="UPCNo">
+                                        <xsl:attribute name="uPCNo">
+                                            <xsl:value-of select="UPCNo"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(FeasInd)">
+                                        <xsl:attribute name="feasInd">
+                                            <xsl:value-of select="if(FeasInd='Y') then 1 else&#xA; if (FeasInd='N') then 0 else &#xA;FeasInd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(ActiveInd)">
+                                        <xsl:attribute name="activeInd">
+                                            <xsl:value-of select="if(ActiveInd='Y') then 1 else&#xA; if (ActiveInd='N') then 0 else &#xA;ActiveInd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                </pfx10:glbArtSKU>
+                            </xsl:for-each>
+                            <xsl:for-each select="$Art/ARTCL/ASEAS">
+                                <pfx10:glbArtSeason>
+                                    <xsl:attribute name="grpArtNo">
+                                        <xsl:value-of select="GrpArtNo"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="timePeriodCode">
+                                        <xsl:value-of select="$getTimePeriodCode/timePeriodMapping/param[ArtActiveSeason=$Art/ARTCL/ArtActiveSeason]/TimePeriodCode"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="seasonCode">
+                                        <xsl:value-of select="SeasonCode"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="MktgFC">
+                                        <xsl:attribute name="mktgFC">
+                                            <xsl:value-of select="MktgFC"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PlaceholderStyleCount">
+                                        <xsl:attribute name="placeholderStyleCount">
+                                            <xsl:value-of select="PlaceholderStyleCount"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(ProductPlaceholder)">
+                                        <xsl:attribute name="prodPlaceholder">
+                                            <xsl:value-of select="if(ProductPlaceholder='Y') then 1 else&#xA; if (ProductPlaceholder='N') then 0 else &#xA;ProductPlaceholder"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ReplenishmentFlag">
+                                        <xsl:attribute name="replenishmentFlag">
+                                            <xsl:value-of select="ReplenishmentFlag"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="Designer">
+                                        <xsl:attribute name="designer">
+                                            <xsl:value-of select="Designer"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="Developer">
+                                        <xsl:attribute name="developer">
+                                            <xsl:value-of select="Developer"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="LODeveloper">
+                                        <xsl:attribute name="lODeveloper">
+                                            <xsl:value-of select="LODeveloper"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ProductManager">
+                                        <xsl:attribute name="productManager">
+                                            <xsl:value-of select="ProductManager"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="CADPatternMaker">
+                                        <xsl:attribute name="cADPatternMaker">
+                                            <xsl:value-of select="CADPatternMaker"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="DirectDevelopment">
+                                        <xsl:attribute name="directDevelopment">
+                                            <xsl:value-of select="DirectDevelopment"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="TransportationleadTime">
+                                        <xsl:attribute name="transportationleadTime">
+                                            <xsl:value-of select="TransportationleadTime"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SalesLine">
+                                        <xsl:attribute name="salesLine">
+                                            <xsl:value-of select="SalesLine"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ConsumerSeg">
+                                        <xsl:attribute name="consumerSegment">
+                                            <xsl:value-of select="ConsumerSeg"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PriceSeg">
+                                        <xsl:attribute name="priceSeg">
+                                            <xsl:value-of select="PriceSeg"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:attribute name="salesRgn">
+                                        <xsl:value-of select="substring(SalesRgn, 1,2)"/>
+                                    </xsl:attribute>
+                                    <xsl:if test="DevType">
+                                        <xsl:attribute name="devType">
+                                            <xsl:value-of select="DevType"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="DistChan">
+                                        <xsl:attribute name="distChan">
+                                            <xsl:value-of select="DistChan"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SpecialUsg">
+                                        <xsl:attribute name="specialUsg">
+                                            <xsl:value-of select="SpecialUsg"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ProdLine">
+                                        <xsl:attribute name="prodLine">
+                                            <xsl:value-of select="ProdLine"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="BusUnit">
+                                        <xsl:attribute name="busUnit">
+                                            <xsl:value-of select="BusUnit"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(current()/FirstExFactoryDt)">
+                                        <xsl:attribute name="firstExFactoryDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/FirstExFactoryDt,1,4),substring(current()/FirstExFactoryDt,5,2),substring(current()/FirstExFactoryDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(current()/LastExFactoryDt)">
+                                        <xsl:attribute name="lastExFactoryDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/LastExFactoryDt,1,4),substring(current()/LastExFactoryDt,5,2),substring(current()/LastExFactoryDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PrdnLeadTm">
+                                        <xsl:attribute name="prdnLeadTm">
+                                            <xsl:value-of select="PrdnLeadTm"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(current()/RetailIntroDt)">
+                                        <xsl:attribute name="retailIntroDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/RetailIntroDt,1,4),substring(current()/RetailIntroDt,5,2),substring(current()/RetailIntroDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="current()/RetailExitDt!=''">
+                                        <xsl:attribute name="retailIExitDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/RetailExitDt,1,4),substring(current()/RetailExitDt,5,2),substring(current()/RetailExitDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ProdLifecycleSeasonSts">
+                                        <xsl:attribute name="prodLifecycleSeasonSts">
+                                            <xsl:value-of select="ProdLifecycleSeasonSts"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="PurOrdMinQty">
+                                        <xsl:attribute name="purOrdMinQty">
+                                            <xsl:value-of select="PurOrdMinQty"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="QuarterCd">
+                                        <xsl:attribute name="quarterCd">
+                                            <xsl:value-of select="QuarterCd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="TimelineCd">
+                                        <xsl:attribute name="timelineCd">
+                                            <xsl:value-of select="TimelineCd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="BusMdlAttCd">
+                                        <xsl:attribute name="busMdlAttCd">
+                                            <xsl:value-of select="BusMdlAttCd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="MktClassificationCd">
+                                        <xsl:attribute name="mktgClassificationCd">
+                                            <xsl:value-of select="MktClassificationCd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="FulfillmentMdlCd">
+                                        <xsl:attribute name="fulfillmentMdlCd">
+                                            <xsl:value-of select="FulfillmentMdlCd"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ArtSeasonSts">
+                                        <xsl:attribute name="artSeasonSts">
+                                            <xsl:value-of select="ArtSeasonSts"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="MdlSeasonSts">
+                                        <xsl:attribute name="mdlSeasonSts">
+                                            <xsl:value-of select="MdlSeasonSts"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SeasonState">
+                                        <xsl:attribute name="seasonState">
+                                            <xsl:value-of select="SeasonState"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="SMUCustomer">
+                                        <xsl:attribute name="sMUCustomer">
+                                            <xsl:value-of select="SMUCustomer"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="ColorwayDelayReason">
+                                        <xsl:attribute name="colorwayDelayReason">
+                                            <xsl:value-of select="ColorwayDelayReason"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists(current()/BuyReadyDt)">
+                                        <xsl:attribute name="buyReadyDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/BuyReadyDt,1,4),substring(current()/BuyReadyDt,5,2),substring(current()/BuyReadyDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists($Art/ARTCL/ASEAS/RevisedBuyReadyDt)">
+                                        <xsl:attribute name="revisedBuyReadyDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/RevisedBuyReadyDt,1,4),substring(current()/RevisedBuyReadyDt,5,2),substring(current()/RevisedBuyReadyDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:if test="exists($Art/ARTCL/ASEAS/BuyReadySetDt)">
+                                        <xsl:attribute name="buyReadySetDt">
+                                            <xsl:value-of select="tib:create-date(substring(current()/BuyReadySetDt,1,4),substring(current()/BuyReadySetDt,5,2),substring(current()/BuyReadySetDt,7,2))"/>
+                                        </xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:for-each select="AFACT">
+                                        <pfx10:glbArtSeasonFactory>
+                                            <xsl:attribute name="grpArtNo">
+                                                <xsl:value-of select="GrpArtNo"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="timePeriodCode">
+                                                <xsl:value-of select="$getTimePeriodCode/timePeriodMapping/param[ArtActiveSeason=$Art/ARTCL/ArtActiveSeason]/TimePeriodCode"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="seasonCode">
+                                                <xsl:value-of select="SeasonCode"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="factoryPriorityInd">
+                                                <xsl:value-of select="FactoryPriorityInd"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="factoryCd">
+                                                <xsl:value-of select="FactoryCd"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="devFactInd">
+                                                <xsl:value-of select="DevFactInd"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="prdnLeadTm">
+                                                <xsl:value-of select="PrdnLeadTm"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="shortLeadTm">
+                                                <xsl:value-of select="ShortLeadTm"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="minMdlQty">
+                                                <xsl:value-of select="MinMdlQty"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="minimumArticleQuantity">
+                                                <xsl:value-of select="MinArtQty"/>
+                                            </xsl:attribute>
+                                            <xsl:for-each select="ACOST">
+                                                <pfx10:glbArtSeasonCosting>
+                                                    <xsl:attribute name="grpArtNo">
+                                                        <xsl:value-of select="GrpArtNo"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="timePeriodCode">
+                                                        <xsl:value-of select="$getTimePeriodCode/timePeriodMapping/param[ArtActiveSeason=$Art/ARTCL/ArtActiveSeason]/TimePeriodCode"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="factoryCd">
+                                                        <xsl:value-of select="substring(FactoryCd,4,3)"/>
+                                                    </xsl:attribute>
+                                                    <xsl:if test="ArtFOB">
+                                                        <xsl:attribute name="fOB">
+                                                            <xsl:value-of select="ArtFOB"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="FOBCurr">
+                                                        <xsl:attribute name="targetFOBCurr">
+                                                            <xsl:value-of select="FOBCurr"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="PricingMilestone">
+                                                        <xsl:attribute name="pricingMilestone">
+                                                            <xsl:value-of select="PricingMilestone"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="PriceType">
+                                                        <xsl:attribute name="priceType">
+                                                            <xsl:value-of select="PriceType"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="SrcSizCd2">
+                                                        <xsl:attribute name="srcSizeCd2">
+                                                            <xsl:value-of select="SrcSizCd2"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="SrcSizCd3">
+                                                        <xsl:attribute name="srcSizeCd3">
+                                                            <xsl:value-of select="SrcSizCd3"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="exists(current()/FOBValidFrom)">
+                                                        <xsl:attribute name="fOBValidFrom">
+                                                            <xsl:value-of select="tib:create-date(substring(current()/FOBValidFrom,1,4),substring(current()/FOBValidFrom,5,2),substring(current()/FOBValidFrom,7,2))"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="exists(current()/FOBValidTo)">
+                                                        <xsl:attribute name="fOBValidTo">
+                                                            <xsl:value-of select="tib:create-date(substring(current()/FOBValidTo,1,4),substring(current()/FOBValidTo,5,2),substring(current()/FOBValidTo,7,2))"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:if test="exists(Confirmed)">
+                                                        <xsl:attribute name="confirmed">
+                                                            <xsl:value-of select="if(Confirmed='Y') then 1 else&#xA; if (Confirmed='N') then 0 else &#xA; Confirmed"/>
+                                                        </xsl:attribute>
+                                                    </xsl:if>
+                                                </pfx10:glbArtSeasonCosting>
+                                            </xsl:for-each>
+                                        </pfx10:glbArtSeasonFactory>
+                                    </xsl:for-each>
+                                    <xsl:for-each select="AMMAT">
+                                        <pfx10:glbArtMdlMtrlSeason>
+                                            <xsl:attribute name="grpArtNo">
+                                                <xsl:value-of select="GrpArtNo"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="timePeriodCode">
+                                                <xsl:value-of select="$getTimePeriodCode/timePeriodMapping/param[ArtActiveSeason=$Art/ARTCL/ArtActiveSeason]/TimePeriodCode"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="mtrlRefNo">
+                                                <xsl:value-of select="MtrlRefNo"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="seasonCode">
+                                                <xsl:value-of select="SeasonCode"/>
+                                            </xsl:attribute>
+                                            <xsl:if test="exists(ColorOverwriteInd)">
+                                                <xsl:attribute name="colorOverwriteInd">
+                                                    <xsl:value-of select="if(ColorOverwriteInd='Y') then 1 else&#xA; if (ColorOverwriteInd='N') then 0 else &#xA;ColorOverwriteInd"/>
+                                                </xsl:attribute>
+                                            </xsl:if>
+                                            <xsl:attribute name="mtrlSupplier">
+                                                <xsl:value-of select="MtrlSupplier"/>
+                                            </xsl:attribute>
+                                        </pfx10:glbArtMdlMtrlSeason>
+                                    </xsl:for-each>
+                                </pfx10:glbArtSeason>
+                            </xsl:for-each>
+                        </pfx10:glbArticle>
+                    </pfx10:Article>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="SendArtCDM">
+                <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+                <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+                <pd:x>434</pd:x>
+                <pd:y>169</pd:y>
+                <config>
+                    <PermittedMessageType>XML Text</PermittedMessageType>
+                    <SessionAttributes>
+                        <transacted>false</transacted>
+                        <acknowledgeMode>1</acknowledgeMode>
+                        <maxSessions>1</maxSessions>
+                        <destination>%%BusinessProcesses/CPSInbound/SharedProcesses/CDMDataToBE/GlbArticleInputQueue%%</destination>
+                    </SessionAttributes>
+                    <ConfigurableHeaders>
+                        <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                        <JMSExpiration>0</JMSExpiration>
+                        <JMSPriority>4</JMSPriority>
+                    </ConfigurableHeaders>
+                    <ConnectionReference>/Adapter/GetProduct/Shared Resources/Connections/JMS/NPJMSConnection.sharedjmscon</ConnectionReference>
+                    <ApplicationProperties>/Adapter/GetProduct/Shared Resources/Schemas/Shared/ACSCatalogInfo.sharedjmsapp</ApplicationProperties>
+                    <InDataxsdString ref="pfx10:Article"/>
+                </config>
+                <pd:inputBindings>
+                    <ns4:ActivityInput>
+                        <OtherProperties>
+                            <GlobalArtNr>
+                                <xsl:value-of select="$Art/ARTCL/GrpArtNo"/>
+                            </GlobalArtNr>
+                            <SourceApp>
+                                <xsl:value-of select="&quot;SPM&quot;"/>
+                            </SourceApp>
+                            <SourceTimeStamp>
+                                <xsl:value-of select="current-dateTime()"/>
+                            </SourceTimeStamp>
+                            <xsl:if test="$Art/ARTCL/AVERS/VerId">
+                                <SourceMsgID>
+                                    <xsl:value-of select="$Art/ARTCL/AVERS/VerId"/>
+                                </SourceMsgID>
+                            </xsl:if>
+                            <xsl:if test="$Art/ARTCL/AVERS/VerId">
+                                <SourceVer>
+                                    <xsl:value-of select="$Art/ARTCL/AVERS/VerId"/>
+                                </SourceVer>
+                            </xsl:if>
+                            <SourceObjType>
+                                <xsl:value-of select="&quot;GlblArticle&quot;"/>
+                            </SourceObjType>
+                        </OtherProperties>
+                        <Body>
+                            <xsl:copy-of select="$MapToArticleCDM/pfx10:Article"/>
+                        </Body>
+                    </ns4:ActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="getTimePeriodCode">
+                <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+                <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+                <pd:x>246</pd:x>
+                <pd:y>120</pd:y>
+                <config>
+                    <variableConfig>/Adapter/GetProduct/Shared Resources/Variables/SharedVariable_timeperiod.sharedvariable</variableConfig>
+                </config>
+                <pd:inputBindings/>
+            </pd:activity>
+            <pd:activity name="AuditLog">
+                <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+                <pd:resourceType>ae.process.subprocess</pd:resourceType>
+                <pd:x>345</pd:x>
+                <pd:y>163</pd:y>
+                <config>
+                    <processName>/Base/Logging/Audit/Audit.process</processName>
+                </config>
+                <pd:inputBindings>
+                    <root>
+                        <customKey>
+                            <xsl:value-of select="$_processContext/ns3:ProcessContext/ProcessId"/>
+                        </customKey>
+                        <station>
+                            <xsl:value-of select="concat(&quot;PID:&quot;,$_processContext/ns3:ProcessContext/ProcessId,&quot; process :ProcessGlblArticleToCDM &quot;)"/>
+                        </station>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;Iteration&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$Article"/>
+                            </value>
+                        </attributes>
+                        <attributes>
+                            <name>
+                                <xsl:value-of select="&quot;GrpArtNo&quot;"/>
+                            </name>
+                            <value>
+                                <xsl:value-of select="$Art/ARTCL/GrpArtNo"/>
+                            </value>
+                        </attributes>
+                    </root>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+    </pd:group>
+    <pd:activity name="getErrorCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>699</pd:x>
+        <pd:y>168</pd:y>
+        <config>
+            <element>
+                <xsd:element name="error">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorCode" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="errorInformation" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="sourceApp" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <error>
+                <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                    <errorCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </errorCode>
+                </xsl:if>
+                <errorInformation>
+                    <xsl:value-of select="concat(&quot;Error in process ProcessGlblArticleToCDM : &quot;,$_error/ns3:ErrorReport/StackTrace)"/>
+                </errorInformation>
+                <sourceApp>
+                    <xsl:value-of select="&quot;ProcessGlblArticleToCDM&quot;"/>
+                </sourceApp>
+            </error>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>699</pd:x>
+        <pd:y>272</pd:y>
+        <config>
+            <variableConfig>/Base/Shared Resources/Data Model/Shared Variables/AuditDetails.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>837</pd:x>
+        <pd:y>274</pd:y>
+        <config>
+            <processName>/Base/ExceptionHandling/SetError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <errorInfos>
+                <xsl:if test="$getErrorCode/error/errorCode">
+                    <errorCode>
+                        <xsl:value-of select="$getErrorCode/error/errorCode"/>
+                    </errorCode>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/errorInformation">
+                    <errorInformation>
+                        <xsl:value-of select="$getErrorCode/error/errorInformation"/>
+                    </errorInformation>
+                </xsl:if>
+                <xsl:if test="$getErrorCode/error/sourceApp">
+                    <errorApplication>
+                        <xsl:value-of select="$getErrorCode/error/sourceApp"/>
+                    </errorApplication>
+                </xsl:if>
+                <processStack>
+                    <xsl:value-of select="&quot;SPMProductDataToCPS&quot;"/>
+                </processStack>
+                <MonitoringDetails>
+                    <bpName>
+                        <xsl:value-of select="$GetVariable/root/ns6:AuditDetails/ns6:bpName"/>
+                    </bpName>
+                    <boId>
+                        <xsl:value-of select="$GetVariable/root/ns6:AuditDetails/ns6:boId"/>
+                    </boId>
+                    <customKey>
+                        <xsl:value-of select="$GetVariable/root/ns6:AuditDetails/ns6:customKey"/>
+                    </customKey>
+                    <sourceApp>
+                        <xsl:value-of select="$GetVariable/root/ns6:AuditDetails/ns6:sourceApp"/>
+                    </sourceApp>
+                    <targetApp>
+                        <xsl:value-of select="$GetVariable/root/ns6:AuditDetails/ns6:targetApp"/>
+                    </targetApp>
+                </MonitoringDetails>
+            </errorInfos>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>69</pd:x>
+        <pd:y>164</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx11:ProductMaster"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/root/param"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Curved</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>getErrorCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-3407872</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getErrorCode</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetError</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <name>DataFormat_SalesOrg</name>
+    <resourceType>ae.shared.ParseSharedResource</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <FormatType>Delimiter separated</FormatType>
+        <ColumnSeparator>;</ColumnSeparator>
+        <ColSeparatorRule>Treat all characters as entered as a single column separator string</ColSeparatorRule>
+        <LineSeparator>
+</LineSeparator>
+        <FillCharacter>Space</FillCharacter>
+        <LineLength>3</LineLength>
+        <DataFormat>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="SalesOrganization" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="DistributionChannel" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="SequNumber" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="SalesOrg" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="DistChan" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="RegionCode" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="AreaCode" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="CountryCode" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="LanguageCode" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="LocaleId" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="SizeConvId" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="CustomerNoDef" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </DataFormat>
+    </config>
+</BWSharedResource>

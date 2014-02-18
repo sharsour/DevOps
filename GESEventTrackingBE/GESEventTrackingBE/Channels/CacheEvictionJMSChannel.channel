@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel:Channel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:channel="http:///com/tibco/cep/designtime/core/model/service/channel" xmlns:designtime="http:///com/tibco/cep/designtime/core/model/designtime_ontology.ecore" namespace="/Channels/" folder="/Channels/" name="CacheEvictionJMSChannel" description="This channel is used to communicate with BW via JMS for eviction of data from BE Cache" GUID="14C99D88-838F-DA44-9EB6-FE1695DA7F92" ownerProjectName="GESEventTrackingBE">
+  <driver configMethod="REFERENCE" reference="/SharedResources/JMS/GESMonitoringJMSSharedCon.sharedjmscon" label="JMS" channel="/">
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="OrderEvictionReqDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/OrderEvictionReq" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/OrderEvictionRequest%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="OrderEvictionResponseDest" description="" GUID="74D5ECE4-B125-76D8-EFD2-FEDF39E2F4F7" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/OrderEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/OrderEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="TripEvictionReqDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/TripEvictionReq" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/TripEvictionRequest%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="TripEvictionResponseDest" description="" GUID="74D5ECE4-B125-76D8-EFD2-FEDF39E2F4F7" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/TripEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/TripEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="CommonEvictionReqDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/CommonEvictionReq" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/CommonEvictionRequest%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="OrderLockEvictionResponseDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/OrdLockEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/OrderLockEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="SummaryEvictionResponseDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/SummaryEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/SummaryEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="OptimizeEvictionResponseDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/OptimizationEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/OptimizationEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations folder="/Channels/CacheEvictionJMSChannel/" name="OrderTokenEvictionResponseDest" description="" GUID="095264B0-3BC1-B6A5-7652-CBD248FF620F" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Eviction/TokenEvictionRes" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Eviction/TokenEvictionResponse%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <driverType xsi:type="channel:DriverTypeInfo" driverTypeName="JMS"/>
+  </driver>
+</channel:Channel>

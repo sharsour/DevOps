@@ -1,0 +1,83 @@
+/**
+ * @description This rule function performs pre-processor activities for orderTripFlow Request Event sent by BW.
+ */
+void rulefunction RuleFunctions.Query.PreProcessorRF.orderTripFlowRequestPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Query.OrdTripFlowRequest ordTripFlowRequest;
+	}
+	body {
+		System.debugOut("In orderTripFlowRequestPP of Query Agent");
+		String plantNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordTripFlowRequest/payload/xsd2:OrderTripFlowRequest/xsd2:OrdTrpRequest/xsd2:PlantNum</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordTripFlowRequest</variable>\n    </variables>\n</xpath>"); 
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordTripFlowRequest/payload/xsd2:OrderTripFlowRequest/xsd2:OrdTrpRequest/xsd2:ShipDate</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordTripFlowRequest</variable>\n    </variables>\n</xpath>");
+		String [] ordTripFlowRes=String[8] {};
+		for(int index=0;index<8;index++)
+		{
+			ordTripFlowRes[index]="0";
+		}
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:param name=\"ordTripFlowRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER TRIP FLOW&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started processing OrderTripFlow Request for PLANT_NUM = &quot;,$plantNum,&quot; on &quot;,$shipDate)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($ordTripFlowRequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			String queryName = "OrderTripFlow";
+			String statementName = queryName + "-SS-" + plantNum + shipDate;
+			String resultSetName = queryName + "-SS-RS-" + plantNum + shipDate;
+			
+			Query.Statement.open(queryName, statementName);
+			Query.Statement.setVar(statementName, "plantNum",plantNum);
+			Query.Statement.setVar(statementName, "shipDate",shipDate);
+			
+			System.debugOut("Started query: " + statementName);
+			
+			Query.Statement.execute(statementName, resultSetName);
+			
+			while(Query.ResultSet.next(resultSetName))
+				{
+					ordTripFlowRes[0] = Query.ResultSet.get(resultSetName, 0);
+					ordTripFlowRes[1] = Query.ResultSet.get(resultSetName, 1);
+					ordTripFlowRes[2] = Query.ResultSet.get(resultSetName, 2);
+					ordTripFlowRes[3] = Query.ResultSet.get(resultSetName, 3);
+					ordTripFlowRes[4] = Query.ResultSet.get(resultSetName, 4);
+					ordTripFlowRes[5] = Query.ResultSet.get(resultSetName, 5);
+					ordTripFlowRes[6] = Query.ResultSet.get(resultSetName, 6);
+					
+				}
+			
+			Events.Query.OrdTripFlowResponse ordTripFlowResponse=Event.createEvent("xslt://{{/Events/Query/OrdTripFlowResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"ordTripFlowRes\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:OrderTripFlowResponse>\n                        <ns:OrdTrpResponse>\n                            <ns:WATS_Ord_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[1])\"/>\n                            </ns:WATS_Ord_Cnt>\n                            <ns:SAP_Ord_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[2])\"/>\n                            </ns:SAP_Ord_Cnt>\n                            <ns:PWM_Ord_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[3])\"/>\n                            </ns:PWM_Ord_Cnt>\n                            <ns:ETM_Ord_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[4])\"/>\n                            </ns:ETM_Ord_Cnt>\n                            <ns:ETM_Trip_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[5])\"/>\n                            </ns:ETM_Trip_Cnt>\n                            <ns:SAP_Trip_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[6])\"/>\n                            </ns:SAP_Trip_Cnt>\n                            <ns:PWM_Trip_Cnt>\n                                <xsl:value-of select=\"number($ordTripFlowRes/elements[7])\"/>\n                            </ns:PWM_Trip_Cnt>\n                        </ns:OrdTrpResponse>\n                    </ns:OrderTripFlowResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(ordTripFlowRequest,ordTripFlowResponse);
+		
+		
+			Query.ResultSet.close(resultSetName);
+			Query.Statement.close(statementName);
+			System.debugOut("Completed query: " + statementName);
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing orderTripFlowRequestPP = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"ordTripFlowRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER TRIP FLOW&quot;\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($ordTripFlowRequest)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			//End Logging.
+			if(cleFlag)
+			{
+				Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:param name=\"ordTripFlowRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER TRIP FLOW&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Completed processing OrderTripFlow Request for PLANT_NUM = &quot;,$plantNum,&quot; on &quot;,$shipDate)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($ordTripFlowRequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			
+			//Consuming/Deleting optRequest event.
+			Event.consumeEvent(ordTripFlowRequest);
+		}
+		
+		
+	}
+}

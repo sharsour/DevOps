@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="OrdLock">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Ship_Date"/>
+				<xs:element ref="LockIdentifierField" minOccurs="0"/>
+				<xs:element ref="Status" minOccurs="0"/>
+				<xs:element ref="JMSDateTime"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="LockIdentifierField" type="xs:string"/>
+	<xs:element name="Status" type="xs:string"/>
+	<xs:element name="JMSDateTime" type="xs:string"/>
+</xs:schema>

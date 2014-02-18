@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/Temporary/" folder="/Concepts/Temporary/" name="AGING" description="This is a temporary concept used to store the data of Orders/Trips that missed SLA." GUID="935B35A4-6D9F-1BE4-71C0-9E176B611655" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="ID" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+  <properties name="CREATION_TIME" ownerProjectName="GESEventTrackingBE" type="long" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+  <properties name="LAST_KNOWN_SYSTEM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+  <properties name="LAST_KNOWN_TIME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+  <properties name="SAP_ORD_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+  <properties name="LAST_KNOWN_TIME_MILLIS" ownerProjectName="GESEventTrackingBE" type="long" array="true" ownerPath="/Concepts/Temporary/AGING"/>
+</element:Concept>

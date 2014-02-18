@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmlns:element="http:///com/tibco/cep/designtime/core/model/element" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Concepts/" folder="/Concepts/" name="PLANT_TIMEZONE" description="This concept contains the list of GES plants and their corresponding TimeZone." GUID="4647B95B-30D5-CE26-A51D-B0564ABBF0B9" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="CST_PLANTNUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="CST_PLANTNAME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="EST_PLANTNUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="EST_PLANTNAME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="PT_PLANTNUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="PT_PLANTNAME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="MT_PLANTNUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+  <properties name="MT_PLANTNAME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/PLANT_TIMEZONE"/>
+</element:Concept>

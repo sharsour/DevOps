@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>code</name>
+            <value>GESBE004</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369809075511</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>message</name>
+            <value>Token already received from incoming plant.</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369809052014</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

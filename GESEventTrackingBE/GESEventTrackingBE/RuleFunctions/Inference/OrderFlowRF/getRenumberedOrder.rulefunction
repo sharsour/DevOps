@@ -1,0 +1,77 @@
+/**
+ * @description Checks if the Ord_Num is present in Ord_Re_Num concept and gets the corresponding Ord_Num
+ */
+String rulefunction RuleFunctions.Inference.OrderFlowRF.getRenumberedOrder {
+	attribute {
+		validity = CONDITION;
+	}
+	scope {
+		String ordNum;
+		String type;//Required ordNum type.
+		Concepts.ORDER_RE_NUM ordReNum;
+	}
+	body {
+		
+			int index;
+			String OrderNum;
+			int gesAgentId=Cluster.getAgentId();
+			
+			//try
+			{
+				if(type=="NEW")
+				{
+					index=Instance.PropertyArray.indexOfString(ordReNum.OLD_ORD_NUM,ordNum);
+					if(index!=-1)
+					{
+						String newOrdNum=ordReNum.NEW_ORD_NUM[index];
+						OrderNum=newOrdNum;
+					}
+					else
+					{
+						OrderNum=null;
+					}
+				}
+				else if(type=="OLD")
+				{
+					index=Instance.PropertyArray.indexOfString(ordReNum.NEW_ORD_NUM,ordNum);
+					if(index!=-1)
+					{
+						String oldOrdNum=ordReNum.OLD_ORD_NUM[index];
+						OrderNum=oldOrdNum;
+					}
+					else
+					{
+						OrderNum=null;
+					}
+				}
+				else if(type=="SAP")
+				{
+					index=Instance.PropertyArray.indexOfString(ordReNum.OLD_ORD_NUM,ordNum);
+					if(index!=-1)
+					{
+						String sapOrdNum=ordReNum.SAP_ORD_NUM[index];
+						OrderNum=sapOrdNum;
+					}
+					else
+					{
+						OrderNum=null;
+					}
+				}
+				else
+				{
+					OrderNum=null;
+				}
+		}
+		return OrderNum;
+		/*
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing getRenumberedOrder rule function = "+e@errorType);		
+		}
+			
+		finally
+		{		
+			return OrderNum;
+		}*/
+	}
+}

@@ -1,0 +1,39 @@
+/**
+ * @description This rule function performs pre-processor activities for Schedule check event triggered by BW.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.SLACheck.ScheduleCheckPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.ScheduleCheckEvent schedulecheckevent;
+	}
+	body {
+		System.debugOut("In ScheduleCheckPP");
+		
+		String ordLock=System.getGlobalVariableAsString("EXTIDS/ORD_LOCK","ORD_LOCK");
+		String ordToken=System.getGlobalVariableAsString("EXTIDS/ORDER_TOKEN","ORDER_TOKEN");
+		String optimization=System.getGlobalVariableAsString("EXTIDS/OPTIMIZATION","OPTIMIZATION");
+		String allTripsAtPWM=System.getGlobalVariableAsString("EXTIDS/ALL_TRIPS_AT_PWM","ALL_TRIPS_AT_PWM");
+		String plantSummaryKey=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","PLANT_SUMMARY");
+		String timerType=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$schedulecheckevent/payload/xsd3:TimerEvent/xsd3:TimerType</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>schedulecheckevent</variable>\n    </variables>\n</xpath>");
+		String plantNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$schedulecheckevent/payload/xsd3:TimerEvent/xsd3:PlantNum</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>schedulecheckevent</variable>\n    </variables>\n</xpath>");
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$schedulecheckevent/payload/xsd3:TimerEvent/xsd3:ShipDate</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>schedulecheckevent</variable>\n    </variables>\n</xpath>");
+		
+		if(timerType==allTripsAtPWM)
+		{
+			timerType=plantSummaryKey;
+		}
+		
+		String entityExtId=timerType+plantNum+shipDate;
+		
+		Cluster.DataGrid.Lock(entityExtId,-1,false);
+		
+		if(timerType==allTripsAtPWM)
+		{
+			RuleFunctions.Inference.CommonRF.getConceptFromCache("PLANT_SUMMARY"/*conceptName String */,entityExtId/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		}
+		
+		System.debugOut("Acquired lock on "+entityExtId);
+	}
+}

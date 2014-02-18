@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="PlantTimezone">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="root" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Plant_Name" type="xs:string"/>
+	<xs:element name="Timezone" type="xs:string"/>
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Plant_Name"/>
+				<xs:element ref="Timezone"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

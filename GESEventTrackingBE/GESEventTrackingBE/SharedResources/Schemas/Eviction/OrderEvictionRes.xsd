@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd75"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd75"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="OrderEvictionRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Plant_Num" type="xs:string"/>
+				<xs:element name="Plant_Name" type="xs:string" minOccurs="0"/>
+				<xs:element name="Delivery_Date" type="xs:string"/>
+				<xs:element name="Ship_Date" type="xs:string"/>
+				<xs:element name="Lgcy_Ord_Num" type="xs:string" minOccurs="0"/>
+				<xs:element name="Sap_Ord_Num" type="xs:string" minOccurs="0"/>
+				<xs:element name="Route_Num" type="xs:string" minOccurs="0"/>
+				<xs:element name="Ord_Type" type="xs:string" minOccurs="0"/>
+				<xs:element name="Delayed_Order" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="CustNum" type="xs:string" minOccurs="0"/>
+				<xs:element name="Ord_CreationTime" type="xs:long" minOccurs="0"/>
+				<xs:element name="Cases" type="xs:integer" minOccurs="0"/>
+				<xs:element name="OrderStatus" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="E2E_SLA" type="xs:string" minOccurs="0"/>
+				<xs:element name="IsGESRoute" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="LastKnowSystem" type="xs:string" minOccurs="0"/>
+				<xs:element name="LastKnowTime" type="xs:string" minOccurs="0"/>
+				<xs:element name="TripId" type="xs:string" minOccurs="0"/>
+				<xs:element name="TripStatus" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="OrderSysState" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SysState_Key" type="xs:string"/>
+							<xs:element name="SAP_Ord_Num" type="xs:string"/>
+							<xs:element name="Sequence" type="xs:integer" minOccurs="0"/>
+							<xs:element name="System" type="xs:string"/>
+							<xs:element name="InDateTime" type="xs:string" minOccurs="0"/>
+							<xs:element name="OutDateTime" type="xs:string" minOccurs="0"/>
+							<xs:element name="SLA" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

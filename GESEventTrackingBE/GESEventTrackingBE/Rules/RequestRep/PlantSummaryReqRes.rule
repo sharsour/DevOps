@@ -1,0 +1,148 @@
+/**
+ * @description This rule sends the Response to the PlantSummary-Request sent by UI.
+ * @author HYDPCM228839D
+ */
+rule Rules.RequestRep.PlantSummaryReqRes {
+	attribute {
+		priority = 5;
+		forwardChain = true;
+	}
+	declare {
+		Events.RequestReply.PlantSummaryRequest plantSummaryRequestEvent;
+	}
+	when {
+		
+	}
+	then {
+		System.debugOut("In PlantSummaryRequest rule");
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantSummaryRequestEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/RequestReply\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/PLANT_SUMMARY\"/>\n                            </ns1:TransactionType>\n                            <xsl:if test=\"$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num\">\n                                <ns1:BusinessID>\n                                    <xsl:value-of select=\"$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num\"/>\n                                </ns1:BusinessID>\n                            </xsl:if>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started sending Plant Summary response for Time Zone&quot;,$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($plantSummaryRequestEvent/payload)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			String plantNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$plantSummaryRequestEvent/payload/xsd2:PlantSummaryRequest/xsd2:PlantSummarySearchRequest/xsd2:Plant_Num</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>plantSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+			String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$plantSummaryRequestEvent/payload/xsd2:PlantSummaryRequest/xsd2:PlantSummarySearchRequest/xsd2:Ship_Date</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>plantSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+			String standardDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>tib:format-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\", tib:create-dateTime(1970,1, 1,0, 0,0))</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables/>\n</xpath>");
+			
+			String plantSummaryExtId=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","PLANT_SUMMARY")+plantNum+shipDate;
+			Concepts.PLANT_SUMMARY plantSummary=Instance.getByExtIdByUri(plantSummaryExtId,"/Concepts/PLANT_SUMMARY");;
+			String ordLockExtId=System.getGlobalVariableAsString("EXTIDS/ORD_LOCK","ORD_LOCK")+plantNum+shipDate;
+			Concepts.SAP_ORDER_LOCK ordLock=Instance.getByExtIdByUri(ordLockExtId,"/Concepts/SAP_ORDER_LOCK");
+			String tokenExtId=System.getGlobalVariableAsString("EXTIDS/ORDER_TOKEN","ORDER_TOKEN")+plantNum+shipDate;
+			Concepts.TOKEN token=Instance.getByExtIdByUri(tokenExtId,"/Concepts/TOKEN");
+			String optimizationExtId=System.getGlobalVariableAsString("EXTIDS/OPTIMIZATION","OPTIMIZATION")+plantNum+shipDate;
+			Concepts.OPTIMIZATION optimization=Instance.getByExtIdByUri(optimizationExtId,"/Concepts/OPTIMIZATION");
+			Concepts.Temporary.PROGRAM_SUMMARY program_Summary=Instance.createInstance("xslt://{{/Concepts/Temporary/PROGRAM_SUMMARY}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:template match=\"/\">\n        <createObject>\n            <object>\n                <xsl:attribute name=\"extId\">\n                    <xsl:value-of select=\"concat($globalVariables/EXTIDS/PLANT_SUMMARY,$globalVariables/EXTIDS/ORD_LOCK,$globalVariables/EXTIDS/ORDER_TOKEN)\"/>\n                </xsl:attribute>\n            </object>\n        </createObject>\n    </xsl:template>\n</xsl:stylesheet>");
+			Concepts.PLANT_TIMEZONE pTZone=Instance.getByExtIdByUri(System.getGlobalVariableAsString("EXTIDS/PLANT_TZONE","PLANT_TZONE"),"/Concepts/PLANT_TIMEZONE");
+			String eval=System.getGlobalVariableAsString("SLA/STATUS/INITIAL","EVAL");
+			String pass=System.getGlobalVariableAsString("SLA/STATUS/SUCCESS","PASS");
+			String late=System.getGlobalVariableAsString("SLA/STATUS/FIRSTFAIL","LATE");
+			String fail=System.getGlobalVariableAsString("SLA/STATUS/SECONDFAIL","FAIL");
+			String empty="";
+		
+			System.debugOut("Accumulating the data of plantNum = "+plantNum);
+				
+				//Accumulate data from plantSummary concept
+				Instance.PropertyArray.appendString(program_Summary.PLANT_NUM,plantNum,System.currentTimeMillis());
+				
+				//Retrieve Plant Name by using Plant Number from Order Event.
+				String plantName=empty;
+				if(plantNum!=null)
+				{
+					plantName=RuleFunctions.Inference.CommonRF.getPlantName(plantNum/*plantNum String */,pTZone/*plantTZ Concepts.PLANT_TIMEZONE */);
+					Instance.PropertyArray.appendString(program_Summary.PLANT_NAME,plantName,System.currentTimeMillis());
+				}
+				if(plantSummary!=null)
+				{
+					Instance.PropertyArray.appendInt(program_Summary.ORD_CNT,plantSummary.SAP_OUT_ORD_CNT,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.ORD_TRIPPED_CNT,plantSummary.ORD_TRIPPED_CNT,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.ALL_TRIPS_CNT,plantSummary.ETM_TRIP_CNT,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.SITE_TRIP_CNT,plantSummary.PWM_TRIP_CNT,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.TOTAL_CASES,plantSummary.TOTAL_CASES_CNT,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.ALLTRIPSATPWM,plantSummary.ALL_TRIPS_AT_SITE_CHECK,System.currentTimeMillis());
+					if(plantSummary.ALL_TRIPS_AT_SITE_CHECK!=eval)
+					{
+						Instance.PropertyArray.appendString(program_Summary.ALLTRIPSATPWM_TIME,plantSummary.ALL_TRIPS_AT_SITE_TIME,System.currentTimeMillis());
+					}
+					else
+					{
+						Instance.PropertyArray.appendString(program_Summary.ALLTRIPSATPWM_TIME,standardDate,System.currentTimeMillis());
+					}
+				}
+				else
+				{
+					Instance.PropertyArray.appendInt(program_Summary.ORD_CNT,0,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.ORD_TRIPPED_CNT,0,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.ALL_TRIPS_CNT,0,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.SITE_TRIP_CNT,0,System.currentTimeMillis());
+					Instance.PropertyArray.appendInt(program_Summary.TOTAL_CASES,0,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.ALLTRIPSATPWM,eval,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.ALLTRIPSATPWM_TIME,standardDate,System.currentTimeMillis());
+				}
+			
+				//Accumulate data from ordLock concept
+				if(ordLock!=null)
+				{
+					Instance.PropertyArray.appendString(program_Summary.LOCK_STATUS,ordLock.STATUS,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.LOCK_TIME,ordLock.LOCKTIMESTAMP,System.currentTimeMillis());
+				}
+				else
+				{
+					Instance.PropertyArray.appendString(program_Summary.LOCK_STATUS,eval,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.LOCK_TIME,standardDate,System.currentTimeMillis());
+				}
+				
+				//Accumulate data from token concept
+				if(token!=null)
+				{
+					Instance.PropertyArray.appendString(program_Summary.TOKEN_STATUS,token.STATUS,System.currentTimeMillis());
+					String tokenTimeStamp=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>if( string-length($token/TOKEN_CREATIONTIME)!=0)\nthen $token/TOKEN_CREATIONTIME\nelse\n$token/TOKEN_GOA_RECIEVETIME</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables>\n        <variable>token</variable>\n        <variable>token</variable>\n        <variable>token</variable>\n    </variables>\n</xpath>");
+					Instance.PropertyArray.appendString(program_Summary.TOKEN_TIME,tokenTimeStamp,System.currentTimeMillis());
+				}
+				else
+				{
+					Instance.PropertyArray.appendString(program_Summary.TOKEN_STATUS,eval,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.TOKEN_TIME,standardDate,System.currentTimeMillis());
+				}
+				
+				//Accumulate data from optimization concept
+				if(optimization!=null)
+				{
+					Instance.PropertyArray.appendString(program_Summary.OPTIMIZE_STATUS,optimization.STATUS,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.OPTIMIZE_TIME,optimization.OPTIMIZATION_TIMESTAMP,System.currentTimeMillis());
+				}
+				else
+				{
+					Instance.PropertyArray.appendString(program_Summary.OPTIMIZE_STATUS,eval,System.currentTimeMillis());
+					Instance.PropertyArray.appendString(program_Summary.OPTIMIZE_TIME,standardDate,System.currentTimeMillis());
+				}
+	
+			
+			Events.RequestReply.PlantSummaryResponse plantSummaryReplyEvent=Event.createEvent("xslt://{{/Events/RequestReply/PlantSummaryResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"program_Summary\"/>\n    <xsl:param name=\"plantSummary\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:PlantSummaryResponse>\n                        <ns:PlantSummarySearchResponse>\n                            <ns:Plant_Num>\n                                <xsl:value-of select=\"$program_Summary/PLANT_NUM[1]\"/>\n                            </ns:Plant_Num>\n                            <xsl:if test=\"$program_Summary/PLANT_NAME[1]\">\n                                <ns:Plant_Name>\n                                    <xsl:value-of select=\"$program_Summary/PLANT_NAME[1]\"/>\n                                </ns:Plant_Name>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/ORD_CNT[1]\">\n                                <ns:Ord_Cnt>\n                                    <xsl:value-of select=\"$program_Summary/ORD_CNT[1]\"/>\n                                </ns:Ord_Cnt>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/LOCK_STATUS[1]\">\n                                <ns:Lock_Status>\n                                    <xsl:value-of select=\"$program_Summary/LOCK_STATUS[1]\"/>\n                                </ns:Lock_Status>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/LOCK_TIME[1]\">\n                                <ns:Lock_Time>\n                                    <xsl:value-of select=\"$program_Summary/LOCK_TIME[1]\"/>\n                                </ns:Lock_Time>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/TOKEN_STATUS[1]\">\n                                <ns:Token_Status>\n                                    <xsl:value-of select=\"$program_Summary/TOKEN_STATUS[1]\"/>\n                                </ns:Token_Status>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/TOKEN_TIME[1]\">\n                                <ns:Token_Time>\n                                    <xsl:value-of select=\"$program_Summary/TOKEN_TIME[1]\"/>\n                                </ns:Token_Time>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/OPTIMIZE_STATUS[1]\">\n                                <ns:Optimize_Status>\n                                    <xsl:value-of select=\"$program_Summary/OPTIMIZE_STATUS[1]\"/>\n                                </ns:Optimize_Status>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/OPTIMIZE_TIME[1]\">\n                                <ns:Optimize_Time>\n                                    <xsl:value-of select=\"$program_Summary/OPTIMIZE_TIME[1]\"/>\n                                </ns:Optimize_Time>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/ALLTRIPSATPWM[1]\">\n                                <ns:AllTripsAtSite>\n                                    <xsl:value-of select=\"$program_Summary/ALLTRIPSATPWM[1]\"/>\n                                </ns:AllTripsAtSite>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/ALLTRIPSATPWM_TIME[1]\">\n                                <ns:AllTripsAtSite_Time>\n                                    <xsl:value-of select=\"$program_Summary/ALLTRIPSATPWM_TIME[1]\"/>\n                                </ns:AllTripsAtSite_Time>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/ALL_TRIPS_CNT[1]\">\n                                <ns:All_Trip_Cnt>\n                                    <xsl:value-of select=\"$program_Summary/ALL_TRIPS_CNT[1]\"/>\n                                </ns:All_Trip_Cnt>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/SITE_TRIP_CNT[1]\">\n                                <ns:Site_Trip_Cnt>\n                                    <xsl:value-of select=\"$program_Summary/SITE_TRIP_CNT[1]\"/>\n                                </ns:Site_Trip_Cnt>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/ORD_TRIPPED_CNT[1]\">\n                                <ns:ReconciledOrders_Cnt>\n                                    <xsl:value-of select=\"$program_Summary/ORD_TRIPPED_CNT[1]\"/>\n                                </ns:ReconciledOrders_Cnt>\n                            </xsl:if>\n                            <xsl:if test=\"$program_Summary/TOTAL_CASES[1]\">\n                                <ns:TotalCases_Cnt>\n                                    <xsl:value-of select=\"$program_Summary/TOTAL_CASES[1]\"/>\n                                </ns:TotalCases_Cnt>\n                            </xsl:if>\n                            <ns:Ord_NotTripped_Cnt>\n                                <xsl:value-of select=\"$program_Summary/ORD_CNT[1] - $program_Summary/ORD_TRIPPED_CNT[1]\"/>\n                            </ns:Ord_NotTripped_Cnt>\n                            <xsl:if test=\"$plantSummary/GOA_ORD_CNT\">\n                                <ns:ETMGOAIN_Ord_Cnt>\n                                    <xsl:value-of select=\"$plantSummary/GOA_ORD_CNT\"/>\n                                </ns:ETMGOAIN_Ord_Cnt>\n                            </xsl:if>\n                            <xsl:if test=\"$plantSummary/E2ESLA_MISS_ORD_CNT\">\n                                <ns:E2EMissOrderSLACnt>\n                                    <xsl:value-of select=\"$plantSummary/E2ESLA_MISS_ORD_CNT\"/>\n                                </ns:E2EMissOrderSLACnt>\n                            </xsl:if>\n                            <xsl:if test=\"$plantSummary/E2ESLA_MISS_TRIP_CNT\">\n                                <ns:E2EMIssTripSLACnt>\n                                    <xsl:value-of select=\"$plantSummary/E2ESLA_MISS_TRIP_CNT\"/>\n                                </ns:E2EMIssTripSLACnt>\n                            </xsl:if>\n                        </ns:PlantSummarySearchResponse>\n                    </ns:PlantSummaryResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(plantSummaryRequestEvent,plantSummaryReplyEvent);
+			
+			Instance.deleteInstance(program_Summary);
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing PlantSummaryRequestReply rule = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns1=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" version=\"1.0\" exclude-result-prefixes=\"ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantSummaryRequestEvent\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/RequestReply\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/PLANT_SUMMARY\"/>\n                            </ns:TransactionType>\n                            <xsl:if test=\"$plantSummaryRequestEvent/payload/ns1:PlantSummaryRequest/ns1:PlantSummarySearchRequest/ns1:Plant_Num\">\n                                <ns:BusinessID>\n                                    <xsl:value-of select=\"$plantSummaryRequestEvent/payload/ns1:PlantSummaryRequest/ns1:PlantSummarySearchRequest/ns1:Plant_Num\"/>\n                                </ns:BusinessID>\n                            </xsl:if>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($plantSummaryRequestEvent)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			if(cleFlag)
+			{
+				Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantSummaryRequestEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/RequestReply\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/PLANT_SUMMARY\"/>\n                            </ns1:TransactionType>\n                            <xsl:if test=\"$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num\">\n                                <ns1:BusinessID>\n                                    <xsl:value-of select=\"$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num\"/>\n                                </ns1:BusinessID>\n                            </xsl:if>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started sending Plant Summary response for Time Zone&quot;,$plantSummaryRequestEvent/payload/ns4:PlantSummaryRequest/ns4:PlantSummarySearchRequest/ns4:Plant_Num)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($plantSummaryRequestEvent/payload)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			Event.consumeEvent(plantSummaryRequestEvent);
+		}
+		
+	}
+}

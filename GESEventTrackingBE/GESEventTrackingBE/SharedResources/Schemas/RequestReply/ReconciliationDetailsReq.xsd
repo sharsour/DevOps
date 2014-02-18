@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd81"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd81"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="ReconciliationDetailsRes.xsd"/>
+	<xs:element name="OrderReconciliationDetailsRequest" type="OrderReconciliationDetailsRequestType"/>
+	<xs:element name="OrderReconciliationDetailsResponse" type="OrderReconciliationDetailsResponseType"/>
+	<xs:complexType name="OrderReconciliationDetailsRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="OrderReconDetailsRequest" type="OrderReconDetailsRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrderReconDetailsRequestType">
+		<xs:sequence>
+			<xs:element name="PlantNum" type="xs:string"/>
+			<xs:element name="ShipDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrderReconciliationDetailsResponseType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="OrderReconDetailsResponse" type="OrderReconciliationDetails"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

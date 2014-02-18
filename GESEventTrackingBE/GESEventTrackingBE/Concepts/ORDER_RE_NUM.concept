@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/" folder="/Concepts/" name="ORDER_RE_NUM" description="This concept contains the list of Orders with Duplicate Legacy OrderIDs." GUID="AB20D968-CE67-4003-1D8A-94B37CCDBA3D" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="OLD_ORD_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/ORDER_RE_NUM"/>
+  <properties name="NEW_ORD_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/ORDER_RE_NUM"/>
+  <properties name="SAP_ORD_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/ORDER_RE_NUM"/>
+</element:Concept>

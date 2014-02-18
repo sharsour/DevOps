@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="SummaryEvictionRes" description="This event is used to send the Plant Summary data from BE Cache to persist it in the DB." GUID="1BB3CA7C-3D44-F071-1445-C2BCA17BDBBE" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:PlantSummaryEvictionRes&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/CacheEvictionJMSChannel" destinationName="SummaryEvictionResponseDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\PlantSummaryEvictionRes.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <expiryAction name="OrderEvictionRes_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderevictionres" type="/Events/Eviction/SummaryEvictionRes"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

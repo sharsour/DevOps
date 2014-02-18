@@ -1,0 +1,57 @@
+/**
+ * @description This rule function performs pre-processor activities for Trip Input Event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Trip.tripPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.TripEvent tripEvent;
+	}
+	body {
+		System.debugOut("In TripEvent PP");
+		String gesAgentId=Engine.engineName();
+		boolean isException=false;
+		
+		try{
+			String tripId=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$tripEvent/payload/xsd2:Trip/xsd2:TripID</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>tripEvent</variable>\n    </variables>\n</xpath>");
+			String etmOut=System.getGlobalVariableAsString("OrderSystems/InputSystems/ETMOUT","ETMOUT");
+			String inputSystem=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$tripEvent/payload/xsd2:Trip/xsd2:System</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>tripEvent</variable>\n    </variables>\n</xpath>");
+			
+			//Acquiring Lock on Trip and loading the same from the cache.
+			Cluster.DataGrid.Lock(tripId,-1,false);
+			Concepts.TRIP trip=RuleFunctions.Inference.CommonRF.getConceptFromCache("TRIP"/*conceptName String */,tripId/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+			System.debugOut("Acquired lock on TripID = "+tripId);
+			
+			Concepts.TRIP_SYSSTATE etm_SysState;
+			if(trip!=null)
+			{
+				String etm=System.getGlobalVariableAsString("OrderSystems/ActualSystems/ETM","ETM");
+				Concepts.TRIP_SYSSTATE [] trip_SysState=Instance.PropertyArray.toArrayContainedConcept(trip.SYSSTATE);
+				etm_SysState=RuleFunctions.Inference.TripFlow.getTripSysState(trip_SysState/*trip_SysState Concepts.TRIP_SYSSTATE[] */,etm/*system String */);
+			}
+					
+			//Check to perform reconciliation.(If Trip is sent by ETM and reconciliation is not already done)
+			if(inputSystem==etmOut && ((trip==null) || (trip!=null && etm_SysState==null)))
+			{
+				RuleFunctions.Inference.TripFlow.reconciliationTrigger(tripEvent/*tripEvent Events.Input.TripEvent */);
+			}
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing Trip Pre-processor rule function = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns1=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"tripEvent\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/TripFlow\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/TripFlow\"/>\n                            </ns:TransactionType>\n                            <xsl:if test=\"$tripEvent/payload/ns1:Trip/ns1:TripID\">\n                                <ns:TransactionID>\n                                    <xsl:value-of select=\"$tripEvent/payload/ns1:Trip/ns1:TripID\"/>\n                                </ns:TransactionID>\n                            </xsl:if>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($tripEvent)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			isException=true;
+		}
+		finally
+		{
+			if(isException)
+			{
+				Events.Replay.TripReplayEvent tripReplayEvent=Event.createEvent("xslt://{{/Events/Replay/TripReplayEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"tripEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <xsl:copy-of select=\"$tripEvent/payload/ns:Trip\"/>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+				Event.sendEvent(tripReplayEvent);
+				Event.consumeEvent(tripEvent);
+			}
+			
+		}
+	}
+}

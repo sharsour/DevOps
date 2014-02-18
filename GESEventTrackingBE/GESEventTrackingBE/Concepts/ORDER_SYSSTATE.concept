@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/" folder="/Concepts/" name="ORDER_SYSSTATE" description="This is a contained concept of ORDERS concept which contains the SLA status of Order in individual Systems." GUID="F8A279EE-7FF3-4DCD-2434-32701C6D7121" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="SEQUENCE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+  <properties name="SYSTEM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+  <properties name="IN_DATETIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+  <properties name="OUT_DATETIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+  <properties name="SLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+  <properties name="LGCY_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDER_SYSSTATE"/>
+</element:Concept>

@@ -1,0 +1,75 @@
+/**
+ * @description This rule updates the Summary Concept with the data from Summary Event. 
+ * @author HYDPCM228839D
+ */
+rule Rules.Summary.SummaryUpdationRule {
+	attribute {
+		priority = 1;
+		forwardChain = true;
+	}
+	declare {
+		Events.Internal.PlantSummaryEvent plantSummaryEvent;
+		Concepts.PLANT_SUMMARY plantSummaryConcept;
+	}
+	when {
+		//Checking the extID of plantSummary Concept
+		plantSummaryConcept@extId==System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","SUMMARY")+plantSummaryEvent.PLANT_NUM+plantSummaryEvent.SHIP_DATE
+		 && plantSummaryEvent.SHIP_DATE!=null;
+		
+	}
+	then {
+		String eval=System.getGlobalVariableAsString("SLA/STATUS/INITIAL","EVAL");
+		String pass=System.getGlobalVariableAsString("SLA/STATUS/SUCCESS","PASS");
+		String late=System.getGlobalVariableAsString("SLA/STATUS/FIRSTFAIL","LATE");
+		String fail=System.getGlobalVariableAsString("SLA/STATUS/SECONDFAIL","FAIL");
+		
+		
+		//Updating the PlantSummary Concept with the data from plantSummaryEvent.
+		plantSummaryConcept.ORD_CNT					=plantSummaryConcept.ORD_CNT+plantSummaryEvent.ORD_CNT;
+		plantSummaryConcept.ORD_TRIPPED_CNT			=plantSummaryConcept.ORD_TRIPPED_CNT+plantSummaryEvent.ORD_TRIPPED_CNT;
+		plantSummaryConcept.DELAYED_ORD_CNT			=plantSummaryConcept.DELAYED_ORD_CNT+plantSummaryEvent.DELAYED_ORD_CNT;
+		plantSummaryConcept.MANUAL_ORD_CNT			=plantSummaryConcept.MANUAL_ORD_CNT+plantSummaryEvent.MANUAL_ORD_CNT;
+		plantSummaryConcept.WATS_ORD_CNT			=plantSummaryConcept.WATS_ORD_CNT+plantSummaryEvent.WATS_ORD_CNT;
+		plantSummaryConcept.SAP_ORD_CNT				=plantSummaryConcept.SAP_ORD_CNT+plantSummaryEvent.SAP_ORD_CNT;
+		plantSummaryConcept.PWM_ORD_CNT				=plantSummaryConcept.PWM_ORD_CNT+plantSummaryEvent.PWM_ORD_CNT;
+		plantSummaryConcept.GOA_ORD_CNT				=plantSummaryConcept.GOA_ORD_CNT+plantSummaryEvent.GOA_ORD_CNT;
+		plantSummaryConcept.TOTAL_CASES_CNT			=plantSummaryConcept.TOTAL_CASES_CNT+plantSummaryEvent.TOTAL_CASES_CNT;
+		plantSummaryConcept.TM_TRIP_CNT				=plantSummaryConcept.TM_TRIP_CNT+plantSummaryEvent.TM_TRIP_CNT;
+		plantSummaryConcept.ETM_TRIP_CNT			=plantSummaryConcept.ETM_TRIP_CNT+plantSummaryEvent.ETM_TRIP_CNT;
+		plantSummaryConcept.SAP_TRIP_CNT			=plantSummaryConcept.SAP_TRIP_CNT+plantSummaryEvent.SAP_TRIP_CNT;
+		plantSummaryConcept.PWM_TRIP_CNT			=plantSummaryConcept.PWM_TRIP_CNT+plantSummaryEvent.PWM_TRIP_CNT;
+		plantSummaryConcept.E2ESLA_MISS_ORD_CNT		=plantSummaryConcept.E2ESLA_MISS_ORD_CNT+plantSummaryEvent.E2ESLA_MISS_ORD_CNT;
+		plantSummaryConcept.E2ESLA_MISS_TRIP_CNT	=plantSummaryConcept.E2ESLA_MISS_TRIP_CNT+plantSummaryEvent.E2ESLA_MISS_TRIP_CNT;
+		plantSummaryConcept.ORD_WATS_SLA_MISS_CNT	=plantSummaryConcept.ORD_WATS_SLA_MISS_CNT+plantSummaryEvent.ORD_WATS_SLA_MISS_CNT;
+		plantSummaryConcept.ORD_SAP_SLA_MISS_CNT	=plantSummaryConcept.ORD_SAP_SLA_MISS_CNT+plantSummaryEvent.ORD_SAP_SLA_MISS_CNT;
+		plantSummaryConcept.ORD_PWM_SLA_MISS_CNT	=plantSummaryConcept.ORD_PWM_SLA_MISS_CNT+plantSummaryEvent.ORD_PWM_SLA_MISS_CNT;
+		//New Counts.
+		plantSummaryConcept.WATS_IN_ORD_CNT					=plantSummaryConcept.WATS_IN_ORD_CNT+plantSummaryEvent.WATS_IN_ORD_CNT;
+		plantSummaryConcept.WATS_OUT_ORD_CNT				=plantSummaryConcept.WATS_OUT_ORD_CNT+plantSummaryEvent.WATS_OUT_ORD_CNT;
+		plantSummaryConcept.SAP_OUT_ORD_CNT					=plantSummaryConcept.SAP_OUT_ORD_CNT+plantSummaryEvent.SAP_OUT_ORD_CNT;
+		plantSummaryConcept.HH_SAP_OUT_ORD_CNT				=plantSummaryConcept.HH_SAP_OUT_ORD_CNT+plantSummaryEvent.HH_SAP_OUT_ORD_CNT;
+		plantSummaryConcept.CANCELLED_SAP_OUT_ORD_CNT		=plantSummaryConcept.CANCELLED_SAP_OUT_ORD_CNT+plantSummaryEvent.CANCELLED_SAP_OUT_ORD_CNT;
+		plantSummaryConcept.PWM_IN_ORD_CNT					=plantSummaryConcept.PWM_IN_ORD_CNT+plantSummaryEvent.PWM_IN_ORD_CNT;
+		
+		
+		/*//Checking ALL_TRIPS_AT_SITE 
+		if((plantSummaryConcept.PWM_TRIP_CNT - plantSummaryConcept.ETM_TRIP_CNT)==0 
+			&& plantSummaryConcept.ALL_TRIPS_AT_SITE_CHECK==fail 
+			&&	plantSummaryConcept.ETM_TRIP_CNT>0 )
+		{
+			plantSummaryConcept.ALL_TRIPS_AT_SITE=true;
+			plantSummaryConcept.ALL_TRIPS_AT_SITE_CHECK=late;
+			plantSummaryConcept.ALL_TRIPS_AT_SITE_TIME=plantSummaryEvent.TRIP_TIME;
+			
+			//Sending the alert to business user.
+			Events.Alert.Alert alert=Event.createEvent("xslt://{{/Events/Alert/Alert}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.tibco.com/schemas/GESEventsMonitoring_testing/SharedResources/SchemaDefinitions/Alerts/Schema.xsd\" xmlns:tib=\"http://www.tibco.com/bw/xslt/custom-functions\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd tib\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"plantSummaryConcept\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"pass\"/>\n    <xsl:param name=\"late\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:IndividualAlert>\n                        <xsl:if test=\"$plantSummaryConcept/PLANT_NUM\">\n                            <ns:Plant_Num>\n                                <xsl:value-of select=\"$plantSummaryConcept/PLANT_NUM\"/>\n                            </ns:Plant_Num>\n                        </xsl:if>\n                        <xsl:if test=\"$plantSummaryConcept/SHIP_DATE\">\n                            <ns:ShipDate>\n                                <xsl:value-of select=\"$plantSummaryConcept/SHIP_DATE\"/>\n                            </ns:ShipDate>\n                        </xsl:if>\n                        <ns:Entity_Type>\n                            <xsl:value-of select=\"$globalVariables/EXTIDS/ALL_TRIPS_AT_PWM\"/>\n                        </ns:Entity_Type>\n                        <xsl:if test=\"$plantSummaryConcept/ALL_TRIPS_AT_SITE_CHECK\">\n                            <ns:Status>\n                                <xsl:value-of select=\"$plantSummaryConcept/ALL_TRIPS_AT_SITE_CHECK\"/>\n                            </ns:Status>\n                        </xsl:if>\n                        <ns:Time>\n                            <xsl:value-of select=\"if($plantSummaryConcept/ALL_TRIPS_AT_SITE_CHECK=$pass or $plantSummaryConcept/ALL_TRIPS_AT_SITE_CHECK=$late)&#xA;then $plantSummaryConcept/ALL_TRIPS_AT_SITE_TIME&#xA;else tib:format-dateTime(&quot;MM-dd-yyyy HH:mm:ss.SSS&quot;,current-dateTime())\"/>\n                        </ns:Time>\n                    </ns:IndividualAlert>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.sendEvent(alert);
+			
+		}*/
+		
+		System.debugOut("PlantSummary concept updated");
+		
+		//Consuming/Deleting plantSummaryEvent.
+		Event.consumeEvent(plantSummaryEvent);
+	}
+}

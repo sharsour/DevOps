@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Internal/" folder="/Events/Internal/" name="PlantSummaryEvent" description="This Event updates the Summary of Orders &amp; Trips which are shipped from a given plant on a given date." GUID="0795FA74-8EFD-8B74-3695-D27DFB2AC984" ownerProjectName="GESEventTrackingBE" superEventPath="" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="PlantSummaryDest">
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ORD_TRIPPED_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="DELAYED_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="MANUAL_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="WATS_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="SAP_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="PWM_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="GOA_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="TOTAL_CASES_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="TM_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ETM_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="SAP_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="PWM_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="E2ESLA_MISS_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="E2ESLA_MISS_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ORD_WATS_SLA_MISS_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ORD_SAP_SLA_MISS_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="ORD_PWM_SLA_MISS_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="TRIP_TIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="WATS_IN_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="WATS_OUT_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="SAP_OUT_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="HH_SAP_OUT_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="CANCELLED_SAP_OUT_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <properties name="PWM_IN_ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Internal/PlantSummaryEvent"/>
+  <expiryAction folder="/Events/Internal/PlantSummaryEvent" name="PlantSummaryEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="plantsummaryevent" type="/Events/Internal/PlantSummaryEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

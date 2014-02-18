@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/" folder="/Concepts/" name="ORDERS" description="This concept holds the data of the incoming Orders, SLA of the Order in each System which processes the Order." GUID="9E0570BE-92CC-9A6C-0606-EC672CF96B46" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="DELIVERY_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="LGCY_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="SAP_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="OLD_LGCY_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="ROUTE_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="ORD_TYPE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="CUST_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="ORD_CREATIONTIME" ownerProjectName="GESEventTrackingBE" type="long" ownerPath="/Concepts/ORDERS"/>
+  <properties name="DELAYED_ORD" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/ORDERS"/>
+  <properties name="CASES" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Concepts/ORDERS"/>
+  <properties name="ORD_STATUS" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/ORDERS"/>
+  <properties name="WATSSAPSLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="SAPETMSLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="SAP_RECEIVED" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/ORDERS"/>
+  <properties name="LAST_KNOWN_SYS" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="LAST_KNOWN_TIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="TRIPID" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="TRIP_STATUS" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/ORDERS"/>
+  <properties name="SYSSTATE" ownerProjectName="GESEventTrackingBE" type="ContainedConcept" conceptTypePath="/Concepts/ORDER_SYSSTATE" array="true" ownerPath="/Concepts/ORDERS"/>
+  <properties name="E2ESLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/ORDERS"/>
+  <properties name="CANCELLED_ORDER" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/ORDERS"/>
+</element:Concept>

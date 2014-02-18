@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:complexType name="ProgramSummary">
+		<xs:sequence>
+			<xs:element name="Plant_Num" type="xs:string"/>
+			<xs:element name="Plant_Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="Ord_Cnt" type="xs:integer" minOccurs="0"/>
+			<xs:element name="Lock_Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="Lock_Time" type="xs:string" minOccurs="0"/>
+			<xs:element name="Token_Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="Token_Time" type="xs:string" minOccurs="0"/>
+			<xs:element name="Optimize_Status" type="xs:string" minOccurs="0"/>
+			<xs:element name="Optimize_Time" type="xs:string" minOccurs="0"/>
+			<xs:element name="AllTripsAtSite" type="xs:string" minOccurs="0"/>
+			<xs:element name="AllTripsAtSite_Time" type="xs:string" minOccurs="0"/>
+			<xs:element name="All_Trip_Cnt" type="xs:integer" minOccurs="0"/>
+			<xs:element name="Site_Trip_Cnt" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ReconciledOrders_Cnt" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TotalCases_Cnt" type="xs:integer" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlantSummary">
+		<xs:complexContent>
+			<xs:extension base="ProgramSummary">
+				<xs:sequence>
+					<xs:element name="Ord_NotTripped_Cnt" type="xs:integer" minOccurs="0"/>
+					<xs:element name="ETMGOAIN_Ord_Cnt" type="xs:integer" minOccurs="0"/>
+					<xs:element name="ETMGOAOUT_Ord_Cnt" type="xs:integer" minOccurs="0"/>
+					<xs:element name="E2EMissOrderSLACnt" type="xs:integer" minOccurs="0"/>
+					<xs:element name="E2EMIssTripSLACnt" type="xs:integer" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SystemOrdSLA">
+		<xs:sequence>
+			<xs:element name="WATSSLAMissCount" type="xs:integer" minOccurs="0"/>
+			<xs:element name="SAPSLAMissCount" type="xs:integer" minOccurs="0"/>
+			<xs:element name="OGDSLAMissCount" type="xs:integer" minOccurs="0"/>
+			<xs:element name="PWMSLAMissCount" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ETMSLAMissCount" type="xs:integer" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SystemTripSLA">
+		<xs:sequence>
+			<xs:element name="SAPSLAMissCount" type="xs:integer" minOccurs="0"/>
+			<xs:element name="OGDSLAMissCount" type="xs:integer" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

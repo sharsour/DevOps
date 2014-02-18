@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Query/" folder="/Events/Query/" name="OptimizationRequest" description="Optimized Trip details sent by TM is received in the form of this event." GUID="6FDC319E-C225-190E-D410-095E7E2B491B" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:OptimizationRequest&quot;/>" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="OptimizationInputDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"/>
+  <registryImportEntries location="SharedResources\Schemas\Input\OptimizationRequest.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"/>
+  <expiryAction folder="/Events/Query/OptimizationRequest" name="OptimizationRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="optimizationrequest" type="/Events/Query/OptimizationRequest"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

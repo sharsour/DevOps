@@ -1,0 +1,24 @@
+/**
+ * @description Pre-processor for Summary Event triggered within BE to update the summary concept.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Summary.PlantSummaryPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Internal.PlantSummaryEvent plantSummaryEvent;
+	}
+	body {
+		
+		// Acquire a lock on Plant+ShipDate to create/update the PlantSummary Concept.
+		String subKey=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","SUMMARY");
+		String summaryKey=subKey+plantSummaryEvent.PLANT_NUM+plantSummaryEvent.SHIP_DATE;
+		
+		Cluster.DataGrid.Lock(summaryKey,-1,false);
+		
+		RuleFunctions.Inference.CommonRF.getConceptFromCache("PLANT_SUMMARY"/*conceptName String */,summaryKey/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		
+		System.debugOut("Acquired lock on SummaryKey = "+summaryKey);
+		
+	}
+}

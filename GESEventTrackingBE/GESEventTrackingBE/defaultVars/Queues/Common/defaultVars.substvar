@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>LogQueue</name>
+            <value>PEP.US.COMMON.LE.LOG.Text.1.Create</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369735051501</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>ExceptionQueue</name>
+            <value>PEP.US.COMMON.LE.EXCEPTION.Text.1.Create</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369735039364</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

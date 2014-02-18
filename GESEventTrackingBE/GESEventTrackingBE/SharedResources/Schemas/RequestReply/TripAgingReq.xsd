@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="TripAgingRes.xsd"/>
+	<xs:element name="TripMissedSLARequest" type="TripAgingRequestType"/>
+	<xs:element name="TripMissedSLAResponse" type="TripAgingResponseType"/>
+	<xs:complexType name="TripAgingRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="TripAgingRequest" type="TripAgeRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TripAgeRequestType">
+		<xs:sequence>
+			<xs:element name="PlantNum" type="xs:string"/>
+			<xs:element name="ShipDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TripAgingResponseType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="TripAgingResponse" type="TripMissedSLA"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/" folder="/Concepts/" name="TRIP_SYSSTATE" description="This is a contained concept of TRIP concept which contains the SLA status of Trip in individual Systems." GUID="CAC72B5B-62AE-AAE3-CC84-C7424F8C2BDB" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="SEQUENCE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+  <properties name="SYSTEM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+  <properties name="IN_DATETIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+  <properties name="OUT_DATETIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+  <properties name="SLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+  <properties name="TRIP_ID" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP_SYSSTATE"/>
+</element:Concept>

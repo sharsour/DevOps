@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel:Channel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:channel="http:///com/tibco/cep/designtime/core/model/service/channel" xmlns:designtime="http:///com/tibco/cep/designtime/core/model/designtime_ontology.ecore" namespace="/Channels/" folder="/Channels/" name="CLEJMSChannel" description="This Channel is used to send Logs and Exceptions to CLE." GUID="27A5658C-2A4D-870C-DF2A-7561595CAAAD" ownerProjectName="GESEventTrackingBE">
+  <driver configMethod="REFERENCE" reference="/SharedResources/JMS/CLEJMSSharedCon.sharedjmscon" label="JMS" channel="/">
+    <destinations name="LogDest" description="" GUID="6B5B35DF-0DE4-0448-E868-1835D127D596" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Common/LogEvent" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Common/LogQueue%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <destinations name="ExceptionDest" description="" GUID="2B4D7A4E-78C1-D6B6-619E-B1E4C8E49772" ownerProjectName="GESEventTrackingBE" eventURI="/Events/Common/ExceptionEvent" serializerDeserializerClass="com.tibco.cep.driver.jms.serializer.TextMessageSerializer" driverConfig="//@driver">
+      <properties>
+        <properties xsi:type="designtime:SimpleProperty" name="Queue" value="true"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Name" value="%%Queues/Common/ExceptionQueue%%"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Selector" value=""/>
+        <properties xsi:type="designtime:SimpleProperty" name="DeliveryMode" value="2"/>
+        <properties xsi:type="designtime:SimpleProperty" name="AckMode" value="23"/>
+        <properties xsi:type="designtime:SimpleProperty" name="Priority" value="4"/>
+        <properties xsi:type="designtime:SimpleProperty" name="TTL" value="0"/>
+        <properties xsi:type="designtime:SimpleProperty" name="DurableSuscriberName" value="%%Deployment%%:%%EngineName%%:%%SessionName%%:%%ChannelURI%%:%%DestinationName%%"/>
+      </properties>
+    </destinations>
+    <driverType xsi:type="channel:DriverTypeInfo" driverTypeName="JMS"/>
+  </driver>
+</channel:Channel>

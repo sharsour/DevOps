@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="TripEvictionResQ2I" description="This event is used to send the list of TripIDs from Query Agent to Inference Agent." GUID="F82E5841-DA1E-680C-3D24-D23212BD7ECA" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:TripEvictionQueryRes&quot;/>" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="TripEvictionQuery2InfDest">
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Eviction/TripEvictionResQ2I"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Eviction/TripEvictionResQ2I"/>
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\TripEvictionQueryRes.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <expiryAction name="TripEvictionResQ2I_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="tripevictionresq2i" type="/Events/Eviction/TripEvictionResQ2I"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

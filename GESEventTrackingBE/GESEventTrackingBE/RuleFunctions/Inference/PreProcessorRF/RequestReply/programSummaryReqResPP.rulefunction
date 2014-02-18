@@ -1,0 +1,38 @@
+/**
+ * @description This rule function performs pre-processor activities for programSummary Request Event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.RequestReply.programSummaryReqResPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.RequestReply.ProgramSummaryRequest programSummaryRequestEvent;
+	}
+	body {
+		System.debugOut("In ProgramSummaryRequest Pre-processor");
+		
+		String tZone=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$programSummaryRequestEvent/payload/xsd2:ProgramSummaryRequest/xsd2:ProgramSummarySearchRequest/xsd2:TimeZone</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>programSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$programSummaryRequestEvent/payload/xsd2:ProgramSummaryRequest/xsd2:ProgramSummarySearchRequest/xsd2:Ship_Date</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>programSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+		
+		if(tZone!=null && shipDate!=null)
+		{
+			Concepts.PLANT_TIMEZONE pTZone=Instance.getByExtIdByUri(System.getGlobalVariableAsString("EXTIDS/PLANT_TZONE","PLANT_TZONE"),"/Concepts/PLANT_TIMEZONE");
+			String [] plant_Nums=RuleFunctions.Inference.CommonRF.getPlantNumsOfTZone(tZone/*tZone String */);
+			
+			for(int index=0;index<plant_Nums@length;index++)
+			{
+				System.debugOut("Plant_Num = "+plant_Nums[index]);
+				String plantSummaryExtId=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","PLANT_SUMMARY")+plant_Nums[index]+shipDate;
+				RuleFunctions.Inference.CommonRF.getConceptFromCache("PLANT_SUMMARY"/*conceptName String */,plantSummaryExtId/*conceptExtID String */,false/*getSysStateContainedConcept boolean */);
+			}
+		}
+		else
+		{
+			Events.RequestReply.ProgramSummaryResponse programSummaryReplyEvent=Event.createEvent("xslt://{{/Events/RequestReply/ProgramSummaryResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:tib=\"http://www.tibco.com/bw/xslt/custom-functions\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd tib\">\n    <xsl:output method=\"xml\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ProgramSummaryResponse>\n                        <ns:ProgramSummarySearchResponse>\n                            <ns:Plant_Num>\n                                <xsl:value-of select=\"&quot;&quot;\"/>\n                            </ns:Plant_Num>\n                            <ns:Lock_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Lock_Time>\n                            <ns:Token_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Token_Time>\n                            <ns:Optimize_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Optimize_Time>\n                        </ns:ProgramSummarySearchResponse>\n                    </ns:ProgramSummaryResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(programSummaryRequestEvent,programSummaryReplyEvent);
+			Event.consumeEvent(programSummaryRequestEvent);
+			System.debugOut("ProgramSummary Not Found");	
+		}
+		
+	}
+}

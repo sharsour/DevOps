@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Query/" folder="/Events/Query/" name="SystemPerfResponse" description="This event is used to send the Performance of various Systems to BW." GUID="9A733D7C-759C-CA3F-77A3-154608435578" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:SystemPerformanceResponse&quot;/>" ttlUnits="Seconds">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\SystemPerformanceReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"/>
+  <expiryAction name="SystemPerfRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="systemperfrequest" type="/Events/Query/SystemPerfResponse"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

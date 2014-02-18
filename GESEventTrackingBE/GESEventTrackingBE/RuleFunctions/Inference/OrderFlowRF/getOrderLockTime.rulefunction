@@ -1,0 +1,37 @@
+/**
+ * @description Returns the orderlock time for a given Plant on a given ShipDate.
+ */
+long rulefunction RuleFunctions.Inference.OrderFlowRF.getOrderLockTime {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		String 		plantNum;
+		String		ShipDate;
+	}
+	body {
+		String ordLockKey=System.getGlobalVariableAsString("EXTIDS/ORD_LOCK","ORD_LOCK")+plantNum+ShipDate;
+		long ordLockTime=0;
+		try
+		{
+			Concepts.SAP_ORDER_LOCK ordLock=Instance.getByExtId(ordLockKey);
+			System.debugOut("Order lock retrieved");
+			if(ordLock!=null && ordLock.LOCKTIMESTAMP!=null)
+			{
+				ordLockTime=DateTime.getTimeInMillis(XPath.evalAsDateTime("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>tib:parse-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\", $ordLock/LOCKTIMESTAMP)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables>\n        <variable>ordLock</variable>\n    </variables>\n</xpath>"));
+			}
+			else
+			{
+				System.debugOut("Order Lock is not yet received from SAP");
+			}
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Order lock not available");
+		}
+		finally
+		{
+			return ordLockTime;
+		}
+	}
+}

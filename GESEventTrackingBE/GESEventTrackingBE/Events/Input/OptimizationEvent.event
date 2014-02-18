@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Input/" folder="/Events/Input/" name="OptimizationEvent" description="Optimized Trip details sent by TM is received in the form of this event from Query Agent with Lgcy_Ord_Num." GUID="68FB4DAE-B0AC-7527-F6FF-53318896FA06" ownerProjectName="GESEventTrackingBE" superEventPath="" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="OptimizationQuery2InferDest">
+  <properties name="LGCY_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Input/OptimizationEvent"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Input/OptimizationEvent"/>
+  <properties name="TRIP_ID" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Input/OptimizationEvent"/>
+  <properties name="JMS_TIMESTAMP" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Input/OptimizationEvent"/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Input/OptimizationEvent"/>
+  <expiryAction name="OptimizationEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="optimizationevent" type="/Events/Input/OptimizationEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

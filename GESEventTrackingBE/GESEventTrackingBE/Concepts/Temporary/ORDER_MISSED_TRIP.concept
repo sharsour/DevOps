@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/Temporary/" folder="/Concepts/Temporary/" name="ORDER_MISSED_TRIP" description="This is a temporary concept used to store the order data when Reconciliation query is triggered." GUID="CE18B1B2-BC4D-BFE1-F505-2B809D3ABAF3" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="LGCY_ORD_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/ORDER_MISSED_TRIP"/>
+  <properties name="LAST_KNOWN_SYSTEM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/ORDER_MISSED_TRIP"/>
+  <properties name="CUST_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/ORDER_MISSED_TRIP"/>
+  <properties name="CANCELLED_ORDER" ownerProjectName="GESEventTrackingBE" type="boolean" array="true" ownerPath="/Concepts/Temporary/ORDER_MISSED_TRIP"/>
+  <properties name="DELAYED_ORDER" ownerProjectName="GESEventTrackingBE" type="boolean" array="true" ownerPath="/Concepts/Temporary/ORDER_MISSED_TRIP"/>
+</element:Concept>

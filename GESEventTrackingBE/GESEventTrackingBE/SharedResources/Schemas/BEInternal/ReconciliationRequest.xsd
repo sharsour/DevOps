@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="ReconciliationRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="TripID"/>
+				<xs:element ref="Delivery_Date" minOccurs="0"/>
+				<xs:element ref="Ship_Date" minOccurs="0"/>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="TripStatus" minOccurs="0"/>
+				<xs:element ref="JMSDateTime"/>
+				<xs:element ref="System" minOccurs="0"/>
+				<xs:element ref="SAPOrder" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TripID" type="xs:string"/>
+	<xs:element name="Delivery_Date" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="TripStatus" type="xs:string"/>
+	<xs:element name="JMSDateTime" type="xs:string"/>
+	<xs:element name="System" type="xs:string"/>
+	<xs:element name="SAPOrder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SAPOrderNumber" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

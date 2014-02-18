@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:complexType name="OptResType">
+		<xs:sequence>
+			<xs:element name="Plant_Num" type="xs:string"/>
+			<xs:element name="Ship_Date" type="xs:string"/>
+			<xs:element name="OrderFound" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

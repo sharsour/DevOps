@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/RequestReply/" folder="/Events/RequestReply/" name="TripRequest" description="This event is triggered when UI requests for an Trip data." GUID="4AC4CD90-6BD5-AE67-4B5A-5C4585BC8F96" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:TripRequest&quot;/>" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="TripRequestDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd80"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\TripRequest.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd80"/>
+  <expiryAction folder="/Events/RequestReply/LgcyOrderRequest" name="OrderRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderrequest" type="/Events/RequestReply/TripRequest"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

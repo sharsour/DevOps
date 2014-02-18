@@ -1,0 +1,30 @@
+/**
+ * @description This rule function performs pre-processor activities for plantSummary Request Event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.RequestReply.plantSummaryRequestPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.RequestReply.PlantSummaryRequest plantSummaryRequestEvent;
+	}
+	body {
+		System.debugOut("In PlantSummaryRequest Pre-processor");
+		
+		String plantNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$plantSummaryRequestEvent/payload/xsd2:PlantSummaryRequest/xsd2:PlantSummarySearchRequest/xsd2:Plant_Num</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>plantSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$plantSummaryRequestEvent/payload/xsd2:PlantSummaryRequest/xsd2:PlantSummarySearchRequest/xsd2:Ship_Date</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>plantSummaryRequestEvent</variable>\n    </variables>\n</xpath>");
+		
+		String plantSummaryExtId=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","PLANT_SUMMARY")+plantNum+shipDate;
+		Concepts.PLANT_SUMMARY plantSummary=RuleFunctions.Inference.CommonRF.getConceptFromCache("PLANT_SUMMARY"/*conceptName String */,plantSummaryExtId/*conceptExtID String */,false/*getSysStateContainedConcept boolean */);
+		
+		/*if(plantSummary==null)
+		{
+			Events.RequestReply.PlantSummaryReply plantSummaryReplyEvent=Event.createEvent("xslt://{{/Events/RequestReply/PlantSummaryReply}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema\" xmlns:tib=\"http://www.tibco.com/bw/xslt/custom-functions\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd tib\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"plantSummaryRequestEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:PlantSummaryResponse>\n                        <ns:PlantSummarySearchResponse>\n                            <ns:Plant_Num>\n                                <xsl:value-of select=\"$plantSummaryRequestEvent/payload/ns:PlantSummaryRequest/ns:PlantSummarySearchRequest/ns:Plant_Num\"/>\n                            </ns:Plant_Num>\n                            <ns:Lock_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Lock_Time>\n                            <ns:Token_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Token_Time>\n                            <ns:Optimize_Time>\n                                <xsl:value-of select=\"tib:create-dateTime(1970,1, 1,0, 0,0)\"/>\n                            </ns:Optimize_Time>\n                        </ns:PlantSummarySearchResponse>\n                    </ns:PlantSummaryResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(plantSummaryRequestEvent,plantSummaryReplyEvent);
+			Event.consumeEvent(plantSummaryRequestEvent);
+			System.debugOut("PlantSummary Not Found");	
+		}*/
+		
+		
+	}
+}

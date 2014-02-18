@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Timer/" folder="/Events/Timer/" name="SLATimerEvent" description="This Timer Event is used to check the SLA of Order/Trip of the System which triggered the event." GUID="F1DB1041-32BD-F1C7-BAED-7F310EBE8636" ownerProjectName="GESEventTrackingBE" superEventPath="" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="OrderSLATimerDest">
+  <properties name="Ord_Num" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Timer/OrderSLATimerEvent"/>
+  <properties name="System" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Timer/OrderSLATimerEvent"/>
+  <properties name="Plant_Num" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Timer/OrderSLATimerEvent"/>
+  <properties name="Interval" ownerProjectName="GESEventTrackingBE" type="long" ownerPath="/Events/Timer/OrderSLATimerEvent"/>
+  <properties name="TripID" ownerProjectName="GESEventTrackingBE" ownerPath="/Events/Timer/OrderSLATimerEvent"/>
+  <properties name="TriggerCount" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Events/Timer/SLATimerEvent"/>
+  <expiryAction folder="/Events/Timer/SLATimerEvent" name="SLATimerEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="slatimerevent" type="/Events/Timer/SLATimerEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

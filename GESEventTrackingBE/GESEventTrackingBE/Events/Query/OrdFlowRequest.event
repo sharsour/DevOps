@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Query/" folder="/Events/Query/" name="OrdFlowRequest" description="This event is triggered to request for the different Order &amp; Trip counts at different Systems." GUID="C3ABF108-0D2F-4E7A-8579-0CA061303C91" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx2:OrderFlowRequest&quot;/>" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="OrderFlowRequest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\OrderFlowReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"/>
+  <expiryAction name="OrderCountRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="ordercountrequest" type="/Events/Query/OrdFlowRequest"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

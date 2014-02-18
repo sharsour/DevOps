@@ -1,0 +1,29 @@
+/**
+ * @description This rule function performs required activities and triggers the Reconciliation Event.
+ */
+void rulefunction RuleFunctions.Inference.TripFlow.reconciliationTrigger {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.TripEvent tripEvent;
+	}
+	body {
+		System.debugOut("In reconciliationTrigger rule function");
+		int noOfOrders=XPath.evalAsInt("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>count($tripEvent/payload/xsd2:Trip/xsd2:SAPOrder/xsd2:SAPOrderNumber)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>tripEvent</variable>\n    </variables>\n</xpath>");
+		//int index;
+		
+		//for(index=1;index<=noOfOrders;index++)
+		//{//Instances of SHIPID_TEMP concept are created.
+			//Concepts.Temporary.SHIPID_TEMP shipIdTemp=Instance.createInstance("xslt://{{/Concepts/Temporary/SHIPID_TEMP}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"tripEvent\"/>\n    <xsl:param name=\"index\"/>\n    <xsl:template match=\"/\">\n        <createObject>\n            <object>\n                <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:SAPOrder/ns:SAPOrderNumber[number($index)]\">\n                    <xsl:attribute name=\"extId\">\n                        <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:SAPOrder/ns:SAPOrderNumber[number($index)]\"/>\n                    </xsl:attribute>\n                </xsl:if>\n                <SAP_ORD_NUM>\n                    <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:SAPOrder/ns:SAPOrderNumber[number($index)]\"/>\n                </SAP_ORD_NUM>\n                <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:TripID\">\n                    <TRIP_ID>\n                        <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:TripID\"/>\n                    </TRIP_ID>\n                </xsl:if>\n            </object>\n        </createObject>\n    </xsl:template>\n</xsl:stylesheet>");
+			//System.debugOut("Temporary ShipID concept is created for SAP_ORD_NUM = "+shipIdTemp.SAP_ORD_NUM+" & TripID = "+shipIdTemp.TRIP_ID);
+		//}
+		//System.debugOut("Number of temporary ShipIds created = "+(index-1));
+		
+		
+		//ReconcileRequest Event is sent to Query Agent.
+		Events.Query.ReconcileRequest recoRequest=Event.createEvent("xslt://{{/Events/Query/ReconcileRequest}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"tripEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ReconciliationRequest>\n                        <ns:TripID>\n                            <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:TripID\"/>\n                        </ns:TripID>\n                        <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:Delivery_Date\">\n                            <ns:Delivery_Date>\n                                <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:Delivery_Date\"/>\n                            </ns:Delivery_Date>\n                        </xsl:if>\n                        <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:Ship_Date\">\n                            <ns:Ship_Date>\n                                <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:Ship_Date\"/>\n                            </ns:Ship_Date>\n                        </xsl:if>\n                        <ns:Plant_Num>\n                            <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:Plant_Num\"/>\n                        </ns:Plant_Num>\n                        <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:TripStatus\">\n                            <ns:TripStatus>\n                                <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:TripStatus\"/>\n                            </ns:TripStatus>\n                        </xsl:if>\n                        <ns:JMSDateTime>\n                            <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:JMSDateTime\"/>\n                        </ns:JMSDateTime>\n                        <xsl:if test=\"$tripEvent/payload/ns:Trip/ns:System\">\n                            <ns:System>\n                                <xsl:value-of select=\"$tripEvent/payload/ns:Trip/ns:System\"/>\n                            </ns:System>\n                        </xsl:if>\n                        <ns:SAPOrder>\n                            <xsl:for-each select=\"$tripEvent/payload/ns:Trip/ns:SAPOrder/ns:SAPOrderNumber\">\n                                <ns:SAPOrderNumber>\n                                    <xsl:value-of select=\".\"/>\n                                </ns:SAPOrderNumber>\n                            </xsl:for-each>\n                        </ns:SAPOrder>\n                    </ns:ReconciliationRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+		Event.sendEvent(recoRequest);
+			 
+	}
+}

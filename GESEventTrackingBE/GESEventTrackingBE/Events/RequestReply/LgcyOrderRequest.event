@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/RequestReply/" folder="/Events/RequestReply/" name="LgcyOrderRequest" description="This event is triggered when UI requests for an Order data." GUID="A8B46227-CA30-CD81-023B-C49FC8AFCCF2" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:OrderRequest&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="LgcyOrderRequestDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\OrderReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"/>
+  <expiryAction folder="/Events/RequestReply/LgcyOrderRequest" name="OrderRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderrequest" type="/Events/RequestReply/LgcyOrderRequest"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

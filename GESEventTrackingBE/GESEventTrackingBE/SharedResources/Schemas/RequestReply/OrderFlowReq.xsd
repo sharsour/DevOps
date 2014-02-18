@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="OrderFlowRes.xsd"/>
+	<xs:element name="OrderFlowRequest" type="OrderFlowRequestType"/>
+	<xs:element name="OrderFlowResponse" type="OrderFlowResponseType"/>
+	<xs:complexType name="OrderFlowRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="OrdRequest" type="OrdRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrdRequestType">
+		<xs:sequence>
+			<xs:element name="PlantNum" type="xs:string"/>
+			<xs:element name="ShipDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrderFlowResponseType">
+		<xs:sequence  minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="OrdResponse" type="OrderFlow"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

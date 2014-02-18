@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd80"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd80"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="TripRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="TripID"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TripID" type="xs:string"/>
+</xs:schema>

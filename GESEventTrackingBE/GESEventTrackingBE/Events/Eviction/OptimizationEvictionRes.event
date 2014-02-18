@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="OptimizationEvictionRes" description="This event is used to send the Optimization(TM OUT) data from BE Cache to persist it in the DB." GUID="6A5608D9-0D84-5D0B-6E26-1F89D4DE8591" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:OptimizationEvictionRes&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/CacheEvictionJMSChannel" destinationName="OptimizeEvictionResponseDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\OptimizationEvictionRes.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"/>
+  <expiryAction name="OrderEvictionRes_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderevictionres" type="/Events/Eviction/OptimizationEvictionRes"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

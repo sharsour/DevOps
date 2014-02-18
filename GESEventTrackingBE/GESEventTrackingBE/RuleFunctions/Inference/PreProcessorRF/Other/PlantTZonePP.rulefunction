@@ -1,0 +1,19 @@
+/**
+ * @description This rule function performs the pre-processor activities for PlantTimezoneEvent event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Other.PlantTZonePP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.PlantTimezoneEvent plantTZoneevent;
+	}
+	body {
+		System.debugOut("In PlantTZone PreProcessorRF");
+		
+		String plantTZoneKey=System.getGlobalVariableAsString("EXTIDS/PLANT_TZONE","PLANT_TZONE");
+		Cluster.DataGrid.Lock(plantTZoneKey,-1,false);
+		
+		System.debugOut("Acquired lock on "+plantTZoneKey);
+	}
+}

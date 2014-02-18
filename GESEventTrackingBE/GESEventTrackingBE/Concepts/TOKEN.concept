@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmlns:element="http:///com/tibco/cep/designtime/core/model/element" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Concepts/" folder="/Concepts/" name="TOKEN" description="This concept contains the Order Token data sent by SAP and recieved at ETM-GOA." GUID="0C4D54FD-8A42-F83B-CE20-E008134CDA43" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+  <properties name="SHIPDATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+  <properties name="TOKEN_CREATIONTIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+  <properties name="TOKEN_GOA_RECIEVETIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+  <properties name="STATUS" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TOKEN"/>
+</element:Concept>

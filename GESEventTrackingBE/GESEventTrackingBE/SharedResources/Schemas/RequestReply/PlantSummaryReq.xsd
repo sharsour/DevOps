@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="PlantSummary.xsd"/>
+	<xs:element name="PlantSummaryRequest" type="PlantSummaryRequestType"/>
+	<xs:element name="PlantSummaryResponse" type="PlantSummaryResponseType"/>
+	<xs:complexType name="PlantSummaryRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="PlantSummarySearchRequest" type="PlantSummarySearchRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlantSummarySearchRequestType">
+		<xs:sequence>
+			<xs:element name="Plant_Num" type="xs:string" minOccurs="0"/>
+			<xs:element name="Delivery_Date" type="xs:string" minOccurs="0"/>
+			<xs:element name="Ship_Date" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlantSummaryResponseType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="PlantSummarySearchResponse" type="PlantSummary"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

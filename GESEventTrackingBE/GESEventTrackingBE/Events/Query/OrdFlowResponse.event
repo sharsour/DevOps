@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Query/" folder="/Events/Query/" name="OrdFlowResponse" description="This event is used to send the response with the different Order &amp; Trip counts at different Systems." GUID="39416250-E189-1AB5-0404-686E196CDCB5" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx2:OrderFlowResponse&quot;/>" ttlUnits="Seconds">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\OrderFlowReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd105"/>
+  <expiryAction name="OrderCountRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="ordercountrequest" type="/Events/Query/OrdFlowResponse"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

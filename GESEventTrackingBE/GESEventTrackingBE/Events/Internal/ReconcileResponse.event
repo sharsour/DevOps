@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Internal/" folder="/Events/Internal/" name="ReconcileResponse" description="This event is used to get the list of LGCY_ORD_NUM at the Inference Agent for the corresponding SAP_ORD_NUM sent to Query Agent." GUID="15164A1C-4146-3218-7E3B-C722404A4912" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:ReconciliationResponse&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="ReconciliationResponseDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"/>
+  <registryImportEntries location="SharedResources\Schemas\BEInternal\ReconciliationResponse.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"/>
+  <expiryAction name="ReconcileResponse_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="reconcileresponse" type="/Events/Internal/ReconcileResponse"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

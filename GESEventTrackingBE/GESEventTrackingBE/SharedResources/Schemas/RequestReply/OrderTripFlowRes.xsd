@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:complexType name="OrderTripFlow">
+		<xs:sequence>
+			<xs:element name="WATS_Ord_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="SAP_Ord_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="PWM_Ord_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="ETM_Ord_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="ETM_Trip_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="SAP_Trip_Cnt" type="xs:int" minOccurs="0"/>
+			<xs:element name="PWM_Trip_Cnt" type="xs:int" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

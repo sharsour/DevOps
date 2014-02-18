@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>HH</name>
+            <value>HH</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1368596708565</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>MANUAL</name>
+            <value>MANUAL</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1368596739754</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>CANCELLED_ORDER</name>
+            <value>CANCELLED</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369027298025</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

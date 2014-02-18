@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="OrdLockEvictionRes" description="This event is used to send the SAP Order Lock data from BE Cache to persist it in the DB." GUID="C339D036-F975-BA7A-ABB4-084F2F77DF8A" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx2:OrdLockEvictionRes&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/CacheEvictionJMSChannel" destinationName="OrderLockEvictionResponseDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\OrdLockEvictionRes.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <expiryAction name="OrderEvictionRes_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderevictionres" type="/Events/Eviction/OrdLockEvictionRes"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

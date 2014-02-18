@@ -1,0 +1,95 @@
+/**
+ * @description This rule function performs pre-processor activities for Order Aging Request Event sent by BW.
+ */
+void rulefunction RuleFunctions.Query.PreProcessorRF.orderMissedSLARequestPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Query.OrderMissedSLARequest ordMissedSLARequest;
+	}
+	body {
+		System.debugOut("In orderMissedSLARequestPP of Query Agent");
+		String plantNum=XPath.evalAsString ("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordMissedSLARequest/payload/xsd2:OrderMissedSLARequest/xsd2:OrderAgingRequest/xsd2:PlantNum</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordMissedSLARequest</variable>\n    </variables>\n</xpath>");
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordMissedSLARequest/payload/xsd2:OrderMissedSLARequest/xsd2:OrderAgingRequest/xsd2:ShipDate</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordMissedSLARequest</variable>\n    </variables>\n</xpath>");
+		Concepts.Temporary.AGING ordAgingTemp=Instance.createInstance("xslt://{{/Concepts/Temporary/AGING}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:tib=\"http://www.tibco.com/bw/xslt/custom-functions\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd tib\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:template match=\"/\">\n        <createObject>\n            <object>\n                <xsl:attribute name=\"extId\">\n                    <xsl:value-of select=\"concat(&quot;ORDER_AGING&quot;,tib:timestamp(),$plantNum,$shipDate)\"/>\n                </xsl:attribute>\n            </object>\n        </createObject>\n    </xsl:template>\n</xsl:stylesheet>");
+		String late=System.getGlobalVariableAsString("SLA/STATUS/FIRSTFAIL","LATE");
+		String fail=System.getGlobalVariableAsString("SLA/STATUS/SECONDFAIL","FAIL");
+		String creationTime;
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:param name=\"ordMissedSLARequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER MISSED SLA&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started processing OrderMissedSLA Request for PLANT_NUM = &quot;,$plantNum,&quot; on &quot;,$shipDate)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($ordMissedSLARequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			String queryName = "OrdersMissedSLA";
+			String statementName = queryName + "-SS-" + plantNum + shipDate;
+			String resultSetName = queryName + "-SS-RS-" + plantNum + shipDate;
+			
+			Query.Statement.open(queryName, statementName);
+			Query.Statement.setVar(statementName, "late",late);
+			Query.Statement.setVar(statementName, "fail",fail);
+			Query.Statement.setVar(statementName, "plantNum",plantNum);
+			Query.Statement.setVar(statementName, "shipDate",shipDate);
+			
+			System.debugOut("Started query: " + statementName);
+			
+			Query.Statement.execute(statementName, resultSetName);
+			
+			while(Query.ResultSet.next(resultSetName))
+				{
+					Instance.PropertyArray.appendString(ordAgingTemp.ID,Query.ResultSet.get(resultSetName, 0),System.currentTimeMillis());
+					creationTime = Query.ResultSet.get(resultSetName, 1);
+					if(creationTime==null)
+					{
+						Instance.PropertyArray.appendLong(ordAgingTemp.CREATION_TIME,0,System.currentTimeMillis());
+					}
+					else
+					{
+						Instance.PropertyArray.appendLong(ordAgingTemp.CREATION_TIME,Number.longValue(creationTime,10),System.currentTimeMillis());
+					}
+					Instance.PropertyArray.appendString(ordAgingTemp.LAST_KNOWN_SYSTEM,Query.ResultSet.get(resultSetName, 2),System.currentTimeMillis());
+					String lastKnownTime=Query.ResultSet.get(resultSetName, 3);
+					Instance.PropertyArray.appendString(ordAgingTemp.LAST_KNOWN_TIME,lastKnownTime,System.currentTimeMillis());
+					Instance.PropertyArray.appendLong(ordAgingTemp.LAST_KNOWN_TIME_MILLIS,DateTime.getTimeInMillis(XPath.evalAsDateTime("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>tib:parse-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\",$lastKnownTime)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables>\n        <variable>lastKnownTime</variable>\n    </variables>\n</xpath>")),System.currentTimeMillis());
+					Instance.PropertyArray.appendString(ordAgingTemp.SAP_ORD_NUM,Query.ResultSet.get(resultSetName, 4),System.currentTimeMillis());
+				}
+			
+			Events.Query.OrderMissedSLAResponse ordMissedSLAResponse=Event.createEvent("xslt://{{/Events/Query/OrderMissedSLAResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:tib=\"http://www.tibco.com/bw/xslt/custom-functions\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd tib\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"ordAgingTemp\"/>\n    <xsl:param name=\"var\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:OrderMissedSLAResponse>\n                        <xsl:for-each select=\"$ordAgingTemp/ID\">\n                            <xsl:variable name=\"var\" select=\"position()\"/>\n                            <ns:OrderAgingResponse>\n                                <ns:OrdId>\n                                    <xsl:value-of select=\".\"/>\n                                </ns:OrdId>\n                                <xsl:if test=\"../SAP_ORD_NUM[$var]\">\n                                    <ns:SAPOrdId>\n                                        <xsl:value-of select=\"../SAP_ORD_NUM[$var]\"/>\n                                    </ns:SAPOrdId>\n                                </xsl:if>\n                                <ns:Age>\n                                    <xsl:value-of select=\"if(../LAST_KNOWN_SYSTEM[$var]  = $globalVariables/OrderSystems/ActualSystems/ETM-GOA)&#xA;then ((../LAST_KNOWN_TIME_MILLIS[$var] - ../CREATION_TIME[$var]) div 1000) div 60&#xA;else ((tib:timestamp() - ../CREATION_TIME[$var]) div 1000) div 60\"/>\n                                </ns:Age>\n                                <xsl:if test=\"../LAST_KNOWN_SYSTEM[$var]\">\n                                    <ns:Last_Known_System>\n                                        <xsl:value-of select=\"../LAST_KNOWN_SYSTEM[$var]\"/>\n                                    </ns:Last_Known_System>\n                                </xsl:if>\n                                <ns:Last_Known_Time>\n                                    <xsl:value-of select=\"../LAST_KNOWN_TIME[$var]\"/>\n                                </ns:Last_Known_Time>\n                            </ns:OrderAgingResponse>\n                        </xsl:for-each>\n                    </ns:OrderMissedSLAResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(ordMissedSLARequest,ordMissedSLAResponse);
+		
+		
+			Query.ResultSet.close(resultSetName);
+			Query.Statement.close(statementName);
+			System.debugOut("Completed query: " + statementName);
+			
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing orderMissedSLARequestPP = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"ordMissedSLARequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER MISSED SLA&quot;\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($ordMissedSLARequest)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			//Deleting the temporary concept.
+			Instance.deleteInstance(ordAgingTemp);
+			
+			//End Logging.
+			if(cleFlag)
+			{
+				Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:param name=\"ordMissedSLARequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;ORDER MISSED SLA&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Completed processing OrderMissedSLA Request for PLANT_NUM = &quot;,$plantNum,&quot; on &quot;,$shipDate)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($ordMissedSLARequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			
+			//Consuming/Deleting optRequest event.
+			Event.consumeEvent(ordMissedSLARequest);
+		}
+		
+		
+	}
+}

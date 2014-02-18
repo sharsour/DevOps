@@ -1,0 +1,41 @@
+/**
+ * @description This rule function performs pre-processor activities for Trip Request Event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.RequestReply.TripRequestPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.RequestReply.TripRequest TripRequest;
+	}
+	body {
+		System.debugOut("In Trip Request PP");
+		
+		String tripID=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$TripRequest/payload/xsd3:TripRequest/xsd3:TripID</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd80\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>TripRequest</variable>\n    </variables>\n</xpath>");
+		Concepts.TRIP trip;	
+	
+		if(tripID!=null)
+		{
+			Cluster.DataGrid.Lock(tripID,-1,false);
+			trip=RuleFunctions.Inference.CommonRF.getConceptFromCache("TRIP"/*conceptName String */,tripID/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+			System.debugOut("Acquired lock on "+tripID);
+		}
+		else
+		{
+			Events.RequestReply.TripResponse tripReply=Event.createEvent("xslt://{{/Events/RequestReply/TripResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd72\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"tripID\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:TripEvictionRes>\n                        <ns:Plant_Num>\n                            <xsl:value-of select=\"&quot;&quot;\"/>\n                        </ns:Plant_Num>\n                        <ns:TripID>\n                            <xsl:value-of select=\"$tripID\"/>\n                        </ns:TripID>\n                        <ns:Ship_Date>\n                            <xsl:value-of select=\"&quot;&quot;\"/>\n                        </ns:Ship_Date>\n                    </ns:TripEvictionRes>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(TripRequest,tripReply);
+			Event.consumeEvent(TripRequest);
+			System.debugOut("Empty TripID");
+			
+		}
+		if(trip==null)
+		{
+			Events.RequestReply.TripResponse tripReply=Event.createEvent("xslt://{{/Events/RequestReply/TripResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd72\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"tripID\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:TripEvictionRes>\n                        <ns:Plant_Num>\n                            <xsl:value-of select=\"&quot;&quot;\"/>\n                        </ns:Plant_Num>\n                        <ns:TripID>\n                            <xsl:value-of select=\"$tripID\"/>\n                        </ns:TripID>\n                        <ns:Ship_Date>\n                            <xsl:value-of select=\"&quot;&quot;\"/>\n                        </ns:Ship_Date>\n                    </ns:TripEvictionRes>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.replyEvent(TripRequest,tripReply);
+			Event.consumeEvent(TripRequest);
+			System.debugOut("Trip Not Found");	
+		}
+		
+		
+	}
+}

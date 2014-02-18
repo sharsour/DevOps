@@ -1,0 +1,59 @@
+/**
+ * @description This is the common pre-processor function for GES Orders received from any System.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Order.OrderCommonPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.OrderEvent orderevent;
+	}
+	body {
+		System.debugOut("In Common Pre-processor");
+		
+		String InputSystem=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$orderevent/payload/xsd2:ORDER/xsd2:System</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>orderevent</variable>\n    </variables>\n</xpath>");
+		String gesAgentId=Engine.engineName();
+		String WATSIn=System.getGlobalVariableAsString("OrderSystems/InputSystems/WATSIN","WATSIN");
+		String WATSOut=System.getGlobalVariableAsString("OrderSystems/InputSystems/WATSOUT-SAPIN","WATSOUT");
+		String SAPOut=System.getGlobalVariableAsString("OrderSystems/InputSystems/SAPOUT-OGDIN","SAPOUT");
+		String PWMIn=System.getGlobalVariableAsString("OrderSystems/InputSystems/OGDOUT-PWMIN","PWMIN");
+		String GOAIn=System.getGlobalVariableAsString("OrderSystems/InputSystems/PWMOUT-GOAIN","ETMGOAIN");
+		String ordNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$orderevent/payload/xsd2:ORDER/xsd2:Lgcy_Ord_Num</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>orderevent</variable>\n    </variables>\n</xpath>");
+		
+		Cluster.DataGrid.Lock(ordNum,-1,false);
+		Concepts.ORDER_RE_NUM orderReNum=RuleFunctions.Inference.CommonRF.getConceptFromCache("ORD_RE_NUM"/*conceptName String */,System.getGlobalVariableAsString("EXTIDS/ORD_RE_NUM","ORD_RE_NUM")/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		
+		//Calling the Preprocessor based on the System from which Order is received
+		
+		System.debugOut("u");
+		
+		
+		if(InputSystem==WATSIn)
+		{
+			RuleFunctions.Inference.PreProcessorRF.Order.OrderWATSINPP(orderevent/*OrderEvent Events.Input.OrderEvent */);
+		}
+		else if(InputSystem==WATSOut)
+		{
+			RuleFunctions.Inference.PreProcessorRF.Order.OrderWATSOutPP(orderevent/*orderevent Events.Input.OrderEvent */);
+		}
+		else if(InputSystem==SAPOut)
+		{
+			RuleFunctions.Inference.PreProcessorRF.Order.OrderSAPOutPP(orderevent/*orderevent Events.Input.OrderEvent */);
+		}
+		else if(InputSystem==PWMIn)
+		{
+			RuleFunctions.Inference.PreProcessorRF.Order.OrderPWMINPP(orderevent/*orderevent Events.Input.OrderEvent */);
+		}
+		else if(InputSystem==GOAIn)
+		{
+			RuleFunctions.Inference.PreProcessorRF.Order.OrderPWMOutPP(orderevent/*orderevent Events.Input.OrderEvent */);
+		}
+		else
+		{
+			System.debugOut("Un-expected InputSystem Name = "+InputSystem);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns1=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" version=\"1.0\" exclude-result-prefixes=\"ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"orderevent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/OrderFlow\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_TransactionType/OrderFlow\"/>\n                            </ns:TransactionType>\n                            <xsl:if test=\"$orderevent/payload/ns1:ORDER/ns1:Lgcy_Ord_Num\">\n                                <ns:TransactionID>\n                                    <xsl:value-of select=\"$orderevent/payload/ns1:ORDER/ns1:Lgcy_Ord_Num\"/>\n                                </ns:TransactionID>\n                            </xsl:if>\n                            <xsl:if test=\"$orderevent/payload/ns1:ORDER/ns1:Plant_Num\">\n                                <ns:BusinessID>\n                                    <xsl:value-of select=\"$orderevent/payload/ns1:ORDER/ns1:Plant_Num\"/>\n                                </ns:BusinessID>\n                            </xsl:if>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/ErrorCodes/InvalidSystemName/code\"/>\n                        </ns:Code>\n                        <ns:Message>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/ErrorCodes/InvalidSystemName/message\"/>\n                        </ns:Message>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($orderevent)\"/>\n                        </ns:TransactionData>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		 
+	}
+}

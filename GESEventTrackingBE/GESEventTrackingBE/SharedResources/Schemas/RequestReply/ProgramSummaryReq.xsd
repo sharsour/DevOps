@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="PlantSummary.xsd"/>
+	<xs:element name="ProgramSummaryRequest" type="ProgramSummaryRequestType"/>
+	<xs:element name="ProgramSummaryResponse" type="ProgramSummaryResponseType"/>
+	<xs:complexType name="ProgramSummaryRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="ProgramSummarySearchRequest" type="ProgramSummarySearchRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProgramSummarySearchRequestType">
+		<xs:sequence>
+			<xs:element name="TimeZone" type="xs:string" minOccurs="0"/>
+			<xs:element name="Ship_Date" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProgramSummaryResponseType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="ProgramSummarySearchResponse" type="ProgramSummary"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,108 @@
+/**
+ * @description This is the shutDown rule function of Query Agent.
+ */
+void rulefunction RuleFunctions.Query.QueryShutDown {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		
+	}
+	body {
+		
+		String queryName = "OrderRequest";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "Optimization";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "Reconciliation";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "WATSSAPSLA";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "SAPETMSLA";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "ETMPWMSLA";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "OrderCount";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "OrderTripFlow";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "OrderFlow";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "OrderMissedTrip";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		queryName = "OrdersMissedSLA";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		
+		queryName = "TripsMissedSLA";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		
+		queryName = "OrderEvictionRequest";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		
+		queryName = "TripEvictionRequest";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+		
+		queryName = "TripListRequest";
+		Query.delete(queryName);
+		System.debugOut("Deleted query: " + queryName);
+		
+		//----------
+		
+	}
+}

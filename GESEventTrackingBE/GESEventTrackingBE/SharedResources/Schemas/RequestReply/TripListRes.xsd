@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51"
+	 targetNamespace="http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:complexType name="TripList">
+		<xs:sequence>
+			<xs:element name="TripID" type="xs:string"/>
+			<xs:element name="Delivery_Date" type="xs:string" minOccurs="0"/>
+			<xs:element name="Ship_Date" type="xs:string" minOccurs="0"/>
+			<xs:element name="Plant_Num" type="xs:string"/>
+			<xs:element name="Plant_Name" type="xs:string" minOccurs="0"/>
+			<xs:element name="Cases" type="xs:integer" minOccurs="0"/>
+			<xs:element name="TripStatus" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="CurrentSystem" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastKnownTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="IsGES" type="xs:boolean" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TripSysState">
+		<xs:sequence>
+			<xs:element name="Sequence" type="xs:integer" minOccurs="0"/>
+			<xs:element name="System" type="xs:string" minOccurs="0"/>
+			<xs:element name="InDateTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="OutDateTime" type="xs:string" minOccurs="0"/>
+			<xs:element name="SLA" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

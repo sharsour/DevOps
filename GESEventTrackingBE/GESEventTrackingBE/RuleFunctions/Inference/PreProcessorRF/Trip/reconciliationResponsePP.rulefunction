@@ -1,0 +1,34 @@
+/**
+ * @description This rule function performs required activities and triggers the Reconciliation Response Event sent by Query Agent.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Trip.reconciliationResponsePP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Internal.ReconcileResponse recoResponse;
+	}
+	body {
+		System.debugOut("In ReconcileResponse rule function");
+		int noOfOrders=XPath.evalAsInt("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>count($recoResponse/payload/xsd2:ReconciliationResponse/xsd2:SAPOrder/xsd2:SAPOrderNumber)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>recoResponse</variable>\n    </variables>\n</xpath>");
+		int index;
+		String tripId=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$recoResponse/payload/xsd2:ReconciliationResponse/xsd2:TripID</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>recoResponse</variable>\n    </variables>\n</xpath>");
+		
+		//Deleting the Temporary ShipID concept instances created while triggering Reconciliation Request Event.
+		//Concepts.Temporary.SHIPID_TEMP shipIDinstance;		
+		//for(index=1;index<=noOfOrders;index++)
+		//{
+			//String shipID=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$recoResponse/payload/xsd2:ReconciliationResponse/xsd2:SAPOrder/xsd2:SAPOrderNumber[number($index)]</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>recoResponse</variable>\n        <variable>index</variable>\n    </variables>\n</xpath>");
+			//shipIDinstance=Cluster.DataGrid.CacheLoadConceptByExtIdByUri(shipID,false,"/Concepts/Temporary/SHIPID_TEMP");
+			//Instance.deleteInstance(shipIDinstance);
+			//System.debugOut("ShipID Concept instance is deleted for = "+shipID);
+		//}
+		//System.debugOut("Number of temporary ShipIds deleted = "+(index-1));
+		
+		Cluster.DataGrid.Lock(tripId,-1,false);
+		RuleFunctions.Inference.CommonRF.getConceptFromCache("TRIP"/*conceptName String */,tripId/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		System.debugOut("Acquired lock on TripID = "+tripId);
+		
+		
+	}
+}

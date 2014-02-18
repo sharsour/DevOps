@@ -1,0 +1,201 @@
+/**
+ * @description This is the startup rule function of Query Agent.
+ */
+void rulefunction RuleFunctions.Query.QueryStartup {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		
+	}
+	body {
+		System.debugOut("In Query Agent Start-up rulefunction");
+		
+		try
+		{
+			String queryName = "OrderRequest";
+			String queryText = "select o, ss from /Concepts/ORDERS o, /Concepts/ORDER_SYSSTATE ss"
+			                   + "\n where o.SAP_ORD_NUM = $sapOrdNum and ss.LGCY_ORD_NUM = o.LGCY_ORD_NUM"
+			                   + "\n and o.LAST_KNOWN_SYS = ss.SYSTEM;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "Optimization";
+			queryText = "select o.LGCY_ORD_NUM, o.SHIP_DATE from /Concepts/ORDERS o"
+			                   + "\n where o.SAP_ORD_NUM = $sapOrdNum;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "Reconciliation";
+			queryText = "select o.LGCY_ORD_NUM from /Concepts/ORDERS o where o.SAP_ORD_NUM = $sapOrdNum;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+				//"select o.LGCY_ORD_NUM from /Concepts/ORDERS o, /Concepts/Temporary/SHIPID_TEMP s"
+			  	//                 + "\n where o.SAP_ORD_NUM = s.SAP_ORD_NUM and s.TRIP_ID = $tripID;";
+			
+			//--------
+			
+			queryName = "WATSSAPSLA";
+			queryText = "select o.WATSSAPSLA, count(o.WATSSAPSLA) theCount" 
+			                   + "\n from /Concepts/ORDERS o "
+			                   + "\n where o.ORD_CREATIONTIME>$ordCreationCheckTime and o.PLANT_NUM = $plantNum "
+			                   + "\n and o.SHIP_DATE = $shipDate"
+			                   + "\n group by o.WATSSAPSLA"
+			                   + "\n order by o.WATSSAPSLA;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			queryName = "SAPETMSLA";
+			queryText = "select o.SAPETMSLA, count(o.SAPETMSLA) theCount" 
+			                   + "\n from /Concepts/ORDERS o "
+			                   + "\n where o.ORD_CREATIONTIME>$ordCreationCheckTime and o.PLANT_NUM = $plantNum "
+			                   + "\n and o.SHIP_DATE = $shipDate "
+			                   + "\n group by o.SAPETMSLA"
+			                   + "\n order by o.SAPETMSLA;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "ETMPWMSLA";
+			queryText = "select t.E2ESLA, count(t.E2ESLA) theCount" 
+			                   + "\n from /Concepts/TRIP t "
+			                   + "\n where t.TRIP_CREATION_TIME>$tripCreationCheckTime and t.PLANT_NUM = $plantNum "
+			                   + "\n and t.SHIP_DATE = $shipDate "
+			                   + "\n group by t.E2ESLA"
+			                   + "\n order by t.E2ESLA;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "OrderCount";
+			queryText = "select p.HH_SAP_OUT_ORD_CNT, p.MANUAL_ORD_CNT, p.ETM_TRIP_CNT" 
+			                   + "\n from /Concepts/PLANT_SUMMARY p "
+			                   + "\n where p.PLANT_NUM = $plantNum and p.SHIP_DATE = $shipDate;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+
+			queryName = "OrderTripFlow";
+			queryText = "select p.WATS_ORD_CNT, p.SAP_ORD_CNT, p.PWM_ORD_CNT, p.GOA_ORD_CNT,"
+							   + "\n p.ETM_TRIP_CNT, p.SAP_TRIP_CNT, p.PWM_TRIP_CNT " 
+			                   + "\n from /Concepts/PLANT_SUMMARY p "
+			                   + "\n where p.PLANT_NUM = $plantNum and p.SHIP_DATE = $shipDate;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "OrderFlow";
+			queryText = "select p.WATS_IN_ORD_CNT, p.WATS_OUT_ORD_CNT, p.SAP_OUT_ORD_CNT, p.PWM_IN_ORD_CNT, p.GOA_ORD_CNT, "
+							   + "\n p.ETM_TRIP_CNT, p.SAP_TRIP_CNT, p.PWM_TRIP_CNT " 
+			                   + "\n from /Concepts/PLANT_SUMMARY p "
+			                   + "\n where p.PLANT_NUM = $plantNum and p.SHIP_DATE = $shipDate;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "OrdersMissedTrip";
+			queryText = "select o.LGCY_ORD_NUM, o.LAST_KNOWN_SYS, o.CUST_NUM, o.CANCELLED_ORDER, o.DELAYED_ORD "
+			                   + "\n from /Concepts/ORDERS o "
+			                   + "\n where o.TRIP_STATUS=false and o.PLANT_NUM = $plantNum and o.SHIP_DATE = $shipDate"
+			                   + "\n order by o.LGCY_ORD_NUM;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			queryName = "OrdersMissedSLA";
+			queryText = "select o.LGCY_ORD_NUM, o.ORD_CREATIONTIME, o.LAST_KNOWN_SYS, o.LAST_KNOWN_TIME, o.SAP_ORD_NUM "
+			                   + "\n from /Concepts/ORDERS o "
+			                   + "\n where o.E2ESLA = $fail and o.PLANT_NUM = $plantNum and o.SHIP_DATE = $shipDate "
+			                   + "\n order by o.LGCY_ORD_NUM;";
+			          
+			                            
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "TripsMissedSLA";
+			queryText = "select t.TRIPID, t.TRIP_CREATION_TIME, t.LAST_KNOWN_SYSTEM, t.LAST_KNOWN_TIME "
+			                   + "\n from /Concepts/TRIP t "
+			                   + "\n where t.E2ESLA = $fail and t.PLANT_NUM = $plantNum and t.SHIP_DATE = $shipDate "
+			                   + "\n order by t.TRIPID;";    
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "OrderEvictionRequest";
+			queryText = "select o.LGCY_ORD_NUM from /Concepts/ORDERS o" 
+			                   + "\n where o.PLANT_NUM = $plantNum and o.SHIP_DATE = $shipDate"
+			                    + "\n order by o.LGCY_ORD_NUM;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "TripEvictionRequest";
+			queryText = "select t.TRIPID from /Concepts/TRIP t"
+			                   + "\n where t.PLANT_NUM = $plantNum "
+			                    + "\n order by t.TRIPID;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+			
+			queryName = "TripListRequest";
+			queryText = "select t from /Concepts/TRIP t"
+			                   + "\n where t.PLANT_NUM = $plantNum and t.SHIP_DATE = $shipDate "
+			                    + "\n order by t.TRIPID;";
+			Query.create(queryName, queryText);
+			System.debugOut("Created query: " + queryName + ", text: " + queryText);
+			
+			//--------
+			
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in Query Agent Start-up rule function = "+e);
+			String gesAgentId=Engine.engineName();
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"concat($globalVariables/CLEparams/CLE_ComponentNames/Query,&quot;STARTUP&quot;)\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"concat(&quot;Error occured in Start-up rule function of Query Agent = &quot;,$gesAgentId)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+	}
+}

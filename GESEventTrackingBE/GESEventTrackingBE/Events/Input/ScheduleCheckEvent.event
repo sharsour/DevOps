@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Input/" folder="/Events/Input/" name="ScheduleCheckEvent" description="This event is received at scheduled time to check whether the respective Entity data is received." GUID="066FEEA1-328B-4688-4B2D-3893C57A03BA" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx2:TimerEvent&quot;/>" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="ScheduleCheckDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77"/>
+  <registryImportEntries location="SharedResources\Schemas\Input\TimerEvent.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77"/>
+  <expiryAction name="ScheduleCheckEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="schedulecheckevent" type="/Events/Input/ScheduleCheckEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

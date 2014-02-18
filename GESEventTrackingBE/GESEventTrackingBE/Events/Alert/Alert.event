@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Alert/" folder="/Events/Alert/" name="Alert" description="This event is used to send alerts to business users on various entities." GUID="D1282C89-CFB4-6F72-6B61-F22DD946836E" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:IndividualAlert&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="AlertDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.tibco.com/schemas/GESEventsMonitoring_testing/SharedResources/SchemaDefinitions/Alerts/Schema.xsd"/>
+  <registryImportEntries location="SharedResources\Schemas\Alert\IndividualAlert.xsd" namespace="http://www.tibco.com/schemas/GESEventsMonitoring_testing/SharedResources/SchemaDefinitions/Alerts/Schema.xsd"/>
+  <expiryAction name="Alert_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="alert" type="/Events/Alert/Alert"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

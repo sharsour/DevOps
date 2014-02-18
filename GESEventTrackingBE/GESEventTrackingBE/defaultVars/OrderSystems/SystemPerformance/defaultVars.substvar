@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>WATS-SAP</name>
+            <value>WATS-SAP</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1371708028102</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>SAP-ETM</name>
+            <value>SAP-ETM</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1371708039584</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>ETM-PWM</name>
+            <value>ETM-PWM</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1371708059614</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

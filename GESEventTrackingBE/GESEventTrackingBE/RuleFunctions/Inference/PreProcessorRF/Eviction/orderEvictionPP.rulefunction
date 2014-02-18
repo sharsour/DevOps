@@ -1,0 +1,27 @@
+/**
+ * @description This rule function performs pre-processor activities for Order Eviction event sent by Query Agent.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Eviction.orderEvictionPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Eviction.OrderEvictionResQ2I orderEvictQueryRes;
+	}
+	body {
+		System.debugOut("In orderEvictionPP of Inference agent");
+		
+		int noOfOrders=XPath.evalAsInt("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>count($orderEvictQueryRes/payload/xsd2:OrderEvictionQueryRes/xsd2:Lgcy_Ord_Num)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>orderEvictQueryRes</variable>\n    </variables>\n</xpath>");
+		int index;
+		String orderNum;
+		
+		for(index=1;index <= noOfOrders;index++)
+		{
+			orderNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$orderEvictQueryRes/payload/xsd2:OrderEvictionQueryRes/xsd2:Lgcy_Ord_Num[number($index)]</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>orderEvictQueryRes</variable>\n        <variable>index</variable>\n    </variables>\n</xpath>");
+			if(orderNum!="0")
+			{
+				RuleFunctions.Inference.CommonRF.getConceptFromCache("ORDER"/*conceptName String */,orderNum/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmlns:element="http:///com/tibco/cep/designtime/core/model/element" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Concepts/" folder="/Concepts/" name="OPTIMIZATION" description="This concept contains the data when Optimization is done by TM for a Plant on a Ship Date." GUID="AD78CEA7-92D5-2A69-482D-A2D68A103960" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/OPTIMIZATION"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/OPTIMIZATION"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/OPTIMIZATION"/>
+  <properties name="STATUS" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/OPTIMIZATION"/>
+  <properties name="OPTIMIZATION_TIMESTAMP" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/OPTIMIZATION"/>
+</element:Concept>

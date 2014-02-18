@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmlns:element="http:///com/tibco/cep/designtime/core/model/element" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Concepts/Temporary/" folder="/Concepts/Temporary/" name="PROGRAM_SUMMARY" description="This is a temporary Concept used to accumulate Program Summary." GUID="E6CD1231-2794-8A05-6AB7-A66FF66D36CE" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="ORD_CNT" ownerProjectName="GESEventTrackingBE" type="int" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="LOCK_STATUS" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="LOCK_TIME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="TOKEN_STATUS" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="TOKEN_TIME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="OPTIMIZE_STATUS" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="OPTIMIZE_TIME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="ALLTRIPSATPWM" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="ALL_TRIPS_CNT" ownerProjectName="GESEventTrackingBE" type="int" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="SITE_TRIP_CNT" ownerProjectName="GESEventTrackingBE" type="int" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="ORD_TRIPPED_CNT" ownerProjectName="GESEventTrackingBE" type="int" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="TOTAL_CASES" ownerProjectName="GESEventTrackingBE" type="int" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+  <properties name="ALLTRIPSATPWM_TIME" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/Temporary/PROGRAM_SUMMARY"/>
+</element:Concept>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="OrderEvictionResQ2I" description="This event is used to send the list of OrderIDs from Query Agent to Inference Agent." GUID="77FDE0B3-3299-4F18-A671-C1B9ED5EAF9C" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx2:OrderEvictionQueryRes&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/BEInternalJMSChannel" destinationName="OrderEvictionQuery2InfDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\OrderEvictionQueryRes.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"/>
+  <expiryAction name="OrderEvictionRes_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderevictionres" type="/Events/Eviction/OrderEvictionResQ2I"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

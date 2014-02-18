@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="PlantSummaryEvictionRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Plant_Name" minOccurs="0"/>
+				<xs:element ref="Ship_Date"/>
+				<xs:element ref="Ord_Tripped_Cnt" minOccurs="0"/>
+				<xs:element ref="Ord_NotTripped_Cnt" minOccurs="0"/>
+				<xs:element ref="Ord_Cnt" minOccurs="0"/>
+				<xs:element ref="DelayedOrdCnt" minOccurs="0"/>
+				<xs:element ref="ManualOrdCnt" minOccurs="0"/>
+				<xs:element ref="WATSOrdCnt" minOccurs="0"/>
+				<xs:element ref="SAPOrdCnt" minOccurs="0"/>
+				<xs:element ref="PWMOrdCnt" minOccurs="0"/>
+				<xs:element ref="GOAOrdCnt" minOccurs="0"/>
+				<xs:element ref="TotalCases_Cnt" minOccurs="0"/>
+				<xs:element ref="TM_Trip_Cnt" minOccurs="0"/>
+				<xs:element ref="ETM_Trip_Cnt" minOccurs="0"/>
+				<xs:element ref="SAP_Trip_Cnt" minOccurs="0"/>
+				<xs:element ref="PWM_Trip_Cnt" minOccurs="0"/>
+				<xs:element ref="AllTripsAtSite" minOccurs="0"/>
+				<xs:element ref="E2EMissOrderSLACnt" minOccurs="0"/>
+				<xs:element ref="E2EMissTripSLACnt" minOccurs="0"/>
+				<xs:element ref="OrdWATSSLAMissCount" minOccurs="0"/>
+				<xs:element ref="OrdSAPSLAMissCount" minOccurs="0"/>
+				<xs:element ref="OrdPWMSLAMissCount" minOccurs="0"/>
+				<xs:element ref="AllTripsAtSite_Check" minOccurs="0"/>
+				<xs:element ref="AllTripsAtSite_Time" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Plant_Name" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="TM_Trip_Cnt" type="xs:integer"/>
+	<xs:element name="ETM_Trip_Cnt" type="xs:integer"/>
+	<xs:element name="SAP_Trip_Cnt" type="xs:integer"/>
+	<xs:element name="PWM_Trip_Cnt" type="xs:integer"/>
+	<xs:element name="Ord_Tripped_Cnt" type="xs:integer"/>
+	<xs:element name="Ord_NotTripped_Cnt" type="xs:integer"/>
+	<xs:element name="Ord_Cnt" type="xs:integer"/>
+	<xs:element name="SAPOrdCnt" type="xs:integer"/>
+	<xs:element name="GOAOrdCnt" type="xs:integer"/>
+	<xs:element name="TotalCases_Cnt" type="xs:integer"/>
+	<xs:element name="AllTripsAtSite" type="xs:boolean"/>
+	<xs:element name="E2EMissOrderSLACnt" type="xs:integer"/>
+	<xs:element name="E2EMissTripSLACnt" type="xs:integer"/>
+	<xs:element name="WATSOrdCnt" type="xs:integer"/>
+	<xs:element name="ManualOrdCnt" type="xs:integer"/>
+	<xs:element name="DelayedOrdCnt" type="xs:integer"/>
+	<xs:element name="PWMOrdCnt" type="xs:integer"/>
+	<xs:element name="OrdWATSSLAMissCount" type="xs:string"/>
+	<xs:element name="OrdSAPSLAMissCount" type="xs:string"/>
+	<xs:element name="OrdPWMSLAMissCount" type="xs:string"/>
+	<xs:element name="AllTripsAtSite_Check" type="xs:string"/>
+	<xs:element name="AllTripsAtSite_Time" type="xs:string"/>
+</xs:schema>

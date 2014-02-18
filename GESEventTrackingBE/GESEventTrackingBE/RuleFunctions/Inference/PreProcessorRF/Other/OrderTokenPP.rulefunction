@@ -1,0 +1,23 @@
+/**
+ * @description This rule function performs the pre-processor activities for Order Token event.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Other.OrderTokenPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.TokenEvent ordTokenEvent;
+	}
+	body {
+		System.debugOut("In OrderToken PreProcessorRF");
+		
+		String plantNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordTokenEvent/payload/xsd2:OrdToken/xsd2:Plant_Num</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordTokenEvent</variable>\n    </variables>\n</xpath>");
+		String shipDate=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$ordTokenEvent/payload/xsd2:OrdToken/xsd2:Ship_Date</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>ordTokenEvent</variable>\n    </variables>\n</xpath>");
+		String ordTokenExtId=System.getGlobalVariableAsString("EXTIDS/ORDER_TOKEN","ORDER_TOKEN")+plantNum+shipDate;
+		
+		Cluster.DataGrid.Lock(ordTokenExtId,-1,false);
+		
+		System.debugOut("Acquired lock on "+ordTokenExtId);
+		
+	}
+}

@@ -1,0 +1,110 @@
+/**
+ * @description This rule handles the Timer events triggered by BE to check if All Trips reached Site.
+ * @author HYDPCM228839D
+ */
+rule Rules.ScheduleCheck.AllTripsAtSiteCheck {
+	attribute {
+		priority = 3;
+		forwardChain = true;
+	}
+	declare {
+		Events.Timer.SLATimerEvent slaTimerEvent;
+		Concepts.PLANT_SUMMARY plantSummary;
+	}
+	when {
+		//Checking if the Timer Event is triggered to perform AllTripsAtSiteCheck.
+		slaTimerEvent.System==System.getGlobalVariableAsString("OrderSystems/ActualSystems/TM","TM") &&
+		//Correlating the TripID of Trip concept with that of TimerEvent.
+		plantSummary@extId==System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","SUMMARY")+slaTimerEvent.Plant_Num;//Plant_Num is concatinated with shipDate.
+	}
+	then {
+		System.debugOut("In AllTripsAtSiteCheck rule triggered from Optimization");
+		String eval=System.getGlobalVariableAsString("SLA/STATUS/INITIAL","EVAL");
+		String pass=System.getGlobalVariableAsString("SLA/STATUS/SUCCESS","PASS");
+		String late=System.getGlobalVariableAsString("SLA/STATUS/FIRSTFAIL","LATE");
+		String fail=System.getGlobalVariableAsString("SLA/STATUS/SECONDFAIL","FAIL");
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Entity_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"slaTimerEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/ScheduleCheck\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/ALL_TRIPS_AT_PWM\"/>\n                            </ns1:TransactionType>\n                            <xsl:if test=\"$slaTimerEvent/Plant_Num\">\n                                <ns1:BusinessID>\n                                    <xsl:value-of select=\"$slaTimerEvent/Plant_Num\"/>\n                                </ns1:BusinessID>\n                            </xsl:if>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started processing AllTripsAtSiteCheck Event at  &quot;,$slaTimerEvent/System)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($slaTimerEvent)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			if(plantSummary.ETM_TRIP_CNT>0)
+			{
+				//Checking ALL_TRIPS_AT_SITE 
+				if((plantSummary.PWM_TRIP_CNT - plantSummary.ETM_TRIP_CNT)==0)
+				{
+					if(plantSummary.ALL_TRIPS_AT_SITE_CHECK!=pass && plantSummary.ALL_TRIPS_AT_SITE_CHECK!=late)
+					{
+						if(plantSummary.ALL_TRIPS_AT_SITE_SCHEDULER_CHECK)
+						{
+							plantSummary.ALL_TRIPS_AT_SITE_CHECK=late;
+							
+						}
+						else
+						{
+							plantSummary.ALL_TRIPS_AT_SITE_CHECK=pass;
+						}
+						plantSummary.ALL_TRIPS_AT_SITE_TIME=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr> tib:format-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\", current-dateTime())</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables/>\n</xpath>");
+						System.debugOut("ALL_TRIPS_AT_SITE status is set as "+plantSummary.ALL_TRIPS_AT_SITE_CHECK+" for plantNum = "+plantSummary.PLANT_NUM+" & ShipDate = "+plantSummary.SHIP_DATE);
+					}
+					
+				}
+				else 
+				{
+					if(plantSummary.ALL_TRIPS_AT_SITE_CHECK!=fail)
+					{
+						//Updating the latest check time for AllTripsAtPWM.
+						plantSummary.ALL_TRIPS_AT_SITE_CHECK=fail;
+						plantSummary.ALL_TRIPS_AT_SITE_TIME=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr> tib:format-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\", current-dateTime())</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables/>\n</xpath>");
+						System.debugOut("ALL_TRIPS_AT_SITE status is set as "+plantSummary.ALL_TRIPS_AT_SITE_CHECK+" for plantNum = "+plantSummary.PLANT_NUM+" & ShipDate = "+plantSummary.SHIP_DATE);
+					}
+					else
+					{
+						plantSummary.ALL_TRIPS_AT_SITE_TIME=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr> tib:format-dateTime(\"MM-dd-yyyy HH:mm:ss.SSS\", current-dateTime())</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/bw/xslt/custom-functions\" pfx=\"tib\"/>\n    </namespaces>\n    <variables/>\n</xpath>");
+						System.debugOut("ALL_TRIPS_AT_SITE check time is updated");
+					}
+				}
+			}
+			else
+			{
+				System.debugOut("Processing of Trips at ETM didnot start.");
+			}
+			
+			
+			if(slaTimerEvent.TriggerCount>0)
+			{
+				//Schedule an event to trigger after 10mins to check AllTripsAtSite.
+				String schedulerName=System.getGlobalVariableAsString("Scheduler/SchedulerName","GESScheduler");					
+				String workKeyLate=plantSummary@extId+System.currentTimeMillis();
+				Events.Timer.SLATimerEvent allTripsAtSiteTimerEvent=Event.createEvent("xslt://{{/Events/Timer/SLATimerEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"workKeyLate\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"plantSummary\"/>\n    <xsl:param name=\"slaTimerEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <xsl:attribute name=\"extId\">\n                    <xsl:value-of select=\"$workKeyLate\"/>\n                </xsl:attribute>\n                <xsl:if test=\"$workKeyLate\">\n                    <Ord_Num>\n                        <xsl:value-of select=\"$workKeyLate\"/>\n                    </Ord_Num>\n                </xsl:if>\n                <System>\n                    <xsl:value-of select=\"$globalVariables/OrderSystems/ActualSystems/TM\"/>\n                </System>\n                <Plant_Num>\n                    <xsl:value-of select=\"concat($plantSummary/PLANT_NUM,$plantSummary/SHIP_DATE)\"/>\n                </Plant_Num>\n                <Interval>\n                    <xsl:value-of select=\"$globalVariables/SLA/INTERVAL/OPT_AllTripsAtPWM\"/>\n                </Interval>\n                <TriggerCount>\n                    <xsl:value-of select=\"$slaTimerEvent/TriggerCount - 1\"/>\n                </TriggerCount>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+				Long interval=System.currentTimeMillis() + System.getGlobalVariableAsLong("SLA/INTERVAL/OPT_AllTripsAtPWM",600000);
+				Cluster.scheduleEvent(schedulerName,workKeyLate,allTripsAtSiteTimerEvent,interval);
+				
+				System.debugOut("Scheduled event to check AllTripsAtSite ="+allTripsAtSiteTimerEvent.TriggerCount+" times");
+			}	
+	
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing AllTripsAtSiteCheck rule = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantSummary\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"slaTimerEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/ScheduleCheck\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/ALL_TRIPS_AT_PWM\"/>\n                            </ns:TransactionType>\n                            <xsl:if test=\"$plantSummary/PLANT_NUM\">\n                                <ns:BusinessID>\n                                    <xsl:value-of select=\"$plantSummary/PLANT_NUM\"/>\n                                </ns:BusinessID>\n                            </xsl:if>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($slaTimerEvent)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			if(cleFlag)
+			{
+				Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"slaTimerEvent\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/ScheduleCheck\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"$globalVariables/EXTIDS/ALL_TRIPS_AT_PWM\"/>\n                            </ns1:TransactionType>\n                            <xsl:if test=\"$slaTimerEvent/Plant_Num\">\n                                <ns1:BusinessID>\n                                    <xsl:value-of select=\"$slaTimerEvent/Plant_Num\"/>\n                                </ns1:BusinessID>\n                            </xsl:if>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Completed processing  AllTripsAtSiteCheck Event at  &quot;,$slaTimerEvent/System)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($slaTimerEvent)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			
+			//Consuming/Deleting slaTimerEvent
+			Event.consumeEvent(slaTimerEvent);	
+		}	
+	}
+}

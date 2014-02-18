@@ -1,0 +1,46 @@
+/**
+ * @description StartUp function will run when the inference engine starts up.
+ */
+void rulefunction RuleFunctions.Inference.InferenceStartUp {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		
+	}
+	body {
+		
+		System.debugOut("In StartUp RF Inference Agent");
+		
+		
+		//Creating the scheduler to schedule events in cache.
+		Long pollInterval=System.getGlobalVariableAsLong("Scheduler/PollInterval",1000);
+		Long refreshAhead=System.getGlobalVariableAsLong("Scheduler/RefreshAhead",5000);
+		String schedulerName=System.getGlobalVariableAsString("Scheduler/SchedulerName","GESScheduler");
+		Cluster.createScheduler(schedulerName, pollInterval, refreshAhead);
+		
+		
+		//Creating an instance of ORDER_RE_NUM concept.
+		String ordReNumExtId=System.getGlobalVariableAsString("EXTIDS/ORD_RE_NUM","ORD_RE_NUM");
+		Cluster.DataGrid.Lock(ordReNumExtId,-1,false);
+		System.debugOut("Acquired lock on ORD_RE_NUM");
+		Concepts.ORDER_RE_NUM orderReNum=RuleFunctions.Inference.CommonRF.getConceptFromCache("ORD_RE_NUM"/*conceptName String */,System.getGlobalVariableAsString("EXTIDS/ORD_RE_NUM","ORD_RE_NUM")/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		if(orderReNum==null)
+		{
+			orderReNum=Instance.createInstance("xslt://{{/Concepts/ORDER_RE_NUM}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:template match=\"/\">\n        <createObject>\n            <object>\n                <xsl:attribute name=\"extId\">\n                    <xsl:value-of select=\"$globalVariables/EXTIDS/ORD_RE_NUM\"/>\n                </xsl:attribute>\n            </object>\n        </createObject>\n    </xsl:template>\n</xsl:stylesheet>");
+		}
+		
+		
+		//Creating an instance of PLANT_TIMEZONE concept.
+		
+		String plantTZoneKey=System.getGlobalVariableAsString("EXTIDS/PLANT_TZONE","PLANT_TZONE");
+		Cluster.DataGrid.Lock(plantTZoneKey,-1,false);
+		System.debugOut("Acquired lock on "+plantTZoneKey);
+		Concepts.PLANT_TIMEZONE plantTZ=Instance.getByExtIdByUri(System.getGlobalVariableAsString("EXTIDS/PLANT_TZONE","PLANT_TZONE"),"/Concepts/PLANT_TIMEZONE");
+		if(plantTZ==null)
+		{ 
+			plantTZ=Instance.createInstance("xslt://{{/Concepts/PLANT_TIMEZONE}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:template match=\"/\">\n        <createObject>\n            <object>\n                <xsl:attribute name=\"extId\">\n                    <xsl:value-of select=\"$globalVariables/EXTIDS/PLANT_TZONE\"/>\n                </xsl:attribute>\n                <CST_PLANTNUM>\n                    <xsl:value-of select=\"2350\"/>\n                </CST_PLANTNUM>\n                <CST_PLANTNUM>\n                    <xsl:value-of select=\"2370\"/>\n                </CST_PLANTNUM>\n                <CST_PLANTNAME>\n                    <xsl:value-of select=\"\'TOPEKA\'\"/>\n                </CST_PLANTNAME>\n                <CST_PLANTNAME>\n                    <xsl:value-of select=\"\'ROSENBERG\'\"/>\n                </CST_PLANTNAME>\n                <EST_PLANTNUM>\n                    <xsl:value-of select=\"33320\"/>\n                </EST_PLANTNUM>\n                <EST_PLANTNAME>\n                    <xsl:value-of select=\"\'PERRY\'\"/>\n                </EST_PLANTNAME>\n                <MT_PLANTNUM>\n                    <xsl:value-of select=\"4330\"/>\n                </MT_PLANTNUM>\n                <MT_PLANTNAME>\n                    <xsl:value-of select=\"\'DENVER\'\"/>\n                </MT_PLANTNAME>\n            </object>\n        </createObject>\n    </xsl:template>\n</xsl:stylesheet>");
+		}
+		
+	}
+}

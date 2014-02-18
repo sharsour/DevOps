@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="ORDER">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Lgcy_Ord_Num" minOccurs="0"/>
+				<xs:element ref="Sap_Ord_Num" minOccurs="0"/>
+				<xs:element ref="Route_Num" minOccurs="0"/>
+				<xs:element ref="Ord_Type" minOccurs="0"/>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Delivery_Date"/>
+				<xs:element ref="Ship_Date" minOccurs="0"/>
+				<xs:element ref="Cases" minOccurs="0"/>
+				<xs:element ref="CustNum" minOccurs="0"/>
+				<xs:element ref="OrderCreateTime" minOccurs="0"/>
+				<xs:element ref="JMSDateTime"/>
+				<xs:element ref="System" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Lgcy_Ord_Num" type="xs:string"/>
+	<xs:element name="Sap_Ord_Num" type="xs:string"/>
+	<xs:element name="Route_Num" type="xs:string"/>
+	<xs:element name="Ord_Type" type="xs:string"/>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Delivery_Date" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="Cases" type="xs:integer"/>
+	<xs:element name="CustNum" type="xs:string"/>
+	<xs:element name="OrderCreateTime" type="xs:long"/>
+	<xs:element name="JMSDateTime" type="xs:string"/>
+	<xs:element name="System" type="xs:string"/>
+</xs:schema>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>PollInterval</name>
+            <value>1000</value>
+            <type>Integer</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1368007148349</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>RefreshAhead</name>
+            <value>5000</value>
+            <type>Integer</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1368007135120</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>SchedulerName</name>
+            <value>GESScheduler</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>false</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1368451813905</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

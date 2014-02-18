@@ -1,0 +1,71 @@
+/**
+ * @description This rule-function will query the System Performance at ETM-PWM.
+ */
+String[] rulefunction RuleFunctions.Query.SystemPerformance.etmPwmSystemPerformance {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		String plantNum;
+		String shipDate;
+		long tripCreationCheckTime;
+	}
+	body {
+		//System.debugOut(" In etmPwmSystemPerformance query rule fucntion");
+		int index=0;
+		String[] slaCounts=String[3] {};
+		//Initialization.
+		for(int initiationIndex=0;initiationIndex<3;initiationIndex++)
+			{
+				slaCounts[initiationIndex]="0";
+			}
+			
+		try
+		{
+			//System.debugOut("plantNum = "+plantNum+" shipDate = "+shipDate+" tripCreationCheckTime = "+tripCreationCheckTime);
+			
+			String queryName = "ETMPWMSLA";
+			String statementName = queryName + "-SS-" + plantNum+shipDate+tripCreationCheckTime;
+			String resultSetName = queryName + "-SS-RS-" + plantNum+shipDate+tripCreationCheckTime;
+			
+			Query.Statement.open(queryName, statementName);
+			
+			Query.Statement.setVar(statementName, "plantNum",plantNum);
+			Query.Statement.setVar(statementName, "shipDate",shipDate);
+			Query.Statement.setVar(statementName, "tripCreationCheckTime",tripCreationCheckTime);
+			
+			//System.debugOut("Started query: " + statementName);
+			
+			Query.Statement.execute(statementName, resultSetName);
+			
+			while(Query.ResultSet.next(resultSetName)){
+			    String status = Query.ResultSet.get(resultSetName, 0);
+			    String count=Query.ResultSet.get(resultSetName, 1);
+			    if(status==System.getGlobalVariableAsString("SLA/STATUS/SUCCESS","PASS"))
+			    {slaCounts[0]=count;}
+				if(status==System.getGlobalVariableAsString("SLA/STATUS/FIRSTFAIL","LATE"))
+			    {slaCounts[1]=count;}
+			    if(status==System.getGlobalVariableAsString("SLA/STATUS/SECONDFAIL","FAIL"))
+			    {slaCounts[2]=count;}
+			    
+			    //System.debugOut(resultSetName + " :: " + Query.ResultSet.get(resultSetName, 0)+ ", " + Query.ResultSet.get(resultSetName, 1));
+			}
+			
+			
+			Query.ResultSet.close(resultSetName);
+			Query.Statement.close(statementName);
+			
+			//System.debugOut("Completed query: " + statementName);
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Error caught in etmPwmSystemPerformance rule-function = "+e);
+			String gesAgentId=Engine.engineName();
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"shipDate\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"&quot;SYSTEM PERFORMANCE&quot;\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"concat(&quot;Error occured while querying ETM-PWM System performance of &quot;,$plantNum,&quot; on &quot;,$shipDate)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		finally
+		{			
+			return slaCounts;
+		}
+	}
+}

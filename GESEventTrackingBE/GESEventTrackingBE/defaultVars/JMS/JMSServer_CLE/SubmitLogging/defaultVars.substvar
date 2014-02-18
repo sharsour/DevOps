@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<repository xmlns="http://www.tibco.com/xmlns/repo/types/2002">
+    <globalVariables>
+        <globalVariable>
+            <name>Delivery_Mode</name>
+            <value>PERSISTENT</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369720646415</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>JMSExpiration_seconds</name>
+            <value>0</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369720649004</modTime>
+        </globalVariable>
+        <globalVariable>
+            <name>Message_Priority</name>
+            <value>4</value>
+            <type>String</type>
+            <deploymentSettable>true</deploymentSettable>
+            <serviceSettable>true</serviceSettable>
+            <description/>
+            <constraint/>
+            <modTime>1369720651766</modTime>
+        </globalVariable>
+    </globalVariables>
+</repository>

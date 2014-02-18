@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Common/" folder="/Events/Common/" name="ExceptionEvent" description="This event is used to send Exception messages to Common LE." GUID="BD40469A-7336-64B9-082F-6A5AA0FE18A8" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:ExceptionRequest&quot;/>" ttlUnits="Seconds" channelURI="/Channels/CLEJMSChannel" destinationName="ExceptionDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.PepsiCo.com/unique/default/namespace/CommonLE"/>
+  <registryImportEntries location="SharedResources\Schemas\Common\ExceptionRequest.xsd" namespace="http://www.PepsiCo.com/unique/default/namespace/CommonLE"/>
+  <expiryAction name="ExceptionEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="exceptionevent" type="/Events/Common/ExceptionEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

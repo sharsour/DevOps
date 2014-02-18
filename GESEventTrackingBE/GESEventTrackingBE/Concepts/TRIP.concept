@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:element="http:///com/tibco/cep/designtime/core/model/element" namespace="/Concepts/" folder="/Concepts/" name="TRIP" description="This concept contains the data of the Trip, list of Orders in the Trip and its E2ESLA." GUID="2FD99E6C-4A17-E9CB-6209-8596781D17E7" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="PLANT_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="PLANT_NAME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="TRIPID" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="SHIP_DATE" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="CASES" ownerProjectName="GESEventTrackingBE" type="int" ownerPath="/Concepts/TRIP"/>
+  <properties name="TRIP_STATUS" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/TRIP"/>
+  <properties name="E2ESLA" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="LAST_KNOWN_SYSTEM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="LAST_KNOWN_TIME" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/TRIP"/>
+  <properties name="SHIPID" ownerProjectName="GESEventTrackingBE" array="true" ownerPath="/Concepts/TRIP"/>
+  <properties name="RECONCILIATION_DONE" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/TRIP"/>
+  <properties name="SYSSTATE" ownerProjectName="GESEventTrackingBE" type="ContainedConcept" conceptTypePath="/Concepts/TRIP_SYSSTATE" array="true" ownerPath="/Concepts/TRIP"/>
+  <properties name="TRIP_CREATION_TIME" ownerProjectName="GESEventTrackingBE" type="long" ownerPath="/Concepts/TRIP"/>
+  <properties name="IS_GES" ownerProjectName="GESEventTrackingBE" type="boolean" ownerPath="/Concepts/TRIP"/>
+</element:Concept>

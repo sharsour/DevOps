@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Input/" folder="/Events/Input/" name="TokenEvent" description="Order Token message is received in the form of Token Event." GUID="BE176120-A66B-F090-5623-DBD8A124C740" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:OrdToken&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="TokenInputDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <registryImportEntries location="SharedResources\Schemas\Input\OrderTokenInput.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <expiryAction name="TokenEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="tokenevent" type="/Events/Input/TokenEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

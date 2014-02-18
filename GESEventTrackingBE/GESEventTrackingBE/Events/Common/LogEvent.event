@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Common/" folder="/Events/Common/" name="LogEvent" description="This event is used to send Log messages to Common LE." GUID="505B341D-896B-E429-4620-46EE3E8AA729" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:LogRequest&quot;/>" ttlUnits="Seconds" channelURI="/Channels/CLEJMSChannel" destinationName="LogDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.PepsiCo.com/unique/default/namespace/CommonLE"/>
+  <registryImportEntries location="SharedResources\Schemas\Common\LogRequest.xsd" namespace="http://www.PepsiCo.com/unique/default/namespace/CommonLE"/>
+  <expiryAction name="LogEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="logevent" type="/Events/Common/LogEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

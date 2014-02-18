@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	 <xs:include schemaLocation="SystemPerformanceRes.xsd"/>
+	 <xs:element name="SystemPerformanceRequest" type="SystemPerformanceRequestType"/>
+	<xs:element name="SystemPerformanceResponse" type="SystemPerformanceResponseType"/>
+	<xs:complexType name="SystemPerformanceRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="SysPerfRequest" type="SysPerfRequestType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SysPerfRequestType">
+		<xs:sequence>
+			<xs:element name="PlantNum" type="xs:string"/>
+			<xs:element name="ShipDate" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SystemPerformanceResponseType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="SysPerfResponse" type="SysPerfResponseType"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

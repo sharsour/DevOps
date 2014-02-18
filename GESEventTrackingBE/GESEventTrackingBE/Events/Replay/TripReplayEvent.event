@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Replay/" folder="/Events/Replay/" name="TripReplayEvent" description="Trip data is sent to Replay Queue using this Event." GUID="29CFABD0-EFC0-E3AD-D4D7-1D72548C1140" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:Trip&quot;/>" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="TripReplayDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"/>
+  <registryImportEntries location="SharedResources\Schemas\Input\TripsInput.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4"/>
+  <expiryAction folder="/Events/Replay/TripReplayEvent" name="TripEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="tripevent" type="/Events/Replay/TripReplayEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

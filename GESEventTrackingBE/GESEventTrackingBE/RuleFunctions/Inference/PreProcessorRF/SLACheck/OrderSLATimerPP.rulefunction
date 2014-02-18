@@ -1,0 +1,57 @@
+/**
+ * @description Pre-Processor of SLA checking Timer Events generated internally by BE.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.SLACheck.OrderSLATimerPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Timer.SLATimerEvent slaTimerEvent;
+	}
+	body {
+		System.debugOut("In SLATimer event Pre-processor");
+		String tm=System.getGlobalVariableAsString("OrderSystems/ActualSystems/TM","TM");
+		
+		//Load the Order from Cache.
+		if(slaTimerEvent.TripID==null)
+		{
+			if(slaTimerEvent.System==tm)
+			{
+				// Acquire a lock on Plant+ShipDate to update the PlantSummary Concept.
+				String subKey=System.getGlobalVariableAsString("EXTIDS/PLANT_SUMMARY","SUMMARY");
+				String summaryKey=subKey+slaTimerEvent.Plant_Num;//Plant_Num is concatinated with shipDate.
+				System.debugOut("summaryKey = "+summaryKey);
+				Cluster.DataGrid.Lock(summaryKey,-1,false);
+				Concepts.PLANT_SUMMARY plantSummary=RuleFunctions.Inference.CommonRF.getConceptFromCache("PLANT_SUMMARY"/*conceptName String */,summaryKey/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+				System.debugOut("Loaded the plantSummary = "+plantSummary@extId+" from the cache and acquired a lock on the same.");
+				
+				
+			}
+			else if(RuleFunctions.Inference.CommonRF.getConceptFromCache("ORDER"/*conceptName String */,slaTimerEvent.Ord_Num/*conceptExtID String */,true/*getSysStateContainedConcept boolean */)!=null)
+			{
+				System.debugOut("Order loaded from cache = "+slaTimerEvent.Ord_Num);
+				Cluster.DataGrid.Lock(slaTimerEvent.Ord_Num,-1,false);
+			}
+			else
+			{
+				//Check if incoming Lgcy_Ord_Num is a duplicate Ord Num.
+				String ordReNumExtId=System.getGlobalVariableAsString("EXTIDS/ORD_RE_NUM","ORD_RE_NUM");
+				Concepts.ORDER_RE_NUM ordReNum= RuleFunctions.Inference.CommonRF.getConceptFromCache("ORD_RE_NUM"/*conceptName String */,ordReNumExtId/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+				String New_Ord_Num=RuleFunctions.Inference.OrderFlowRF.getRenumberedOrder(slaTimerEvent.Ord_Num/*OrdID String */,"NEW"/*Type String */,ordReNum/*ordReNum Concepts.ORDER_RE_NUM */);
+				if(New_Ord_Num!=null)
+				{
+					if(RuleFunctions.Inference.CommonRF.getConceptFromCache("ORDER"/*conceptName String */,New_Ord_Num/*conceptExtID String */,true/*getSysStateContainedConcept boolean */)!=null)
+					{//If New_Ord_Num concept is present in the cache, aquire lock on New_Ord_Num & update the concept.
+						Cluster.DataGrid.Lock(New_Ord_Num,-1,false);
+					}
+				}
+			}
+		}
+		else
+		{
+			//Load the Trip from Cache.
+			RuleFunctions.Inference.CommonRF.getConceptFromCache("TRIP"/*conceptName String */,slaTimerEvent.TripID/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		}
+		
+	}
+}

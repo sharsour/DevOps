@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="OptimizationEvictionRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Optimization_Key" minOccurs="0"/>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Plant_Name" minOccurs="0"/>
+				<xs:element ref="ShipDate"/>
+				<xs:element ref="Optimized_Status" minOccurs="0"/>
+				<xs:element ref="DateTimeStamp" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Optimization_Key" type="xs:string"/>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Plant_Name" type="xs:string"/>
+	<xs:element name="ShipDate" type="xs:string"/>
+	<xs:element name="Optimized_Status" type="xs:string"/>
+	<xs:element name="DateTimeStamp" type="xs:string"/>
+</xs:schema>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element:Concept xmlns:element="http:///com/tibco/cep/designtime/core/model/element" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Concepts/Temporary/" folder="/Concepts/Temporary/" name="SHIPID_TEMP" description="This is a temporary concept created to store the SAP_ORD_NUMs present in a Trip." GUID="38629EC8-6FB4-0101-AEE4-5D39F98297F5" ownerProjectName="GESEventTrackingBE" superConceptPath="" autoStartStateMachine="true">
+  <extendedProperties/>
+  <properties name="SAP_ORD_NUM" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/Temporary/SHIPID_TEMP"/>
+  <properties name="TRIP_ID" ownerProjectName="GESEventTrackingBE" ownerPath="/Concepts/Temporary/SHIPID_TEMP"/>
+</element:Concept>

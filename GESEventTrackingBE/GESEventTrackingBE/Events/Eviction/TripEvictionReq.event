@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="TripEvictionReq" description="This event is sent as a request to evict the Trip data from BE cache." GUID="2FCC9B47-5D9E-8300-F1FB-57F85438C6DD" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:TripEvictionReq&quot;/>" ttlUnits="Seconds" channelURI="/Channels/CacheEvictionJMSChannel" destinationName="TripEvictionReqDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\TripEvictionReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73"/>
+  <expiryAction name="TripEvictionReq_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="tripevictionreq" type="/Events/Eviction/TripEvictionReq"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

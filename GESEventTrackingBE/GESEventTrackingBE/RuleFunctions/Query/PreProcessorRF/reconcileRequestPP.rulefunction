@@ -1,0 +1,94 @@
+/**
+ * @description This rule function triggers the reconciliation query to get the list of LGCY_ORD_NUM present in the Trip.
+ */
+void rulefunction RuleFunctions.Query.PreProcessorRF.reconcileRequestPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Query.ReconcileRequest reconcileRequest;
+	}
+	body {
+		System.debugOut("In ReconcileRequest PP Query Agent");
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"reconcileRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;RECONCILIATION QUERY&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started processing Trip Event for TripID = &quot;,$reconcileRequest/payload/ns4:ReconciliationRequest/ns4:TripID)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($reconcileRequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			String tripId= XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$reconcileRequest/payload/xsd4:ReconciliationRequest/xsd4:TripID</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd4\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>reconcileRequest</variable>\n    </variables>\n</xpath>");
+			int noOfLgcyOrders=0,noOfSAPOrders=XPath.evalAsInt("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>count($reconcileRequest/payload/xsd2:ReconciliationRequest/xsd2:SAPOrder/xsd2:SAPOrderNumber)</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>reconcileRequest</variable>\n    </variables>\n</xpath>");
+			String [] lgcy_Ord_Num=String[noOfSAPOrders] {};
+			String sapOrdNum;
+			int index=0;
+			
+			System.debugOut(" Number of Sap_Ord_Num Retrieved = "+noOfSAPOrders);
+			
+			//Initialization of LgcyOrdNum array.
+			for(int initIndex=0;initIndex<noOfSAPOrders;initIndex++){
+					lgcy_Ord_Num[initIndex]="0";
+				}
+			
+			//Loop over each SAP_ORD_NUM and query for the coreesponding LGCY_ORD_NUM.
+			for(int rowIndex=1;rowIndex<=noOfSAPOrders;rowIndex++)
+			{
+				sapOrdNum=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$reconcileRequest/payload/xsd2:ReconciliationRequest/xsd2:SAPOrder/xsd2:SAPOrderNumber[number($rowIndex)]</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n    </namespaces>\n    <variables>\n        <variable>reconcileRequest</variable>\n        <variable>rowIndex</variable>\n    </variables>\n</xpath>");
+								
+				String queryName = "Reconciliation";
+				String statementName = queryName + "-SS-" + tripId + sapOrdNum;
+				String resultSetName = queryName + "-SS-RS-" + tripId + sapOrdNum;
+				
+				Query.Statement.open(queryName, statementName);
+				Query.Statement.setVar(statementName, "sapOrdNum",sapOrdNum);
+				
+				//System.debugOut("Started query: " + statementName);
+				
+				Query.Statement.execute(statementName, resultSetName);
+				
+				while(Query.ResultSet.next(resultSetName))
+					{
+						if(Query.ResultSet.get(resultSetName, 0)!=null)
+						{
+							lgcy_Ord_Num[index]=Query.ResultSet.get(resultSetName, 0);
+							index++;
+						}
+						//System.debugOut(" lgcy_Ord_Num = "+lgcy_Ord_Num[index-1]);
+					}
+					
+				Query.ResultSet.close(resultSetName);
+				Query.Statement.close(statementName);
+				//System.debugOut("Completed query: " + statementName);
+			}
+			System.debugOut(" Number of lgcy_Ord_Num Retrieved = "+index);
+			
+			//Sending the Reconciliation response to Inference agent.
+			Events.Internal.ReconcileResponse recoResponse=Event.createEvent("xslt://{{/Events/Internal/ReconcileResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"reconcileRequest\"/>\n    <xsl:param name=\"lgcy_Ord_Num\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ReconciliationResponse>\n                        <ns:TripID>\n                            <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:TripID\"/>\n                        </ns:TripID>\n                        <xsl:if test=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:Delivery_Date\">\n                            <ns:Delivery_Date>\n                                <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:Delivery_Date\"/>\n                            </ns:Delivery_Date>\n                        </xsl:if>\n                        <xsl:if test=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:Ship_Date\">\n                            <ns:Ship_Date>\n                                <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:Ship_Date\"/>\n                            </ns:Ship_Date>\n                        </xsl:if>\n                        <ns:Plant_Num>\n                            <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:Plant_Num\"/>\n                        </ns:Plant_Num>\n                        <xsl:if test=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:TripStatus\">\n                            <ns:TripStatus>\n                                <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:TripStatus\"/>\n                            </ns:TripStatus>\n                        </xsl:if>\n                        <ns:JMSDateTime>\n                            <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:JMSDateTime\"/>\n                        </ns:JMSDateTime>\n                        <xsl:if test=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:System\">\n                            <ns:System>\n                                <xsl:value-of select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:System\"/>\n                            </ns:System>\n                        </xsl:if>\n                        <ns:SAPOrder>\n                            <xsl:for-each select=\"$reconcileRequest/payload/ns:ReconciliationRequest/ns:SAPOrder/ns:SAPOrderNumber\">\n                                <ns:SAPOrderNumber>\n                                    <xsl:value-of select=\".\"/>\n                                </ns:SAPOrderNumber>\n                            </xsl:for-each>\n                        </ns:SAPOrder>\n                        <ns:LgcyOrder>\n                            <xsl:for-each select=\"$lgcy_Ord_Num/elements\">\n                                <ns:LgcyOrderNumber>\n                                    <xsl:value-of select=\".\"/>\n                                </ns:LgcyOrderNumber>\n                            </xsl:for-each>\n                        </ns:LgcyOrder>\n                    </ns:ReconciliationResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+			Event.sendEvent(recoResponse);
+			
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing ReconcileRequest PP Query Agent = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"reconcileRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"&quot;RECONCILIATION QUERY&quot;\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($reconcileRequest)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			//End Logging.
+			if(cleFlag)
+			{
+				Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd4\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"reconcileRequest\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;RECONCILIATION QUERY&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Completed processing Trip Event for TripID = &quot;,$reconcileRequest/payload/ns4:ReconciliationRequest/ns4:TripID)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($reconcileRequest)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			
+			//Consuming/Deleting event.
+			Event.consumeEvent(reconcileRequest);
+		}
+			
+		
+	}
+}

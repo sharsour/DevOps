@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd77"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="TimerEvent">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PlantNum"/>
+				<xs:element ref="TimerType"/>
+				<xs:element ref="ShipDate"/>
+				<xs:element ref="TimeZone"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PlantNum" type="xs:string"/>
+	<xs:element name="TimerType" type="xs:string"/>
+	<xs:element name="ShipDate" type="xs:string"/>
+	<xs:element name="TimeZone" type="xs:string"/>
+</xs:schema>

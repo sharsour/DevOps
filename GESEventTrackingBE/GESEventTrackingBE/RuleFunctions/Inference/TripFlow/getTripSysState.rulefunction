@@ -1,0 +1,34 @@
+/**
+ * @description Returns the required SysState from the given array.
+ */
+Concepts.TRIP_SYSSTATE rulefunction RuleFunctions.Inference.TripFlow.getTripSysState {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Concepts.TRIP_SYSSTATE [] trip_SysState;
+		String system;
+	}
+	body {
+		Concepts.TRIP_SYSSTATE sysState=null;
+		try
+		{
+			for(int index=0;index<trip_SysState@length;index++)
+				{
+					if(trip_SysState[index]!=null && trip_SysState[index].SYSTEM!=null && trip_SysState[index].SYSTEM==system)
+					{
+						sysState=trip_SysState[index];
+						break;
+					}
+				}
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in getTripSysState type = "+e+system);
+		}
+		finally
+		{
+			return sysState;
+		}
+	}
+}

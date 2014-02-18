@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd72"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd72"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="TripEvictionRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Plant_Name" minOccurs="0"/>
+				<xs:element ref="TripID"/>
+				<xs:element ref="Ship_Date"/>
+				<xs:element ref="TripStatus" minOccurs="0"/>
+				<xs:element ref="Cases" minOccurs="0"/>
+				<xs:element ref="E2E_SLA" minOccurs="0"/>
+				<xs:element ref="LastKnowSystem" minOccurs="0"/>
+				<xs:element ref="LastKnowTime" minOccurs="0"/>
+				<xs:element ref="IsGES" minOccurs="0"/>
+				<xs:element ref="SAPOrder" minOccurs="0"/>
+				<xs:element ref="TripSysState" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TripID" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Plant_Name" type="xs:string"/>
+	<xs:element name="TripStatus" type="xs:boolean"/>
+	<xs:element name="Cases" type="xs:integer"/>
+	<xs:element name="E2E_SLA" type="xs:string"/>
+	<xs:element name="LastKnowSystem" type="xs:string"/>
+	<xs:element name="LastKnowTime" type="xs:string"/>
+	<xs:element name="IsGES" type="xs:boolean"/>
+	<xs:element name="TripSysState">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SysState_Key" type="xs:string"/>
+				<xs:element name="TripID" type="xs:string"/>
+				<xs:element name="Sequence" type="xs:integer" minOccurs="0"/>
+				<xs:element name="System" type="xs:string"/>
+				<xs:element name="InDateTime" type="xs:string" minOccurs="0"/>
+				<xs:element name="OutDateTime" type="xs:string" minOccurs="0"/>
+				<xs:element name="SLA" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SAPOrder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SAPOrderNumber" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

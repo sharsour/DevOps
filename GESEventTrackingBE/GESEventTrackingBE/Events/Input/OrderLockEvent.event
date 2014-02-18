@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/Input/" folder="/Events/Input/" name="OrderLockEvent" description="SAP sends the time after which Orders are blocked in this event" GUID="4F3302B6-E5D5-A140-FB16-83AD26BBBAAB" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:OrdLock&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="OrderLockDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <registryImportEntries location="SharedResources\Schemas\Input\OrderLockInput.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"/>
+  <expiryAction name="OrderLockEvent_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="orderlockevent" type="/Events/Input/OrderLockEvent"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

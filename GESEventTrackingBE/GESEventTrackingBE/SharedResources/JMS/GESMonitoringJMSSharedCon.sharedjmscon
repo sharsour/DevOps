@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<BWSharedResource>
+    <name>GESMonitoringJMSSharedCon</name>
+    <resourceType>ae.shared.JMSConnectionKey</resourceType>
+    <description/>
+    <config>
+        <NamingEnvironment>
+            <UseJNDI>false</UseJNDI>
+            <ProviderURL>%%JMS/JMSServer_GES/Provider_URL%%</ProviderURL>
+            <NamingURL>tibjmsnaming://localhost:7222</NamingURL>
+            <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+            <TopicFactoryName>TopicConnectionFactory</TopicFactoryName>
+            <QueueFactoryName>QueueConnectionFactory</QueueFactoryName>
+            <NamingPrincipal/>
+            <NamingCredential>#!cgOtntsmIINECpprMqBG6w==</NamingCredential>
+        </NamingEnvironment>
+        <ConnectionAttributes>
+            <username>%%JMS/JMSServer_GES/UserName%%</username>
+            <password>%%JMS/JMSServer_GES/Password%%</password>
+            <clientID/>
+            <autoGenClientID>true</autoGenClientID>
+        </ConnectionAttributes>
+        <UseXACF>false</UseXACF>
+        <useSsl>false</useSsl>
+        <UseSharedJndiConfig>false</UseSharedJndiConfig>
+        <AdmFactorySslPassword>#!c+33P29pSV/TtJZsY1Fxxw==</AdmFactorySslPassword>
+        <ssl xmlns="http://www.tibco.com/xmlns/aemeta/services/2002">
+            <cert isRef="true"/>
+            <identity isRef="true"/>
+            <trustStorePassword>#!0bkLM3qJE6rnuhmGPlX6jQ==</trustStorePassword>
+            <trace>true</trace>
+            <debugTrace>true</debugTrace>
+            <verifyHostName>true</verifyHostName>
+            <expectedHostName/>
+            <strongCipherSuitesOnly>true</strongCipherSuitesOnly>
+        </ssl>
+        <JndiSharedConfiguration/>
+        <JNDIProperties/>
+    </config>
+</BWSharedResource>

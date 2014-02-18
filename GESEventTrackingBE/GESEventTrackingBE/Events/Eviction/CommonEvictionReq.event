@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Eviction/" folder="/Events/Eviction/" name="CommonEvictionReq" description="This event is sent as a request to evict OrdLock, Token, Optimization and Summary data from BE cache." GUID="60792C59-F815-D7B0-FC31-FBD2F24DC764" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx2:CommonEvictionReq&quot;/>" ttlUnits="Seconds" channelURI="/Channels/CacheEvictionJMSChannel" destinationName="CommonEvictionReqDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx2" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd70"/>
+  <registryImportEntries location="SharedResources\Schemas\Eviction\CommonEvictionReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd70"/>
+  <expiryAction name="CommonEvictionReq_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="commonevictionreq" type="/Events/Eviction/CommonEvictionReq"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

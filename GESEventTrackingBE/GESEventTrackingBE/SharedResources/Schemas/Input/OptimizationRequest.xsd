@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:include schemaLocation="OptimizationResponse.xsd"/>
+	<xs:element name="OptimizationRequest" type="OptimizationRequestType"/>
+	<xs:element name="OptimizationResponse" type="OptimizationResponseType"/>
+	<xs:complexType name="OptimizationRequestType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="OptimizationReqType" type="OptReqType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptReqType">
+		<xs:sequence>
+			<xs:element name="Plant_Num" type="xs:string"/>
+			<xs:element name="OrderID" type="xs:string"/>
+			<xs:element name="TripID" type="xs:string"/>
+			<xs:element name="JMSTimeStamp" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationResponseType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="OptimizationResType" type="OptResType"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

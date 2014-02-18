@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmlns:event="http:///com/tibco/cep/designtime/core/model/event" xmlns:xmi="http://www.omg.org/XMI" xmi:version="2.0" namespace="/Events/RequestReply/" folder="/Events/RequestReply/" name="ProgramSummaryRequest" description="This event is triggered when UI requests for an Program Summary data." GUID="EFBE9726-DE55-42A5-4866-170FA185EB2B" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;payload ref=&quot;pfx:ProgramSummaryRequest&quot;/&gt;" ttlUnits="Seconds" channelURI="/Channels/GESMonitoringJMSChannel" destinationName="ProgramSummaryReqResDest">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\ProgramSummaryReq.xsd" namespace="http://www.pepsico.com/schemas/practice/Schemas/Schema"/>
+  <expiryAction name="ProgramSummaryRequest_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="programsummaryrequest" type="/Events/RequestReply/ProgramSummaryRequest"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>

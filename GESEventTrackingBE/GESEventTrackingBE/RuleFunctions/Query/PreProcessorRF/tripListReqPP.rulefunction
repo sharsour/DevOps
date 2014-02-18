@@ -1,0 +1,94 @@
+/**
+ * @description This rule function performs pre-processor activities for Trip List Request Event sent by BW.
+ */
+void rulefunction RuleFunctions.Query.PreProcessorRF.tripListReqPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Query.TripListRequest tripListReq;
+	}
+	body {
+		System.debugOut("In TripListRequestPP of Query Agent ");
+		String plant_Num=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$tripListReq/payload/xsd3:TripListRequest/xsd3:TripListSearchRequest/xsd3:PlantNum</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>tripListReq</variable>\n    </variables>\n</xpath>");
+		String ship_Date=XPath.evalAsString("xpath://<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xpath>\n    <expr>$tripListReq/payload/xsd3:TripListRequest/xsd3:TripListSearchRequest/xsd3:ShipDate</expr>\n    <namespaces>\n        <namespace URI=\"http://www.w3.org/1999/XSL/Transform\" pfx=\"xsl\"/>\n        <namespace URI=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73\" pfx=\"xsd2\"/>\n        <namespace URI=\"http://www.w3.org/2001/XMLSchema\" pfx=\"xsd\"/>\n        <namespace URI=\"http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51\" pfx=\"xsd3\"/>\n    </namespaces>\n    <variables>\n        <variable>tripListReq</variable>\n    </variables>\n</xpath>");
+		
+		//Logging.
+		boolean cleFlag=System.getGlobalVariableAsBoolean("CLEparams/CLE_Flag",true);
+		String gesAgentId=Engine.engineName();
+		if(cleFlag)
+		{
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plant_Num\"/>\n    <xsl:param name=\"ship_Date\"/>\n    <xsl:param name=\"tripListReq\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;TRIP LIST REQUEST&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Started processing Trip List Request for PLANT_NUM = &quot;,$plant_Num,&quot; on &quot;,$ship_Date)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;Start Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($tripListReq)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+		
+		try
+		{
+			String queryName = "TripListRequest";
+			
+			String statementName = queryName + "-SS-" + plant_Num + ship_Date;
+			String resultSetName = queryName + "-SS-RS-" + plant_Num + ship_Date;
+			
+			Query.Statement.open(queryName, statementName);
+			Query.Statement.setVar(statementName, "plantNum",plant_Num);
+			Query.Statement.setVar(statementName, "shipDate",ship_Date);
+			
+			System.debugOut("Started query: " + statementName);
+			
+			Query.Statement.execute(statementName, resultSetName);
+			
+			int noOfRows=Query.ResultSet.getRowCountIfPossible(resultSetName);
+			if(noOfRows>0)
+			{
+				Concepts.TRIP [] trips = Concepts.TRIP[noOfRows] {};
+				/*for(int index=0;index<noOfRows;index++)
+				{
+					tripNum[index]="0";
+				}*/
+				
+				int rowNum=0;
+				
+				while(Query.ResultSet.next(resultSetName))
+				{
+					trips[rowNum]=Query.ResultSet.get(resultSetName, 0);
+					//System.debugOut("TripID Found = "+trips[rowNum].TRIPID);
+					rowNum++;
+				}
+				
+				Events.Query.TripListResponse tripListRes = Event.createEvent("xslt://{{/Events/Query/TripListResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"trips\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:TripListResponse>\n                        <xsl:for-each select=\"$trips/elements\">\n                            <ns:TripListSearchResponse>\n                                <ns:TripID>\n                                    <xsl:value-of select=\"TRIPID\"/>\n                                </ns:TripID>\n                                <xsl:if test=\"SHIP_DATE\">\n                                    <ns:Delivery_Date>\n                                        <xsl:value-of select=\"SHIP_DATE\"/>\n                                    </ns:Delivery_Date>\n                                </xsl:if>\n                                <xsl:if test=\"SHIP_DATE\">\n                                    <ns:Ship_Date>\n                                        <xsl:value-of select=\"SHIP_DATE\"/>\n                                    </ns:Ship_Date>\n                                </xsl:if>\n                                <ns:Plant_Num>\n                                    <xsl:value-of select=\"PLANT_NUM\"/>\n                                </ns:Plant_Num>\n                                <xsl:if test=\"PLANT_NAME\">\n                                    <ns:Plant_Name>\n                                        <xsl:value-of select=\"PLANT_NAME\"/>\n                                    </ns:Plant_Name>\n                                </xsl:if>\n                                <xsl:if test=\"CASES\">\n                                    <ns:Cases>\n                                        <xsl:value-of select=\"CASES\"/>\n                                    </ns:Cases>\n                                </xsl:if>\n                                <xsl:if test=\"TRIP_STATUS\">\n                                    <ns:TripStatus>\n                                        <xsl:value-of select=\"TRIP_STATUS\"/>\n                                    </ns:TripStatus>\n                                </xsl:if>\n                                <xsl:if test=\"LAST_KNOWN_SYSTEM\">\n                                    <ns:CurrentSystem>\n                                        <xsl:value-of select=\"LAST_KNOWN_SYSTEM\"/>\n                                    </ns:CurrentSystem>\n                                </xsl:if>\n                                <xsl:if test=\"LAST_KNOWN_TIME\">\n                                    <ns:LastKnownTime>\n                                        <xsl:value-of select=\"LAST_KNOWN_TIME\"/>\n                                    </ns:LastKnownTime>\n                                </xsl:if>\n                                <xsl:if test=\"IS_GES\">\n                                    <ns:IsGES>\n                                        <xsl:value-of select=\"IS_GES\"/>\n                                    </ns:IsGES>\n                                </xsl:if>\n                            </ns:TripListSearchResponse>\n                        </xsl:for-each>\n                    </ns:TripListResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+				Event.replyEvent(tripListReq,tripListRes);
+			}
+			else
+			{
+				Events.Query.TripListResponse tripListRes = Event.createEvent("xslt://{{/Events/Query/TripListResponse}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51\" version=\"1.0\" exclude-result-prefixes=\"xsl xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"ship_Date\"/>\n    <xsl:param name=\"plant_Num\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:TripListResponse>\n                        <ns:TripListSearchResponse>\n                            <ns:TripID>\n                                <xsl:value-of select=\"\'\'\"/>\n                            </ns:TripID>\n                            <ns:Ship_Date>\n                                <xsl:value-of select=\"$ship_Date\"/>\n                            </ns:Ship_Date>\n                            <ns:Plant_Num>\n                                <xsl:value-of select=\"$plant_Num\"/>\n                            </ns:Plant_Num>\n                        </ns:TripListSearchResponse>\n                    </ns:TripListResponse>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>");
+				Event.replyEvent(tripListReq,tripListRes);
+			}
+			
+			Query.ResultSet.close(resultSetName);
+			Query.Statement.close(statementName);
+			System.debugOut("Completed query: " + statementName);
+			
+			
+			
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing TripListRequestPP of Query Agent = "+e);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:param name=\"tripListReq\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:TransactionType>\n                                <xsl:value-of select=\"&quot;TRIP LIST REQUEST&quot;\"/>\n                            </ns:TransactionType>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"string($tripListReq)\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			//End Logging.
+			if(cleFlag)
+			{
+					Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/LogEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd5\" xmlns:ns1=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" xmlns:ns2=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3\" xmlns:ns3=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd2\" xmlns:ns4=\"http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd73\" version=\"1.0\" exclude-result-prefixes=\"ns2 ns1 xsl ns4 ns ns3 xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plant_Num\"/>\n    <xsl:param name=\"ship_Date\"/>\n    <xsl:param name=\"tripListReq\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns1:LogRequest>\n                        <ns1:Header>\n                            <ns1:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns1:ApplicationID>\n                            <ns1:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns1:ServiceName>\n                            <ns1:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/Query\"/>\n                            </ns1:ComponentName>\n                            <ns1:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns1:Hostname>\n                            <ns1:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns1:Timestamp>\n                            <ns1:TransactionType>\n                                <xsl:value-of select=\"&quot;TRIP LIST REQUEST&quot;\"/>\n                            </ns1:TransactionType>\n                        </ns1:Header>\n                        <ns1:Messages>\n                            <ns1:Name>\n                                <xsl:value-of select=\"&quot;LOG_MSG&quot;\"/>\n                            </ns1:Name>\n                            <ns1:Value>\n                                <xsl:value-of select=\"concat(&quot;Completed processing Trip List Request for PLANT_NUM = &quot;,$plant_Num,&quot; on &quot;,$ship_Date)\"/>\n                            </ns1:Value>\n                        </ns1:Messages>\n                        <ns1:Status>\n                            <xsl:value-of select=\"&quot;End Log&quot;\"/>\n                        </ns1:Status>\n                        <ns1:TransactionBefore>\n                            <xsl:value-of select=\"string($tripListReq)\"/>\n                        </ns1:TransactionBefore>\n                    </ns1:LogRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+			}
+			
+			//Consuming/Deleting optRequest event.
+			Event.consumeEvent(tripListReq);
+		}
+		
+		
+		
+	}
+}

@@ -1,0 +1,26 @@
+/**
+ * @description This rule function performs pre-processor activities for Optimization Event sent by Query Agent.
+ */
+void rulefunction RuleFunctions.Inference.PreProcessorRF.Trip.optimizationPP {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		Events.Input.OptimizationEvent optEvent;
+	}
+	body {
+		System.debugOut("In Optimization Pre-Processor of Inference Agent");
+		
+		String optKey=System.getGlobalVariableAsString("EXTIDS/OPTIMIZATION","OPTIMIZATION")+optEvent.PLANT_NUM+optEvent.SHIP_DATE;
+				
+		Cluster.DataGrid.Lock(optEvent.TRIP_ID,-1,false);
+		if(optEvent.TRIP_ID!=null)
+		{
+			RuleFunctions.Inference.CommonRF.getConceptFromCache("TRIP"/*conceptName String */,optEvent.TRIP_ID/*conceptExtID String */,true/*getSysStateContainedConcept boolean */);
+		}
+		
+		Cluster.DataGrid.Lock(optKey,-1,false);
+		
+		System.debugOut("Acquired lock on optimization = "+optKey);
+	}
+}

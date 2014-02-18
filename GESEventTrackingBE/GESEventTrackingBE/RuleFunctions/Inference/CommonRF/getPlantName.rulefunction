@@ -1,0 +1,62 @@
+/**
+ * @description This RuleFunction returns the Plant Name for a given Plant Number.
+ */
+String rulefunction RuleFunctions.Inference.CommonRF.getPlantName {
+	attribute {
+		validity = ACTION;
+	}
+	scope {
+		String plantNum;
+		Concepts.PLANT_TIMEZONE plantTZ;
+	}
+	body {
+			System.debugOut("In getPlantName function for Plant Num = "+plantNum);
+			int index;
+			String plantName;
+			String gesAgentId=Engine.engineName();
+			try
+			{
+				//Check the Plant Number in CST TZ.
+				index=Instance.PropertyArray.indexOfString(plantTZ.CST_PLANTNUM,plantNum);
+				if(index!=-1)
+				{
+					plantName=plantTZ.CST_PLANTNAME[index];
+					return plantName;
+				}
+				else{//Check the Plant Number in EST TZ.
+					index=Instance.PropertyArray.indexOfString(plantTZ.EST_PLANTNUM,plantNum);
+					if(index!=-1)
+					{
+						plantName=plantTZ.EST_PLANTNAME[index];
+						return plantName;
+					}
+					else{//Check the Plant Number in PT TZ.
+						index=Instance.PropertyArray.indexOfString(plantTZ.PT_PLANTNUM,plantNum);
+						if(index!=-1)
+						{
+							plantName=plantTZ.PT_PLANTNAME[index];
+							return plantName;
+						}			
+						else{//Check the Plant Number in MT TZ.
+							index=Instance.PropertyArray.indexOfString(plantTZ.MT_PLANTNUM,plantNum);
+							if(index!=-1)
+							{
+								plantName=plantTZ.MT_PLANTNAME[index];
+								return plantName;
+							}
+							}
+						}
+					}
+		}
+		catch(Exception e)
+		{
+			System.debugOut("Exception caught in processing getPlantName rule function = "+e@errorType);
+			Event.sendEvent(Event.createEvent("xslt://{{/Events/Common/ExceptionEvent}}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:ns=\"http://www.PepsiCo.com/unique/default/namespace/CommonLE\" version=\"1.0\" exclude-result-prefixes=\"xsl ns xsd\">\n    <xsl:output method=\"xml\"/>\n    <xsl:param name=\"globalVariables\"/>\n    <xsl:param name=\"gesAgentId\"/>\n    <xsl:param name=\"plantNum\"/>\n    <xsl:param name=\"e\"/>\n    <xsl:template match=\"/\">\n        <createEvent>\n            <event>\n                <payload>\n                    <ns:ExceptionRequest>\n                        <ns:Header>\n                            <ns:ApplicationID>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_Applicationid\"/>\n                            </ns:ApplicationID>\n                            <ns:ServiceName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ServiceName\"/>\n                            </ns:ServiceName>\n                            <ns:ComponentName>\n                                <xsl:value-of select=\"$globalVariables/CLEparams/CLE_ComponentNames/PlantTZone\"/>\n                            </ns:ComponentName>\n                            <ns:Hostname>\n                                <xsl:value-of select=\"$gesAgentId\"/>\n                            </ns:Hostname>\n                            <ns:Timestamp>\n                                <xsl:value-of select=\"current-dateTime()\"/>\n                            </ns:Timestamp>\n                            <ns:BusinessID>\n                                <xsl:value-of select=\"$plantNum\"/>\n                            </ns:BusinessID>\n                        </ns:Header>\n                        <ns:Category>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorCategory\"/>\n                        </ns:Category>\n                        <ns:Type>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorType\"/>\n                        </ns:Type>\n                        <ns:Severity>\n                            <xsl:value-of select=\"$globalVariables/CLEparams/DefaultErrorSeverity\"/>\n                        </ns:Severity>\n                        <ns:Code>\n                            <xsl:value-of select=\"$e/@errorType\"/>\n                        </ns:Code>\n                        <xsl:if test=\"$e/@message\">\n                            <ns:Message>\n                                <xsl:value-of select=\"$e/@message\"/>\n                            </ns:Message>\n                        </xsl:if>\n                        <ns:TransactionData>\n                            <xsl:value-of select=\"$plantNum\"/>\n                        </ns:TransactionData>\n                        <ns:DumpAnalysis>\n                            <xsl:value-of select=\"string($e)\"/>\n                        </ns:DumpAnalysis>\n                    </ns:ExceptionRequest>\n                </payload>\n            </event>\n        </createEvent>\n    </xsl:template>\n</xsl:stylesheet>"));
+		}
+			
+		finally
+		{
+			return plantName;
+		}
+	}
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"
+	 targetNamespace="http://www.pepsico.com/schemas/practice/Schemas/Schema.xsd3"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="OrdTokenEvictionRes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="OrdToken_Key" minOccurs="0"/>
+				<xs:element ref="Plant_Num"/>
+				<xs:element ref="Plant_Name" minOccurs="0"/>
+				<xs:element ref="Ship_Date" minOccurs="0"/>
+				<xs:element ref="CreationTime" minOccurs="0"/>
+				<xs:element ref="GOA_RecieveTime" minOccurs="0"/>
+				<xs:element ref="Status" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="OrdToken_Key" type="xs:string"/>
+	<xs:element name="Plant_Num" type="xs:string"/>
+	<xs:element name="Plant_Name" type="xs:string"/>
+	<xs:element name="Ship_Date" type="xs:string"/>
+	<xs:element name="CreationTime" type="xs:string"/>
+	<xs:element name="GOA_RecieveTime" type="xs:string"/>
+	<xs:element name="Status" type="xs:string"/>
+</xs:schema>

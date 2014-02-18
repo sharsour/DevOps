@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event:SimpleEvent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:event="http:///com/tibco/cep/designtime/core/model/event" namespace="/Events/Query/" folder="/Events/Query/" name="TripListResponse" description="This event is used to send the list of Trips of the requested Plant for a requested ShipDate." GUID="44749C1E-9772-17F3-BE32-0949D7952749" ownerProjectName="GESEventTrackingBE" superEventPath="" payloadString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&#xA;&lt;payload ref=&quot;pfx:TripListResponse&quot;/>" ttlUnits="Seconds">
+  <namespaceEntries prefix="xsd" namespace="http://www.w3.org/2001/XMLSchema"/>
+  <namespaceEntries prefix="pfx" namespace="http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51"/>
+  <registryImportEntries location="SharedResources\Schemas\RequestReply\TripsListReq.xsd" namespace="http://www.tibco.com/schemas/GESEventsMonitoring_ST21/SharedResources/SchemaDefinitions/RequestReply/Schema.xsd51"/>
+  <expiryAction name="TripListResponse_expiryAction" ownerProjectName="GESEventTrackingBE" actionText="" conditionText="">
+    <symbols>
+      <symbolList idName="triplistresponse" type="/Events/Query/TripListResponse"/>
+    </symbols>
+  </expiryAction>
+</event:SimpleEvent>
